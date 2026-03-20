@@ -7,7 +7,7 @@
   <style>
     @font-face {
       font-family: "RobotoLocal";
-      src: url("Roboto-Regular.ttf") format("truetype");
+      src: url("img/Roboto-Regular.ttf") format("truetype");
       font-weight: 400;
       font-style: normal;
       font-display: swap;
@@ -279,6 +279,39 @@
       color: #27353f;
     }
 
+    .name-with-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      white-space: nowrap;
+    }
+
+    .verified-badge {
+      width: 21px;
+      height: 21px;
+      border-radius: 50%;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 0.78rem;
+      font-weight: 700;
+      color: #fff;
+      background: linear-gradient(180deg, #4eb7ff 0%, #2196f3 100%);
+      border: 1px solid #1a86dc;
+      box-shadow: 0 1px 2px rgba(16, 82, 130, 0.25);
+      line-height: 1;
+      flex-shrink: 0;
+    }
+
+    .verified-badge-sm {
+      width: 16px;
+      height: 16px;
+      font-size: 0.62rem;
+      border-width: 1px;
+      vertical-align: middle;
+      margin-left: 4px;
+    }
+
     .handle {
       margin: 6px 0 10px;
       color: #7a5259;
@@ -521,6 +554,8 @@
     .post-name {
       font-weight: 700;
       color: #24303a;
+      display: inline-flex;
+      align-items: center;
     }
 
     .post-handle,
@@ -843,10 +878,10 @@
     <section class="panel">
       <div class="profile-card">
         <div class="profile-photo">
-          <img src="icon.png" alt="Foto da empresa Arctos Medved" />
+          <img src="img/icon.png" alt="Foto da empresa Arctos Medved" />
         </div>
         <div>
-          <h1 class="profile-title">Arctos Medved Entertainment</h1>
+          <h1 class="profile-title"><span class="name-with-badge">Arctos Medved Entertainment<span class="verified-badge" title="Conta verificada" aria-label="Conta verificada">✓</span></span></h1>
           <p class="handle">@arctos</p>
           <p class="bio">
             The official blog of Arctos Medved Entertainment.
@@ -910,41 +945,9 @@
       favorites: "arctos_user_favorites_v1",
       followers: "arctos_followers_v1"
     };
-    const DEFAULT_USER_AVATAR = "icon.png";
+    const DEFAULT_USER_AVATAR = "img/icon.png";
 
-    const DEFAULT_POSTS = [
-      {
-        id: "seed-1",
-        text: "The official blog for Arctos Medved Entertainment. #letItArctos",
-        media: "",
-        favoriteCount: 2,
-        comments: [
-          {
-            id: "c1",
-            author: "follower_mt",
-            text: "Curti demais esse começo @arctos #letItArctos",
-            createdAt: new Date(Date.now() - 1000 * 60 * 33).toISOString()
-          }
-        ],
-        createdAt: new Date(Date.now() - 1000 * 60 * 55).toISOString()
-      },
-      {
-        id: "seed-2",
-        text: "Novo update em @arctos: iniciamos hoje a fase de mídia para #entertainment no Brazil.",
-        media: "icon.png",
-        favoriteCount: 1,
-        comments: [],
-        createdAt: new Date(Date.now() - 1000 * 60 * 170).toISOString()
-      },
-      {
-        id: "seed-3",
-        text: "Toda menção com @ e tags com # viram busca dentro do site. #letItArctos",
-        media: "",
-        favoriteCount: 0,
-        comments: [],
-        createdAt: new Date(Date.now() - 1000 * 60 * 410).toISOString()
-      }
-    ];
+    const DEFAULT_POSTS = [];
 
     const state = {
       activeTab: "grrrarrr",
@@ -984,8 +987,19 @@
     const followButton = document.getElementById("followButton");
     const followState = document.getElementById("followState");
     const DEFAULT_COMPOSER_HINT = "Dica: clique em @ ou # para filtrar o conteúdo. Admin também pode enviar foto.";
+    const REMOTE_SYNC = {
+      enabled: /^https?:$/i.test(window.location.protocol),
+      endpoint: "api/posts.php",
+      pollMs: 5000
+    };
     let pendingPhotoData = "";
     let isProcessingPhoto = false;
+    let allowRemotePush = false;
+    let remotePushTimer = null;
+    let remotePullTimer = null;
+    let isApplyingRemotePosts = false;
+    let lastLocalMutationAt = 0;
+    let hasRemoteInitialized = false;
 
     function normalizeAvatarUrl(value) {
       const avatar = String(value || "").trim();
@@ -1034,10 +1048,136 @@
     function savePosts() {
       try {
         localStorage.setItem(STORAGE_KEYS.posts, JSON.stringify(state.posts));
+        lastLocalMutationAt = Date.now();
+        if (!isApplyingRemotePosts && allowRemotePush) {
+          scheduleRemotePush();
+        }
         return true;
       } catch (_error) {
         return false;
       }
+    }
+
+    function scheduleRemotePush() {
+      if (!REMOTE_SYNC.enabled) return;
+      if (remotePushTimer) {
+        clearTimeout(remotePushTimer);
+      }
+      remotePushTimer = setTimeout(() => {
+        remotePushTimer = null;
+        pushRemotePosts();
+      }, 450);
+    }
+
+    async function pushRemotePosts(keepalive) {
+      if (!REMOTE_SYNC.enabled) return false;
+      try {
+        const response = await fetch(REMOTE_SYNC.endpoint, {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json"
+          },
+          cache: "no-store",
+          keepalive: !!keepalive,
+          body: JSON.stringify({
+            posts: state.posts,
+            followers: Array.from(state.followersSet)
+          })
+        });
+        return response.ok;
+      } catch (_error) {
+        return false;
+      }
+    }
+
+    async function pullRemotePosts(isInitial) {
+      if (!REMOTE_SYNC.enabled) return;
+
+      try {
+        const response = await fetch(REMOTE_SYNC.endpoint, {
+          method: "GET",
+          cache: "no-store"
+        });
+        if (!response.ok) return;
+
+        const payload = await response.json();
+        const incomingPosts = Array.isArray(payload)
+          ? payload
+          : Array.isArray(payload && payload.posts)
+            ? payload.posts
+            : null;
+        if (!incomingPosts) return;
+
+        const incomingFollowers = Array.isArray(payload && payload.followers)
+          ? payload.followers
+          : null;
+
+        const normalizedPosts = incomingPosts.map((post, index) => normalizePost(post, index));
+        const normalizedFollowers = incomingFollowers
+          ? incomingFollowers.map((item) => String(item || "").trim().toLowerCase()).filter(Boolean)
+          : Array.from(state.followersSet);
+        const uniqueFollowers = Array.from(new Set(normalizedFollowers));
+
+        if (
+          isInitial &&
+          normalizedPosts.length === 0 &&
+          uniqueFollowers.length === 0 &&
+          (state.posts.length > 0 || state.followersSet.size > 0)
+        ) {
+          await pushRemotePosts();
+          return;
+        }
+
+        const localFollowers = Array.from(state.followersSet).map((item) => String(item)).sort();
+        const remoteFollowers = uniqueFollowers.slice().sort();
+        const remoteSignature = JSON.stringify({
+          posts: normalizedPosts,
+          followers: remoteFollowers
+        });
+        const localSignature = JSON.stringify({
+          posts: state.posts,
+          followers: localFollowers
+        });
+
+        if (remoteSignature === localSignature) return;
+        if (!isInitial && Date.now() - lastLocalMutationAt < 1800) return;
+
+        isApplyingRemotePosts = true;
+        state.posts = normalizedPosts;
+        state.followersSet = new Set(uniqueFollowers);
+        localStorage.setItem(STORAGE_KEYS.posts, JSON.stringify(normalizedPosts));
+        localStorage.setItem(STORAGE_KEYS.followers, JSON.stringify(uniqueFollowers));
+        isApplyingRemotePosts = false;
+        render();
+      } catch (_error) {
+      }
+    }
+
+    async function initializeRemoteSync() {
+      if (!REMOTE_SYNC.enabled) return;
+      if (hasRemoteInitialized) return;
+      hasRemoteInitialized = true;
+
+      await pullRemotePosts(true);
+      allowRemotePush = true;
+
+      remotePullTimer = setInterval(() => {
+        pullRemotePosts(false);
+      }, REMOTE_SYNC.pollMs);
+
+      document.addEventListener("visibilitychange", () => {
+        if (document.visibilityState === "visible") {
+          pullRemotePosts(false);
+        }
+      });
+
+      window.addEventListener("beforeunload", () => {
+        if (remotePushTimer) {
+          clearTimeout(remotePushTimer);
+          remotePushTimer = null;
+          pushRemotePosts(true);
+        }
+      });
     }
 
     function loadFavorites() {
@@ -1111,6 +1251,10 @@
 
     function saveFollowers() {
       localStorage.setItem(STORAGE_KEYS.followers, JSON.stringify(Array.from(state.followersSet)));
+      lastLocalMutationAt = Date.now();
+      if (!isApplyingRemotePosts && allowRemotePush) {
+        scheduleRemotePush();
+      }
     }
 
     function clearSession() {
@@ -1177,8 +1321,12 @@
     }
 
     function buildStatusUrl(statusId) {
-      const url = new URL(window.location.href);
-      url.hash = buildStatusHash(statusId);
+      const cleanId = parseStatusId(statusId);
+      const url = new URL("status.html", window.location.href);
+      if (cleanId) {
+        url.searchParams.set("id", cleanId);
+      }
+      url.hash = "";
       return url.toString();
     }
 
@@ -1464,17 +1612,17 @@
               '">Excluir grrrarrr</button>'
             : "";
           const statusText = "status/" + post.statusId;
-          const statusHref = "#/status/" + post.statusId;
+          const statusHref = buildStatusUrl(post.statusId);
           const mediaBlock = post.media
             ? '<div class="post-media"><img src="' + escapeHtml(post.media) + '" alt="Mídia do grrrarrr"></div>'
             : "";
 
           return (
             '<li class="post">' +
-            '<img class="post-avatar" src="icon.png" alt="Arctos Medved">' +
+            '<img class="post-avatar" src="img/icon.png" alt="Arctos Medved">' +
             '<div>' +
             '<p class="post-head">' +
-            '<span class="post-name">Arctos Medved</span>' +
+            '<span class="post-name">Arctos Medved<span class="verified-badge verified-badge-sm" title="Conta verificada" aria-label="Conta verificada">✓</span></span>' +
             '<span class="post-handle">@arctos</span>' +
             '<span class="post-time">· ' +
             formatRelativeTime(post.createdAt) +
@@ -1496,7 +1644,7 @@
             ")</button>" +
             deleteButton +
             '<a class="status-link" href="' +
-            statusHref +
+            escapeHtml(statusHref) +
             '" data-action="open-status" data-status-id="' +
             post.statusId +
             '">' +
@@ -1701,10 +1849,7 @@
         event.preventDefault();
         const statusId = parseStatusId(statusLink.dataset.statusId);
         if (!statusId) return;
-        state.statusFilter = statusId;
-        state.activeTab = "grrrarrr";
-        syncStatusUrl(statusId);
-        render();
+        window.location.href = buildStatusUrl(statusId);
         return;
       }
 
@@ -1806,6 +1951,7 @@
     }
 
     render();
+    initializeRemoteSync();
   </script>
 </body>
 </html>

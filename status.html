@@ -1,0 +1,905 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Arctos Medved | status</title>
+  <style>
+    @font-face {
+      font-family: "RobotoLocal";
+      src: url("img/Roboto-Regular.ttf") format("truetype");
+      font-weight: 400;
+      font-style: normal;
+      font-display: swap;
+    }
+
+    :root {
+      --panel-border: #f0c4cc;
+      --ink: #332427;
+      --brand-700: #6c1420;
+      --brand-600: #8e1e2d;
+      --token: #b6263d;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      min-height: 100vh;
+      padding-top: 74px;
+      font-family: "RobotoLocal", "Segoe UI", Tahoma, sans-serif;
+      color: var(--ink);
+      background:
+        linear-gradient(180deg, #f7c8d0 0, #fde2e6 180px, #fff2f4 100%),
+        repeating-linear-gradient(
+          -28deg,
+          rgba(255, 255, 255, 0.25),
+          rgba(255, 255, 255, 0.25) 8px,
+          transparent 8px,
+          transparent 24px
+        );
+    }
+
+    .topbar {
+      min-height: 56px;
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      z-index: 1200;
+      background: linear-gradient(180deg, var(--brand-700) 0%, var(--brand-600) 100%);
+      border-bottom: 1px solid rgba(18, 39, 50, 0.35);
+      box-shadow: 0 1px 0 rgba(255, 255, 255, 0.25) inset;
+    }
+
+    .topbar-inner {
+      width: min(900px, 95vw);
+      margin: 0 auto;
+      min-height: 56px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px;
+      flex-wrap: wrap;
+      padding: 8px 0;
+      color: #fff;
+    }
+
+    .brand {
+      font-size: 1.08rem;
+      font-weight: 700;
+      text-shadow: 0 1px 0 rgba(0, 0, 0, 0.28);
+    }
+
+    .top-links {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+
+    .top-link {
+      color: #ffe3e7;
+      text-decoration: none;
+      font-size: 0.88rem;
+      border-bottom: 1px dotted rgba(255, 227, 231, 0.8);
+    }
+
+    .page {
+      width: min(900px, 95vw);
+      margin: 18px auto 32px;
+    }
+
+    .panel {
+      background: #fff;
+      border: 1px solid var(--panel-border);
+      border-radius: 8px;
+      overflow: hidden;
+      box-shadow: 0 1px 0 rgba(255, 255, 255, 0.8) inset;
+    }
+
+    .status-head {
+      padding: 12px 14px;
+      border-bottom: 1px solid #efcad1;
+      background: #fff7f8;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+
+    .status-title {
+      margin: 0;
+      font-size: 0.94rem;
+      color: #7f545c;
+      font-weight: 700;
+    }
+
+    .status-code {
+      color: #b6263d;
+      font-size: 0.84rem;
+      font-weight: 700;
+    }
+
+    .post-wrap {
+      padding: 14px;
+    }
+
+    .post {
+      display: grid;
+      grid-template-columns: 56px minmax(0, 1fr);
+      gap: 10px;
+    }
+
+    .post-avatar {
+      width: 56px;
+      height: 56px;
+      border: 1px solid #efc9d0;
+      border-radius: 8px;
+      padding: 4px;
+      background: #fff4f6;
+      object-fit: contain;
+    }
+
+    .post-head {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: baseline;
+      gap: 6px;
+      margin: 0 0 6px;
+    }
+
+    .post-name {
+      font-weight: 700;
+      color: #24303a;
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+    }
+
+    .verified-badge {
+      width: 16px;
+      height: 16px;
+      border-radius: 50%;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 0.62rem;
+      font-weight: 700;
+      color: #fff;
+      background: linear-gradient(180deg, #4eb7ff 0%, #2196f3 100%);
+      border: 1px solid #1a86dc;
+      box-shadow: 0 1px 2px rgba(16, 82, 130, 0.22);
+      line-height: 1;
+      flex-shrink: 0;
+    }
+
+    .post-handle,
+    .post-time {
+      color: #8f656c;
+      font-size: 0.9rem;
+    }
+
+    .post-text {
+      margin: 0;
+      line-height: 1.45;
+      color: #293943;
+      word-break: break-word;
+    }
+
+    .post-text .token {
+      color: var(--token);
+      font-weight: 700;
+    }
+
+    .post-media {
+      margin-top: 10px;
+      border: 1px solid #efcad1;
+      border-radius: 8px;
+      background: #fff4f6;
+      padding: 8px;
+    }
+
+    .post-media img {
+      width: 100%;
+      max-height: 380px;
+      object-fit: contain;
+      border-radius: 6px;
+      display: block;
+    }
+
+    .post-actions {
+      margin-top: 10px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+
+    .fav-btn,
+    .copy-btn {
+      border: 1px solid #e7b4be;
+      border-radius: 999px;
+      background: #fff;
+      color: #885a62;
+      padding: 5px 11px;
+      font-size: 0.83rem;
+      cursor: pointer;
+      font-family: inherit;
+    }
+
+    .fav-btn.active {
+      border-color: #d6939f;
+      color: #922f40;
+      background: #ffeef1;
+    }
+
+    .comment-list {
+      margin-top: 12px;
+      display: grid;
+      gap: 6px;
+    }
+
+    .comment-item {
+      background: #fff7f8;
+      border: 1px solid #efd2d7;
+      border-radius: 8px;
+      padding: 8px;
+      display: grid;
+      grid-template-columns: 34px minmax(0, 1fr);
+      gap: 8px;
+      align-items: start;
+    }
+
+    .comment-item.no-avatar {
+      grid-template-columns: 1fr;
+    }
+
+    .comment-avatar {
+      width: 34px;
+      height: 34px;
+      border-radius: 50%;
+      object-fit: cover;
+      border: 1px solid #e8c6cc;
+      background: #fff;
+      margin-top: 1px;
+    }
+
+    .comment-head {
+      display: flex;
+      align-items: baseline;
+      gap: 6px;
+      flex-wrap: wrap;
+      margin-bottom: 4px;
+    }
+
+    .comment-author {
+      font-size: 0.84rem;
+      font-weight: 700;
+      color: #5f3f46;
+    }
+
+    .comment-time {
+      font-size: 0.75rem;
+      color: #8f676e;
+    }
+
+    .comment-text {
+      margin: 0;
+      font-size: 0.88rem;
+      line-height: 1.35;
+      color: #52383d;
+      word-break: break-word;
+    }
+
+    .comment-form {
+      margin-top: 10px;
+      display: grid;
+      gap: 6px;
+      grid-template-columns: minmax(0, 1fr) auto;
+    }
+
+    .comment-input {
+      border: 1px solid #efcad1;
+      border-radius: 8px;
+      padding: 8px 10px;
+      font-size: 0.84rem;
+      font-family: inherit;
+      min-width: 0;
+    }
+
+    .comment-submit {
+      border: 1px solid #8f2231;
+      border-radius: 16px;
+      background: linear-gradient(180deg, #d1455a 0%, #b72f43 100%);
+      color: #fff;
+      padding: 7px 11px;
+      font-size: 0.82rem;
+      cursor: pointer;
+      font-family: inherit;
+    }
+
+    .empty {
+      padding: 22px 16px;
+      color: #79585f;
+    }
+
+    .notice {
+      margin: 0;
+      padding: 12px 14px;
+      color: #7c5a61;
+      font-size: 0.9rem;
+      border-top: 1px solid #f0d2d8;
+      background: #fff8f9;
+    }
+
+    .user-pill {
+      font-size: 0.83rem;
+      padding: 3px 8px;
+      border-radius: 999px;
+      background: rgba(255, 241, 244, 0.16);
+      border: 1px solid rgba(255, 221, 227, 0.42);
+      color: #fff2f4;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .user-pill-avatar {
+      width: 20px;
+      height: 20px;
+      border-radius: 50%;
+      object-fit: cover;
+      border: 1px solid rgba(255, 228, 234, 0.65);
+      background: rgba(255, 255, 255, 0.3);
+    }
+
+    .auth-zone {
+      display: inline-flex;
+      gap: 8px;
+      align-items: center;
+    }
+
+    .logout-button {
+      border: 1px solid #8f2231;
+      border-radius: 16px;
+      background: linear-gradient(180deg, #d1455a 0%, #b72f43 100%);
+      color: #fff;
+      padding: 6px 10px;
+      font-size: 0.8rem;
+      font-weight: 700;
+      cursor: pointer;
+      font-family: inherit;
+    }
+
+    @media (max-width: 760px) {
+      body {
+        padding-top: 124px;
+      }
+
+      .topbar-inner {
+        justify-content: center;
+      }
+
+      .brand,
+      .top-links {
+        width: 100%;
+        justify-content: center;
+        text-align: center;
+      }
+
+      .comment-form {
+        grid-template-columns: 1fr;
+      }
+    }
+  </style>
+</head>
+<body>
+  <header class="topbar">
+    <div class="topbar-inner">
+      <div class="brand">Arctos Medved Entertainment</div>
+      <div class="top-links">
+        <a class="top-link" href="index.html">Voltar ao feed</a>
+        <div class="auth-zone" id="authZone"></div>
+      </div>
+    </div>
+  </header>
+
+  <main class="page">
+    <section class="panel">
+      <div class="status-head">
+        <p class="status-title">grrrarrr</p>
+        <span class="status-code" id="statusCode">status/...</span>
+      </div>
+      <div class="post-wrap" id="postWrap"></div>
+      <p class="notice" id="statusNotice">Link direto de grrrarrr.</p>
+    </section>
+  </main>
+
+  <script>
+    const STORAGE_KEYS = {
+      posts: "arctos_posts_v2",
+      session: "arctos_user_session_v1",
+      favorites: "arctos_user_favorites_v1"
+    };
+
+    const DEFAULT_USER_AVATAR = "img/icon.png";
+    const REMOTE_SYNC = {
+      enabled: /^https?:$/i.test(window.location.protocol),
+      endpoint: "api/posts.php",
+      pollMs: 5000
+    };
+
+    const state = {
+      statusId: "",
+      post: null,
+      currentUser: null,
+      userFavorites: new Set()
+    };
+
+    let allowRemotePush = false;
+    let remotePushTimer = null;
+    let remotePullTimer = null;
+    let isApplyingRemotePosts = false;
+    let lastLocalMutationAt = 0;
+    let hasRemoteInitialized = false;
+
+    const postWrap = document.getElementById("postWrap");
+    const statusCode = document.getElementById("statusCode");
+    const statusNotice = document.getElementById("statusNotice");
+    const authZone = document.getElementById("authZone");
+
+    function parseStatusId(value) {
+      const normalized = String(value || "").trim();
+      if (!/^[0-9]{6,}$/.test(normalized)) return "";
+      return normalized;
+    }
+
+    function extractStatusFromLocation() {
+      const query = new URLSearchParams(window.location.search);
+      const queryStatus = parseStatusId(query.get("id") || query.get("status"));
+      if (queryStatus) return queryStatus;
+
+      const pathMatch = window.location.pathname.match(/\/(?:ArctosEnt\/)?status\/([0-9]+)/i);
+      const pathStatus = parseStatusId(pathMatch && pathMatch[1]);
+      if (pathStatus) return pathStatus;
+
+      const hashMatch = window.location.hash.match(/(?:status\/)?([0-9]{6,})/i);
+      return parseStatusId(hashMatch && hashMatch[1]);
+    }
+
+    function normalizeAvatarUrl(value) {
+      const avatar = String(value || "").trim();
+      return avatar || DEFAULT_USER_AVATAR;
+    }
+
+    function normalizePost(post, index) {
+      return {
+        id: String(post.id || "post-" + Date.now() + "-" + index),
+        statusId: parseStatusId(post.statusId || post.status || post.id),
+        text: String(post.text || ""),
+        media: String(post.media || ""),
+        favoriteCount: Math.max(0, Number(post.favoriteCount || (post.favorite ? 1 : 0) || 0)),
+        comments: Array.isArray(post.comments)
+          ? post.comments.map((comment, cIndex) => ({
+              id: String(comment.id || "comment-" + index + "-" + cIndex + "-" + Date.now()),
+              author: String(comment.author || "Visitante"),
+              text: String(comment.text || ""),
+              avatar: normalizeAvatarUrl(comment.avatar),
+              createdAt: comment.createdAt || new Date().toISOString()
+            }))
+          : [],
+        createdAt: post.createdAt || new Date().toISOString()
+      };
+    }
+
+    function loadPosts() {
+      try {
+        const raw = JSON.parse(localStorage.getItem(STORAGE_KEYS.posts) || "[]");
+        if (!Array.isArray(raw)) return [];
+        return raw.map((post, index) => normalizePost(post, index)).filter((post) => !!post.statusId);
+      } catch (_error) {
+        return [];
+      }
+    }
+
+    function savePosts(posts) {
+      localStorage.setItem(STORAGE_KEYS.posts, JSON.stringify(posts));
+      lastLocalMutationAt = Date.now();
+      if (!isApplyingRemotePosts && allowRemotePush) {
+        scheduleRemotePush();
+      }
+    }
+
+    function scheduleRemotePush() {
+      if (!REMOTE_SYNC.enabled) return;
+      if (remotePushTimer) {
+        clearTimeout(remotePushTimer);
+      }
+      remotePushTimer = setTimeout(() => {
+        remotePushTimer = null;
+        pushRemotePosts();
+      }, 450);
+    }
+
+    async function pushRemotePosts(keepalive) {
+      if (!REMOTE_SYNC.enabled) return false;
+      try {
+        const response = await fetch(REMOTE_SYNC.endpoint, {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json"
+          },
+          cache: "no-store",
+          keepalive: !!keepalive,
+          body: JSON.stringify({
+            posts: loadPosts()
+          })
+        });
+        return response.ok;
+      } catch (_error) {
+        return false;
+      }
+    }
+
+    async function pullRemotePosts(isInitial) {
+      if (!REMOTE_SYNC.enabled) return;
+      try {
+        const response = await fetch(REMOTE_SYNC.endpoint, {
+          method: "GET",
+          cache: "no-store"
+        });
+        if (!response.ok) return;
+
+        const payload = await response.json();
+        const incoming = Array.isArray(payload)
+          ? payload
+          : Array.isArray(payload && payload.posts)
+            ? payload.posts
+            : null;
+        if (!incoming) return;
+
+        const normalized = incoming.map((post, index) => normalizePost(post, index)).filter((post) => !!post.statusId);
+        const remoteJson = JSON.stringify(normalized);
+        const localPosts = loadPosts();
+        const localJson = JSON.stringify(localPosts);
+
+        if (isInitial && normalized.length === 0 && localPosts.length > 0) {
+          await pushRemotePosts();
+          return;
+        }
+
+        if (remoteJson === localJson) return;
+        if (!isInitial && Date.now() - lastLocalMutationAt < 1800) return;
+
+        isApplyingRemotePosts = true;
+        localStorage.setItem(STORAGE_KEYS.posts, remoteJson);
+        isApplyingRemotePosts = false;
+        loadCurrentPost();
+        render();
+      } catch (_error) {
+      }
+    }
+
+    async function initializeRemoteSync() {
+      if (!REMOTE_SYNC.enabled) return;
+      if (hasRemoteInitialized) return;
+      hasRemoteInitialized = true;
+
+      await pullRemotePosts(true);
+      allowRemotePush = true;
+
+      remotePullTimer = setInterval(() => {
+        pullRemotePosts(false);
+      }, REMOTE_SYNC.pollMs);
+
+      document.addEventListener("visibilitychange", () => {
+        if (document.visibilityState === "visible") {
+          pullRemotePosts(false);
+        }
+      });
+
+      window.addEventListener("beforeunload", () => {
+        if (remotePushTimer) {
+          clearTimeout(remotePushTimer);
+          remotePushTimer = null;
+          pushRemotePosts(true);
+        }
+      });
+    }
+
+    function loadFavorites() {
+      try {
+        const parsed = JSON.parse(localStorage.getItem(STORAGE_KEYS.favorites) || "[]");
+        if (!Array.isArray(parsed)) return new Set();
+        return new Set(parsed.map(String));
+      } catch (_error) {
+        return new Set();
+      }
+    }
+
+    function saveFavorites() {
+      localStorage.setItem(STORAGE_KEYS.favorites, JSON.stringify(Array.from(state.userFavorites)));
+    }
+
+    function normalizeSession(rawSession) {
+      if (!rawSession || rawSession.logged !== true) return null;
+      const username = String(rawSession.username || "").trim().toLowerCase();
+      if (!username) return null;
+      return {
+        logged: true,
+        name: String(rawSession.name || username),
+        username,
+        avatar: normalizeAvatarUrl(rawSession.avatar),
+        loggedAt: rawSession.loggedAt || new Date().toISOString()
+      };
+    }
+
+    function loadSession() {
+      try {
+        return normalizeSession(JSON.parse(localStorage.getItem(STORAGE_KEYS.session) || "null"));
+      } catch (_error) {
+        return null;
+      }
+    }
+
+    function escapeHtml(text) {
+      return String(text || "")
+        .replaceAll("&", "&amp;")
+        .replaceAll("<", "&lt;")
+        .replaceAll(">", "&gt;")
+        .replaceAll('"', "&quot;")
+        .replaceAll("'", "&#39;");
+    }
+
+    function parseTokens(text) {
+      return escapeHtml(text).replace(/([@#][\wÀ-ÿ]+)/g, '<span class="token">$1</span>').replaceAll("\n", "<br>");
+    }
+
+    function formatRelativeTime(isoDate) {
+      const then = new Date(isoDate).getTime();
+      const minutes = Math.max(0, Math.floor((Date.now() - then) / 60000));
+      if (minutes < 1) return "agora";
+      if (minutes < 60) return "há " + minutes + " min";
+      const hours = Math.floor(minutes / 60);
+      if (hours < 24) return "há " + hours + " h";
+      const days = Math.floor(hours / 24);
+      return "há " + days + " dia" + (days > 1 ? "s" : "");
+    }
+
+    function createId(prefix) {
+      if (window.crypto && typeof window.crypto.randomUUID === "function") {
+        return prefix + "-" + window.crypto.randomUUID();
+      }
+      return prefix + "-" + Date.now() + "-" + Math.floor(Math.random() * 1e6);
+    }
+
+    function buildStatusUrl(statusId) {
+      const cleanId = parseStatusId(statusId);
+      const url = new URL("status.html", window.location.href);
+      if (cleanId) {
+        url.searchParams.set("id", cleanId);
+      }
+      url.hash = "";
+      return url.toString();
+    }
+
+    function copyTextToClipboard(value) {
+      if (navigator.clipboard && window.isSecureContext) {
+        return navigator.clipboard.writeText(value);
+      }
+
+      return new Promise((resolve, reject) => {
+        const textarea = document.createElement("textarea");
+        textarea.value = value;
+        textarea.setAttribute("readonly", "");
+        textarea.style.position = "absolute";
+        textarea.style.left = "-9999px";
+        document.body.appendChild(textarea);
+        textarea.select();
+        textarea.setSelectionRange(0, textarea.value.length);
+        try {
+          const ok = document.execCommand("copy");
+          document.body.removeChild(textarea);
+          if (!ok) throw new Error("copy failed");
+          resolve();
+        } catch (error) {
+          document.body.removeChild(textarea);
+          reject(error);
+        }
+      });
+    }
+
+    function renderAuth() {
+      if (state.currentUser) {
+        const avatarSrc = escapeHtml(state.currentUser.avatar || DEFAULT_USER_AVATAR);
+        const avatarAlt = "Avatar de @" + escapeHtml(state.currentUser.username);
+        authZone.innerHTML =
+          '<span class="user-pill"><img class="user-pill-avatar" src="' +
+          avatarSrc +
+          '" alt="' +
+          avatarAlt +
+          '">' +
+          '<span>@' +
+          escapeHtml(state.currentUser.username) +
+          '</span></span>' +
+          '<button type="button" class="logout-button" id="logoutButton">Sair</button>';
+      } else {
+        authZone.innerHTML =
+          '<a class="top-link" href="login.html?mode=login">Entrar</a>' +
+          '<a class="top-link" href="login.html?mode=signup">Criar conta</a>';
+      }
+    }
+
+    function renderComments(post) {
+      if (!post.comments.length) {
+        return '<div class="comment-list"><div class="comment-item no-avatar"><div><p class="comment-text">Nenhum comentário ainda.</p></div></div></div>';
+      }
+
+      const ordered = [...post.comments].sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
+      return (
+        '<div class="comment-list">' +
+        ordered
+          .map(
+            (comment) =>
+              '<div class="comment-item">' +
+              '<img class="comment-avatar" src="' +
+              escapeHtml(comment.avatar || DEFAULT_USER_AVATAR) +
+              '" alt="Avatar de usuário">' +
+              '<div>' +
+              '<div class="comment-head">' +
+              '<span class="comment-author">' +
+              escapeHtml(comment.author) +
+              '</span>' +
+              '<span class="comment-time">· ' +
+              formatRelativeTime(comment.createdAt) +
+              '</span>' +
+              '</div>' +
+              '<p class="comment-text">' +
+              parseTokens(comment.text) +
+              '</p>' +
+              '</div>' +
+              '</div>'
+          )
+          .join("") +
+        '</div>'
+      );
+    }
+
+    function renderPost() {
+      if (!state.statusId) {
+        statusCode.textContent = "status/---";
+        statusNotice.textContent = "Link inválido. Abra pelo link status/{id}.";
+        postWrap.innerHTML = '<p class="empty">ID do grrrarrr não encontrado no link.</p>';
+        return;
+      }
+
+      statusCode.textContent = "status/" + state.statusId;
+      if (!state.post) {
+        statusNotice.textContent = "Esse grrrarrr não foi encontrado ou já foi excluído.";
+        postWrap.innerHTML = '<p class="empty">Nenhum grrrarrr encontrado para esse status.</p>';
+        return;
+      }
+
+      statusNotice.textContent = "Página individual do grrrarrr.";
+      const post = state.post;
+      const userLiked = state.userFavorites.has(post.id);
+      const favClass = userLiked ? "fav-btn active" : "fav-btn";
+      const favLabel = userLiked ? "★ Favoritado" : "☆ Favoritar";
+
+      postWrap.innerHTML =
+        '<article class="post">' +
+        '<img class="post-avatar" src="img/icon.png" alt="Arctos Medved">' +
+        '<div>' +
+        '<p class="post-head">' +
+        '<span class="post-name">Arctos Medved <span class="verified-badge" title="Conta verificada">✓</span></span>' +
+        '<span class="post-handle">@arctos</span>' +
+        '<span class="post-time">· ' +
+        formatRelativeTime(post.createdAt) +
+        '</span>' +
+        '</p>' +
+        '<p class="post-text">' +
+        parseTokens(post.text) +
+        '</p>' +
+        (post.media ? '<div class="post-media"><img src="' + escapeHtml(post.media) + '" alt="Mídia do grrrarrr"></div>' : '') +
+        '<div class="post-actions">' +
+        '<button class="' + favClass + '" data-action="toggle-favorite">' + favLabel + ' (' + post.favoriteCount + ')</button>' +
+        '<button class="copy-btn" data-action="copy-link" type="button">Copiar link</button>' +
+        '</div>' +
+        renderComments(post) +
+        '<form class="comment-form" data-action="comment-form">' +
+        '<input class="comment-input" name="comment" maxlength="280" placeholder="' +
+        (state.currentUser ? 'Comentar como @' + escapeHtml(state.currentUser.username) : 'Comente nesse grrrarrr') +
+        '" required>' +
+        '<button class="comment-submit" type="submit">Comentar</button>' +
+        '</form>' +
+        '</div>' +
+        '</article>';
+    }
+
+    function loadCurrentPost() {
+      const posts = loadPosts();
+      state.post = posts.find((item) => item.statusId === state.statusId) || null;
+    }
+
+    function saveCurrentPost() {
+      const posts = loadPosts();
+      const index = posts.findIndex((item) => item.id === (state.post && state.post.id));
+      if (index >= 0 && state.post) {
+        posts[index] = state.post;
+        savePosts(posts);
+      }
+    }
+
+    function render() {
+      renderAuth();
+      renderPost();
+    }
+
+    document.addEventListener("click", (event) => {
+      const logoutButton = event.target.closest("#logoutButton");
+      if (logoutButton) {
+        localStorage.removeItem(STORAGE_KEYS.session);
+        state.currentUser = null;
+        render();
+        return;
+      }
+
+      const favoriteButton = event.target.closest('[data-action="toggle-favorite"]');
+      if (favoriteButton && state.post) {
+        if (state.userFavorites.has(state.post.id)) {
+          state.userFavorites.delete(state.post.id);
+          state.post.favoriteCount = Math.max(0, state.post.favoriteCount - 1);
+        } else {
+          state.userFavorites.add(state.post.id);
+          state.post.favoriteCount += 1;
+        }
+        saveFavorites();
+        saveCurrentPost();
+        render();
+        return;
+      }
+
+      const copyButton = event.target.closest('[data-action="copy-link"]');
+      if (copyButton && state.post) {
+        const statusUrl = buildStatusUrl(state.post.statusId);
+        copyTextToClipboard(statusUrl)
+          .then(() => window.alert("Link copiado: " + statusUrl))
+          .catch(() => window.prompt("Copie o link deste grrrarrr:", statusUrl));
+      }
+    });
+
+    document.addEventListener("submit", (event) => {
+      const form = event.target.closest('[data-action="comment-form"]');
+      if (!form || !state.post) return;
+      event.preventDefault();
+
+      const formData = new FormData(form);
+      const text = String(formData.get("comment") || "").trim();
+      if (!text) return;
+
+      const author = state.currentUser ? "@" + state.currentUser.username : "Visitante";
+      state.post.comments.push({
+        id: createId("comment"),
+        author,
+        text,
+        avatar: state.currentUser ? normalizeAvatarUrl(state.currentUser.avatar) : DEFAULT_USER_AVATAR,
+        createdAt: new Date().toISOString()
+      });
+
+      saveCurrentPost();
+      render();
+    });
+
+    state.statusId = extractStatusFromLocation();
+    state.currentUser = loadSession();
+    state.userFavorites = loadFavorites();
+    loadCurrentPost();
+    render();
+    initializeRemoteSync();
+  </script>
+</body>
+</html>
