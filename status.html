@@ -431,19 +431,33 @@
     </section>
   </main>
 
+  <script src="/sync-config.js"></script>
   <script>
     const STORAGE_KEYS = {
       posts: "arctos_posts_v2",
       session: "arctos_user_session_v1",
-      favorites: "arctos_user_favorites_v1"
+      favorites: "arctos_user_favorites_v1",
+      followers: "arctos_followers_v1"
     };
 
     const DEFAULT_USER_AVATAR = "/img/icon.png";
+    const SYNC_CONFIG = window.ARC_SYNC || {};
     const REMOTE_SYNC = {
-      enabled: /^https?:$/i.test(window.location.protocol),
-      endpoint: "/api/posts.php",
-      pollMs: 5000
+      provider: "supabase",
+      enabled:
+        /^https?:$/i.test(window.location.protocol) &&
+        String(SYNC_CONFIG.provider || "supabase").toLowerCase() === "supabase" &&
+        typeof SYNC_CONFIG.url === "string" &&
+        SYNC_CONFIG.url.includes("supabase.co") &&
+        typeof SYNC_CONFIG.anonKey === "string" &&
+        SYNC_CONFIG.anonKey.length > 20,
+      url: String(SYNC_CONFIG.url || "").replace(/\/+$/, ""),
+      anonKey: String(SYNC_CONFIG.anonKey || ""),
+      table: String(SYNC_CONFIG.table || "site_state"),
+      rowId: String(SYNC_CONFIG.rowId || "global"),
+      pollMs: Number(SYNC_CONFIG.pollMs) > 0 ? Number(SYNC_CONFIG.pollMs) : 5000
     };
+    const SYNC_NOT_CONFIGURED_TEXT = "Sincronização online desativada: configure o arquivo sync-config.js (Supabase).";
 
     const state = {
       statusId: "",
@@ -534,12 +548,100 @@
       }
     }
 
+    function loadFollowersForSync() {
+      try {
+        const raw = JSON.parse(localStorage.getItem(STORAGE_KEYS.followers) || "[]");
+        if (!Array.isArray(raw)) return [];
+        return raw.map((item) => String(item || "").trim().toLowerCase()).filter(Boolean);
+      } catch (_error) {
+        return [];
+      }
+    }
+
     function savePosts(posts) {
       localStorage.setItem(STORAGE_KEYS.posts, JSON.stringify(posts));
       lastLocalMutationAt = Date.now();
       if (!isApplyingRemotePosts && allowRemotePush) {
         scheduleRemotePush();
       }
+    }
+
+    function mapRemoteSyncError(error) {
+      const status = Number(error && error.status);
+      if (status === 401 || status === 403) {
+        return "Sync bloqueada: confira URL, chave e políticas do Supabase.";
+      }
+      if (status === 404) {
+        return "Sync não encontrada: confira tabela/rota no Supabase.";
+      }
+      return "Sincronização online indisponível no momento.";
+    }
+
+    function getRemoteHeaders(withJson) {
+      const headers = {
+        apikey: REMOTE_SYNC.anonKey,
+        Authorization: "Bearer " + REMOTE_SYNC.anonKey
+      };
+      if (withJson) {
+        headers["Content-Type"] = "application/json";
+      }
+      return headers;
+    }
+
+    function buildRemoteTableUrl() {
+      return REMOTE_SYNC.url + "/rest/v1/" + encodeURIComponent(REMOTE_SYNC.table);
+    }
+
+    async function fetchRemoteState() {
+      const url =
+        buildRemoteTableUrl() +
+        "?id=eq." +
+        encodeURIComponent(REMOTE_SYNC.rowId) +
+        "&select=posts,followers,revision,updated_at";
+      const response = await fetch(url, {
+        method: "GET",
+        headers: getRemoteHeaders(false),
+        cache: "no-store"
+      });
+      if (!response.ok) {
+        const error = new Error("remote get failed");
+        error.status = response.status;
+        throw error;
+      }
+
+      const payload = await response.json();
+      if (!Array.isArray(payload) || !payload.length) {
+        return null;
+      }
+      return payload[0];
+    }
+
+    async function upsertRemoteState(keepalive) {
+      const url = buildRemoteTableUrl() + "?on_conflict=id";
+      const response = await fetch(url, {
+        method: "POST",
+        headers: {
+          ...getRemoteHeaders(true),
+          Prefer: "resolution=merge-duplicates,return=minimal"
+        },
+        cache: "no-store",
+        keepalive: !!keepalive,
+        body: JSON.stringify([
+          {
+            id: REMOTE_SYNC.rowId,
+            posts: loadPosts(),
+            followers: loadFollowersForSync(),
+            revision: Date.now(),
+            updated_at: new Date().toISOString()
+          }
+        ])
+      });
+      if (!response.ok) {
+        const error = new Error("remote upsert failed");
+        error.status = response.status;
+        throw error;
+      }
+      return true;
     }
 
     function scheduleRemotePush() {
@@ -556,25 +658,11 @@
     async function pushRemotePosts(keepalive) {
       if (!REMOTE_SYNC.enabled) return false;
       try {
-        const response = await fetch(REMOTE_SYNC.endpoint, {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json"
-          },
-          cache: "no-store",
-          keepalive: !!keepalive,
-          body: JSON.stringify({
-            posts: loadPosts()
-          })
-        });
-        if (!response.ok) {
-          setRemoteSyncIssue("Sincronização online indisponível no momento.");
-          return false;
-        }
+        await upsertRemoteState(keepalive);
         setRemoteSyncIssue("");
         return true;
-      } catch (_error) {
-        setRemoteSyncIssue("Sincronização online indisponível no momento.");
+      } catch (error) {
+        setRemoteSyncIssue(mapRemoteSyncError(error));
         return false;
       }
     }
@@ -582,39 +670,18 @@
     async function pullRemotePosts(isInitial) {
       if (!REMOTE_SYNC.enabled) return;
       try {
-        const response = await fetch(REMOTE_SYNC.endpoint, {
-          method: "GET",
-          cache: "no-store"
-        });
-        if (!response.ok) {
-          setRemoteSyncIssue("Sincronização online indisponível no momento.");
-          return;
-        }
-
-        const contentType = String(response.headers.get("content-type") || "").toLowerCase();
-        if (!contentType.includes("application/json")) {
-          const snippet = (await response.text()).slice(0, 240).toLowerCase();
-          if (snippet.includes("<?php") || snippet.includes("declare(strict_types=1)")) {
-            setRemoteSyncIssue("API offline: o servidor está baixando o PHP em vez de executar.");
-          } else {
-            setRemoteSyncIssue("API respondeu em formato inválido para sincronização.");
-          }
-          return;
-        }
-
-        const payload = await response.json();
+        const payload = await fetchRemoteState();
         setRemoteSyncIssue("");
-        const incoming = Array.isArray(payload)
-          ? payload
-          : Array.isArray(payload && payload.posts)
-            ? payload.posts
-            : null;
-        if (!incoming) return;
+        const incoming = Array.isArray(payload && payload.posts) ? payload.posts : [];
+        const incomingFollowers = Array.isArray(payload && payload.followers) ? payload.followers : [];
 
         const normalized = incoming.map((post, index) => normalizePost(post, index)).filter((post) => !!post.statusId);
         const remoteJson = JSON.stringify(normalized);
         const localPosts = loadPosts();
         const localJson = JSON.stringify(localPosts);
+        const normalizedFollowers = incomingFollowers
+          .map((item) => String(item || "").trim().toLowerCase())
+          .filter(Boolean);
 
         if (isInitial && normalized.length === 0 && localPosts.length > 0) {
           await pushRemotePosts();
@@ -626,16 +693,20 @@
 
         isApplyingRemotePosts = true;
         localStorage.setItem(STORAGE_KEYS.posts, remoteJson);
+        localStorage.setItem(STORAGE_KEYS.followers, JSON.stringify(Array.from(new Set(normalizedFollowers))));
         isApplyingRemotePosts = false;
         loadCurrentPost();
         render();
-      } catch (_error) {
-        setRemoteSyncIssue("Sincronização online indisponível no momento.");
+      } catch (error) {
+        setRemoteSyncIssue(mapRemoteSyncError(error));
       }
     }
 
     async function initializeRemoteSync() {
-      if (!REMOTE_SYNC.enabled) return;
+      if (!REMOTE_SYNC.enabled) {
+        setRemoteSyncIssue(SYNC_NOT_CONFIGURED_TEXT);
+        return;
+      }
       if (hasRemoteInitialized) return;
       hasRemoteInitialized = true;
 
