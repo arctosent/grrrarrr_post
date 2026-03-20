@@ -7,7 +7,7 @@
   <style>
     @font-face {
       font-family: "RobotoLocal";
-      src: url("img/Roboto-Regular.ttf") format("truetype");
+      src: url("/img/Roboto-Regular.ttf") format("truetype");
       font-weight: 400;
       font-style: normal;
       font-display: swap;
@@ -515,6 +515,16 @@
       gap: 8px;
     }
 
+    .sync-status {
+      display: none;
+      padding: 10px 14px;
+      border-bottom: 1px solid #efcad1;
+      background: #fff8e6;
+      color: #7c4a00;
+      font-size: 0.88rem;
+      line-height: 1.35;
+    }
+
     .timeline {
       margin: 0;
       padding: 0;
@@ -878,7 +888,7 @@
     <section class="panel">
       <div class="profile-card">
         <div class="profile-photo">
-          <img src="img/icon.png" alt="Foto da empresa Arctos Medved" />
+          <img src="/img/icon.png" alt="Foto da empresa Arctos Medved" />
         </div>
         <div>
           <h1 class="profile-title"><span class="name-with-badge">Arctos Medved Entertainment<span class="verified-badge" title="Conta verificada" aria-label="Conta verificada">✓</span></span></h1>
@@ -932,6 +942,7 @@
         <span id="searchStatusText"></span>
         <button id="clearSearch" class="clear-button" type="button">Limpar</button>
       </div>
+      <div class="sync-status" id="syncStatus"></div>
 
       <ul class="timeline" id="timeline"></ul>
     </section>
@@ -945,7 +956,7 @@
       favorites: "arctos_user_favorites_v1",
       followers: "arctos_followers_v1"
     };
-    const DEFAULT_USER_AVATAR = "img/icon.png";
+    const DEFAULT_USER_AVATAR = "/img/icon.png";
 
     const DEFAULT_POSTS = [];
 
@@ -967,6 +978,7 @@
     const searchStatus = document.getElementById("searchStatus");
     const searchStatusText = document.getElementById("searchStatusText");
     const clearSearchButton = document.getElementById("clearSearch");
+    const syncStatus = document.getElementById("syncStatus");
     const composer = document.getElementById("composer");
     const composerLocked = document.getElementById("composerLocked");
     const newPostText = document.getElementById("newPostText");
@@ -989,7 +1001,7 @@
     const DEFAULT_COMPOSER_HINT = "Dica: clique em @ ou # para filtrar o conteúdo. Admin também pode enviar foto.";
     const REMOTE_SYNC = {
       enabled: /^https?:$/i.test(window.location.protocol),
-      endpoint: "api/posts.php",
+      endpoint: "/api/posts.php",
       pollMs: 5000
     };
     let pendingPhotoData = "";
@@ -1000,6 +1012,21 @@
     let isApplyingRemotePosts = false;
     let lastLocalMutationAt = 0;
     let hasRemoteInitialized = false;
+    let remoteSyncIssue = "";
+
+    function setRemoteSyncIssue(message) {
+      const nextMessage = String(message || "").trim();
+      if (nextMessage === remoteSyncIssue) return;
+      remoteSyncIssue = nextMessage;
+      if (!syncStatus) return;
+      if (!remoteSyncIssue) {
+        syncStatus.style.display = "none";
+        syncStatus.textContent = "";
+        return;
+      }
+      syncStatus.textContent = remoteSyncIssue;
+      syncStatus.style.display = "block";
+    }
 
     function normalizeAvatarUrl(value) {
       const avatar = String(value || "").trim();
@@ -1084,8 +1111,14 @@
             followers: Array.from(state.followersSet)
           })
         });
-        return response.ok;
+        if (!response.ok) {
+          setRemoteSyncIssue("Sincronização online indisponível no momento.");
+          return false;
+        }
+        setRemoteSyncIssue("");
+        return true;
       } catch (_error) {
+        setRemoteSyncIssue("Sincronização online indisponível no momento.");
         return false;
       }
     }
@@ -1098,9 +1131,24 @@
           method: "GET",
           cache: "no-store"
         });
-        if (!response.ok) return;
+        if (!response.ok) {
+          setRemoteSyncIssue("Sincronização online indisponível no momento.");
+          return;
+        }
+
+        const contentType = String(response.headers.get("content-type") || "").toLowerCase();
+        if (!contentType.includes("application/json")) {
+          const snippet = (await response.text()).slice(0, 240).toLowerCase();
+          if (snippet.includes("<?php") || snippet.includes("declare(strict_types=1)")) {
+            setRemoteSyncIssue("API offline: o servidor está baixando o PHP em vez de executar.");
+          } else {
+            setRemoteSyncIssue("API respondeu em formato inválido para sincronização.");
+          }
+          return;
+        }
 
         const payload = await response.json();
+        setRemoteSyncIssue("");
         const incomingPosts = Array.isArray(payload)
           ? payload
           : Array.isArray(payload && payload.posts)
@@ -1150,6 +1198,7 @@
         isApplyingRemotePosts = false;
         render();
       } catch (_error) {
+        setRemoteSyncIssue("Sincronização online indisponível no momento.");
       }
     }
 
@@ -1619,7 +1668,7 @@
 
           return (
             '<li class="post">' +
-            '<img class="post-avatar" src="img/icon.png" alt="Arctos Medved">' +
+            '<img class="post-avatar" src="/img/icon.png" alt="Arctos Medved">' +
             '<div>' +
             '<p class="post-head">' +
             '<span class="post-name">Arctos Medved<span class="verified-badge verified-badge-sm" title="Conta verificada" aria-label="Conta verificada">✓</span></span>' +
