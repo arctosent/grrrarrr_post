@@ -150,12 +150,24 @@
     }
 
     .user-pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
       font-size: 0.83rem;
       padding: 3px 8px;
       border-radius: 999px;
       background: rgba(255, 241, 244, 0.16);
       border: 1px solid rgba(255, 221, 227, 0.42);
       color: #fff2f4;
+    }
+
+    .user-pill-avatar {
+      width: 20px;
+      height: 20px;
+      border-radius: 50%;
+      object-fit: cover;
+      border: 1px solid rgba(255, 228, 234, 0.65);
+      background: rgba(255, 255, 255, 0.3);
     }
 
     .admin-pill {
@@ -628,6 +640,28 @@
       border: 1px solid #efd2d7;
       border-radius: 8px;
       padding: 8px;
+      display: grid;
+      grid-template-columns: 34px minmax(0, 1fr);
+      gap: 8px;
+      align-items: start;
+    }
+
+    .comment-item.no-avatar {
+      grid-template-columns: 1fr;
+    }
+
+    .comment-avatar {
+      width: 34px;
+      height: 34px;
+      border-radius: 50%;
+      object-fit: cover;
+      border: 1px solid #e8c6cc;
+      background: #fff;
+      margin-top: 1px;
+    }
+
+    .comment-content {
+      min-width: 0;
     }
 
     .comment-head {
@@ -876,6 +910,7 @@
       favorites: "arctos_user_favorites_v1",
       followers: "arctos_followers_v1"
     };
+    const DEFAULT_USER_AVATAR = "img/icon.png";
 
     const DEFAULT_POSTS = [
       {
@@ -952,6 +987,11 @@
     let pendingPhotoData = "";
     let isProcessingPhoto = false;
 
+    function normalizeAvatarUrl(value) {
+      const avatar = String(value || "").trim();
+      return avatar || DEFAULT_USER_AVATAR;
+    }
+
     function normalizePost(post, index) {
       return {
         id: String(post.id || "post-" + Date.now() + "-" + index),
@@ -964,6 +1004,7 @@
               id: String(comment.id || "comment-" + index + "-" + cIndex + "-" + Date.now()),
               author: String(comment.author || "Visitante"),
               text: String(comment.text || ""),
+              avatar: normalizeAvatarUrl(comment.avatar),
               createdAt: comment.createdAt || new Date().toISOString()
             }))
           : [],
@@ -1022,6 +1063,7 @@
         name: String(rawSession.name || username),
         username,
         email: String(rawSession.email || ""),
+        avatar: normalizeAvatarUrl(rawSession.avatar),
         isAdmin: username === "arctos",
         loggedAt: rawSession.loggedAt || new Date().toISOString()
       };
@@ -1043,6 +1085,7 @@
             name: "Arctos Medved",
             username: "arctos",
             email: "",
+            avatar: DEFAULT_USER_AVATAR,
             loggedAt: legacy.loggedAt || new Date().toISOString()
           });
           if (migrated) {
@@ -1285,10 +1328,17 @@
 
     function renderAuth() {
       if (state.currentUser) {
+        const avatarSrc = escapeHtml(state.currentUser.avatar || DEFAULT_USER_AVATAR);
+        const avatarAlt = "Avatar de @" + escapeHtml(state.currentUser.username);
         authZone.innerHTML =
-          '<span class="user-pill">@' +
+          '<span class="user-pill"><img class="user-pill-avatar" src="' +
+          avatarSrc +
+          '" alt="' +
+          avatarAlt +
+          '">' +
+          '<span>@' +
           escapeHtml(state.currentUser.username) +
-          "</span>" +
+          "</span></span>" +
           '<button type="button" class="logout-button" id="logoutButton">Sair</button>';
       } else {
         authZone.innerHTML =
@@ -1355,7 +1405,7 @@
 
     function renderComments(post) {
       if (!post.comments.length) {
-        return '<div class="comment-list"><div class="comment-item"><p class="comment-text">Nenhum comentário ainda.</p></div></div>';
+        return '<div class="comment-list"><div class="comment-item no-avatar"><div class="comment-content"><p class="comment-text">Nenhum comentário ainda.</p></div></div></div>';
       }
 
       const ordered = [...post.comments].sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
@@ -1365,6 +1415,10 @@
           .map(
             (comment) =>
               '<div class="comment-item">' +
+              '<img class="comment-avatar" src="' +
+              escapeHtml(comment.avatar || DEFAULT_USER_AVATAR) +
+              '" alt="Avatar de usuário">' +
+              '<div class="comment-content">' +
               '<div class="comment-head">' +
               '<span class="comment-author">' +
               escapeHtml(comment.author) +
@@ -1375,7 +1429,7 @@
               '</div>' +
               '<p class="comment-text">' +
               parseTokens(comment.text) +
-              '</p>' +
+              '</p></div>' +
               '</div>'
           )
           .join("") +
@@ -1619,6 +1673,9 @@
         id: createId("comment"),
         author,
         text,
+        avatar: state.currentUser
+          ? normalizeAvatarUrl(state.currentUser.avatar)
+          : DEFAULT_USER_AVATAR,
         createdAt: new Date().toISOString()
       });
 
