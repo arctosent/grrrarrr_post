@@ -3,76 +3,77 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Arctos Entertainment | Cena Interativa</title>
-  <link rel="icon" type="image/png" href="imagem/icon.png" />
-  <link rel="stylesheet" href="style.css" />
-  <script src="script.js" defer></script>
+  <title>Arctos Chess Arena</title>
+  <link rel="icon" type="image/png" href="icon.png" />
+  <link rel="stylesheet" href="styles.css" />
 </head>
 <body>
- 
+  <main class="app-shell">
+    <section class="phone-card" aria-label="Arctos Chess Arena">
+      <section class="arena-grid">
+        <aside class="left-panel" aria-label="Russell">
+          <div class="bear-stage" aria-hidden="true">
+            <div id="bear" class="bear"></div>
+          </div>
+          <p class="bot-rating">Bot Russell • Rating 1800</p>
+        </aside>
 
-  <main class="scene-page">
-    <section class="scene-shell" aria-label="Cena animada Arctos">
-      <div class="scene" id="scene">
-        <div class="layer layer-top" aria-hidden="true">
-          <img src="imagem/top.png" alt="" />
+        <section class="center-panel">
+          <header class="masthead">
+            <img id="logoFrame" class="logo" src="imagem/LOGOGAME1.png" alt="Arctos Game Logo" />
+          </header>
+
+          <section class="hud" aria-label="Controles de jogo">
+            <p id="statusText">Sua vez (brancas).</p>
+            <div class="hud-actions">
+              <label for="difficultySelect">IA</label>
+              <select id="difficultySelect" aria-label="Dificuldade da IA">
+                <option value="easy">Facil</option>
+                <option value="medium" selected>Media</option>
+                <option value="hard">Dificil</option>
+              </select>
+              <button id="resetBtn" type="button">Novo jogo</button>
+            </div>
+            <p id="botPhrase" class="bot-phrase">Russell (1800): Vamos jogar um xadrez elegante.</p>
+            <div class="store-cta">
+              <a
+                id="playStoreBtn"
+                class="store-link"
+                href="https://play.google.com/store/apps/details?id=com.arctos.russellsmate"
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                Baixar Russell's Mate no Google Play
+              </a>
+            </div>
+          </section>
+        </section>
+
+        <section class="board-wrap">
+          <div id="board" class="board" role="grid" aria-label="Tabuleiro de xadrez"></div>
+        </section>
+      </section>
+
+      <footer class="foot-note">
+        <div class="foot-left">
+          <img class="footer-logo" src="imagem/LogoArctos.png" alt="Logo Arctos" />
         </div>
-        <div class="layer layer-middle" aria-hidden="true">
-          <img src="imagem/meio.png" alt="" />
+        <div class="foot-right">
+          <a
+            class="privacy-link"
+            href="https://privacy-policy-steel-ten.vercel.app"
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            Politica de privacidade
+          </a>
+          <a class="contact-mail" href="mailto:arctosent@icloud.com">arctosent@icloud.com</a>
+          <p class="contact-address">R. Shelma Lombardi Kato, L Katto, 104 Santa Cruz RONDONOPOLIS - MT 78715-211 Brazil</p>
         </div>
-        <div class="layer layer-bottom" aria-hidden="true">
-          <img src="imagem/bottom.png" alt="" />
-        </div>
-        <div class="space-stars" aria-hidden="true"></div>
-        <div class="pointer-line" aria-hidden="true"></div>
-        <div class="point-stars" aria-hidden="true">
-          <svg class="dipper-lines" viewBox="0 0 360 170" role="presentation" aria-hidden="true">
-            <polyline points="32,92 20,30 118,40 108,98 32,92" />
-            <polyline points="118,40 182,35 248,48 316,82" />
-          </svg>
-          <span class="star ds1"></span>
-          <span class="star ds2"></span>
-          <span class="star ds3"></span>
-          <span class="star ds4"></span>
-          <span class="star ds5"></span>
-          <span class="star ds6"></span>
-          <span class="star ds7"></span>
-        </div>
-        <div class="camera-flash" id="cameraFlash" aria-hidden="true"></div>
-
-        <button class="entity character c-major" data-key="vision" aria-label="Urso maior: visao criativa">
-          <img src="imagem/urso-maior.png" alt="Urso maior" />
-          <span class="badge">01</span>
-        </button>
-
-        <button class="entity character c-astronaut" data-key="games" aria-label="Urso astronauta: game design">
-          <img src="imagem/atronauta.png" alt="Urso astronauta" />
-          <span class="badge">02</span>
-        </button>
-
-        <button class="entity character c-cub camera-bear is-active" data-key="community" aria-label="Urso menor: comunidade">
-          <img src="imagem/urso-menor.png" alt="Urso menor" />
-          <span class="badge">03</span>
-        </button>
-
-        <button class="entity character c-ballerina" data-key="brand" aria-label="Urso bailarina: branding">
-          <img src="imagem/urso-bailarina.png" alt="Urso bailarina" />
-          <span class="badge">04</span>
-        </button>
-      </div>
-
-      <aside class="info" aria-live="polite">
-        <p class="eyebrow" id="infoTag">Arctos | Essencia</p>
-        <h1 id="infoTitle">Visao Criativa</h1>
-        <p id="infoText">A Arctos transforma ideias em experiencias memoraveis, com direcao artistica forte e identidade propria.</p>
-      </aside>
+      </footer>
     </section>
   </main>
 
-  <footer class="site-footer" aria-label="Rodape">
-    <img src="imagem/LogoArctos.svg" alt="Arctos Entertainment" />
-  </footer>
-
-  <audio id="bgMusic" src="imagem/musica.mp3" loop preload="auto"></audio>
+  <script src="script.js"></script>
 </body>
 </html>
