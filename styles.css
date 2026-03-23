@@ -326,6 +326,23 @@ body {
   transform: translateY(-20%);
 }
 
+.capture-projectile {
+  position: fixed;
+  left: 0;
+  top: 0;
+  z-index: 5000;
+  pointer-events: none;
+  opacity: 1;
+  transform: translate3d(0, 0, 0) rotate(0deg) scale(1);
+  transform-origin: center;
+  filter: drop-shadow(0 8px 12px rgba(0, 0, 0, 0.45));
+  transition: transform 620ms cubic-bezier(0.22, 0.72, 0.18, 1), opacity 620ms ease;
+}
+
+.capture-projectile.fly {
+  opacity: 0.88;
+}
+
 .foot-note {
   padding: 12px 16px 14px;
   display: flex;
@@ -539,6 +556,7 @@ body {
   .bear,
   .bear.talk,
   .bear.hurt,
+  .capture-projectile,
   .square.hit::before,
   .square.mate::before {
     animation: none !important;

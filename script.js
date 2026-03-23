@@ -227,6 +227,102 @@
     return `${FILES[pos.c]}${8 - pos.r}`;
   }
 
+  function getCaptureMeta(state, move) {
+    if (!move.capture && !move.isEnPassant) {
+      return null;
+    }
+
+    const movingPiece = state.board[move.from.r][move.from.c];
+    if (!movingPiece) {
+      return null;
+    }
+
+    if (move.isEnPassant) {
+      const mover = pieceColor(movingPiece);
+      const capRow = mover === "w" ? move.to.r + 1 : move.to.r - 1;
+      const capturedPiece = state.board[capRow][move.to.c];
+      if (!capturedPiece) {
+        return null;
+      }
+      return {
+        piece: capturedPiece,
+        square: { r: capRow, c: move.to.c }
+      };
+    }
+
+    const capturedPiece = state.board[move.to.r][move.to.c];
+    if (!capturedPiece) {
+      return null;
+    }
+    return {
+      piece: capturedPiece,
+      square: { r: move.to.r, c: move.to.c }
+    };
+  }
+
+  function launchCapturedPieceAtRussell(captureMeta) {
+    if (!captureMeta) {
+      triggerBearHurt();
+      return;
+    }
+
+    const fromSquare = boardEl.querySelector(
+      squareToSelector(captureMeta.square.r, captureMeta.square.c)
+    );
+
+    if (!fromSquare) {
+      triggerBearHurt();
+      return;
+    }
+
+    const startRect = fromSquare.getBoundingClientRect();
+    const bearRect = bearEl.getBoundingClientRect();
+    if (!startRect.width || !bearRect.width) {
+      triggerBearHurt();
+      return;
+    }
+
+    const projectile = document.createElement("img");
+    projectile.className = "capture-projectile";
+    projectile.src = getPieceImagePath(captureMeta.piece);
+    projectile.alt = "";
+
+    const size = Math.max(52, Math.min(90, startRect.width * 1.12));
+    const startX = startRect.left + startRect.width / 2 - size / 2;
+    const startY = startRect.top + startRect.height / 2 - size / 2;
+    const targetX = bearRect.left + bearRect.width * 0.52 - size / 2;
+    const targetY = bearRect.top + bearRect.height * 0.46 - size / 2;
+
+    projectile.style.width = `${size}px`;
+    projectile.style.height = `${size}px`;
+    projectile.style.left = `${startX}px`;
+    projectile.style.top = `${startY}px`;
+
+    document.body.appendChild(projectile);
+
+    const dx = targetX - startX;
+    const dy = targetY - startY;
+    const spin = dx >= 0 ? 450 : -450;
+
+    let finished = false;
+    const finish = () => {
+      if (finished) {
+        return;
+      }
+      finished = true;
+      projectile.remove();
+      triggerBearHurt();
+    };
+
+    projectile.addEventListener("transitionend", finish, { once: true });
+    window.setTimeout(finish, 740);
+
+    window.requestAnimationFrame(() => {
+      projectile.classList.add("fly");
+      projectile.style.transform = `translate3d(${dx}px, ${dy}px, 0) rotate(${spin}deg) scale(0.32)`;
+    });
+  }
+
   function pickRandom(list) {
     return list[Math.floor(Math.random() * list.length)];
   }
@@ -799,6 +895,7 @@
 
   function applyMoveAndRefresh(move, moverColor) {
     const wasCapture = Boolean(move.capture || move.isEnPassant);
+    const captureMeta = wasCapture ? getCaptureMeta(gameState, move) : null;
 
     gameState = applyMove(gameState, move);
     selectedSquare = null;
@@ -808,8 +905,9 @@
     renderBoard();
 
     if (wasCapture) {
-      triggerSquareFx(move.to.r, move.to.c, "hit");
-      triggerBearHurt();
+      const fxSquare = captureMeta ? captureMeta.square : move.to;
+      triggerSquareFx(fxSquare.r, fxSquare.c, "hit");
+      launchCapturedPieceAtRussell(captureMeta);
     }
 
     const sideToMove = gameState.turn;
