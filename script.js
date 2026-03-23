@@ -44,6 +44,12 @@
     hard: 3
   };
 
+  const AI_DELAY_BY_LEVEL = {
+    easy: [700, 1000],
+    medium: [1100, 1550],
+    hard: [1500, 2100]
+  };
+
   const PLAYER_COLOR = "w";
   const AI_COLOR = "b";
   const FILES = ["a", "b", "c", "d", "e", "f", "g", "h"];
@@ -105,6 +111,7 @@
 
   let logoIndex = 0;
   let bearTalkTimer = null;
+  let aiDelayWindow = AI_DELAY_BY_LEVEL.medium;
 
   function createInitialState() {
     const board = Array.from({ length: 8 }, () => Array(8).fill(null));
@@ -931,6 +938,8 @@
     aiThinking = true;
     updateGameStatus();
 
+    const delayMs = aiDelayWindow[0] + Math.floor(Math.random() * (aiDelayWindow[1] - aiDelayWindow[0] + 1));
+
     window.setTimeout(() => {
       const aiMove = chooseAiMove(gameState, aiDepth);
 
@@ -944,7 +953,7 @@
       }
 
       applyMoveAndRefresh(aiMove, AI_COLOR);
-    }, 320);
+    }, delayMs);
   }
 
   function renderBoard() {
@@ -1024,6 +1033,7 @@
   difficultySelect.addEventListener("change", () => {
     const level = difficultySelect.value;
     aiDepth = AI_DEPTH_BY_LEVEL[level] || AI_DEPTH_BY_LEVEL.medium;
+    aiDelayWindow = AI_DELAY_BY_LEVEL[level] || AI_DELAY_BY_LEVEL.medium;
   });
 
   setInterval(rotateLogo, 420);
