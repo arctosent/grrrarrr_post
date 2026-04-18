@@ -1626,17 +1626,10 @@
     let pendingProfileAvatarData = "";
 
     function setRemoteSyncIssue(message) {
-      const nextMessage = String(message || "").trim();
-      if (nextMessage === remoteSyncIssue) return;
-      remoteSyncIssue = nextMessage;
+      remoteSyncIssue = String(message || "").trim();
       if (!syncStatus) return;
-      if (!remoteSyncIssue) {
-        syncStatus.style.display = "none";
-        syncStatus.textContent = "";
-        return;
-      }
-      syncStatus.textContent = remoteSyncIssue;
-      syncStatus.style.display = "block";
+      syncStatus.style.display = "none";
+      syncStatus.textContent = "";
     }
 
     function disableRemoteSyncSilently() {

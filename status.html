@@ -467,17 +467,10 @@
     const authZone = document.getElementById("authZone");
 
     function setRemoteSyncIssue(message) {
-      const nextMessage = String(message || "").trim();
-      if (nextMessage === remoteSyncIssue) return;
-      remoteSyncIssue = nextMessage;
+      remoteSyncIssue = String(message || "").trim();
       if (!syncNotice) return;
-      if (!remoteSyncIssue) {
-        syncNotice.style.display = "none";
-        syncNotice.textContent = "";
-        return;
-      }
-      syncNotice.textContent = remoteSyncIssue;
-      syncNotice.style.display = "block";
+      syncNotice.style.display = "none";
+      syncNotice.textContent = "";
     }
 
     function disableRemoteSyncSilently() {
