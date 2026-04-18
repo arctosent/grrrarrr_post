@@ -1,0 +1,1260 @@
+/* olá Ket, bom, vou detalhando aqui com o comentário para vc entendendo*/
+
+*{border: 0; margin: 0; padding: 0; box-sizing: border-box;}
+body, html
+{
+  background: url(../imagens/fundo-base.gif);
+  background-attachment: fixed;
+  margin: 0px;
+  color: #f0f0ef;
+}
+/*página do index com os três idiomas*/
+#elefante-bg{
+  background: #E7E2C3 url(../imagens/zig-zag.png);
+  height: 100%;
+  position: fixed;
+  width: 100%;
+  padding: 40px 20px 20px 20px;
+  z-index: 0;
+}
+/* o elefante do inicio */
+.elefante{
+  float: left;
+  position: fixed;
+  z-index: 9999;
+  left: 420px;
+  top: 20px;
+}
+/*este logo pode ser junto com o mesmo do outro, o que muda este que está maior do que o do menu (lateral)*/
+.logo-inicio{
+float: left;
+top: 280px;
+position: fixed;
+z-index: 99999;
+height: 376px;
+width: 452px;
+background: url(../imagens/logo-inicio.fw.png);
+background-repeat: no-repeat;
+}
+
+#campo-idioma{
+  float: right;
+}
+
+/* fonte menu */
+/* este são os idiomas do início como havia informado */
+@font-face{
+  font-family: 'idiomas';
+  src:  url('minion-pro.otf');
+  src:  local('minion pro'),
+  url('../fonte/minion-pro.otf') format('otf');
+  font-weight: normal;
+}
+/* esta fonte é do menu */
+@font-face {
+    font-family: 'menu';
+    src: url('Alga-RegularItalic.eot');
+    src: local('Alga Italic'), local('Alga-RegularItalic'),
+        url('../fonte/Alga-RegularItalic.eot?#iefix') format('embedded-opentype'),
+        url('../fonte/Alga-RegularItalic.woff2') format('woff2'),
+        url('../fonte/Alga-RegularItalic.woff') format('woff'),
+        url('../fonte/Alga-RegularItalic.ttf') format('truetype');
+    font-weight: normal;
+    font-style: italic;
+}
+
+/* textos e descrição */
+@font-face {
+    font-family: 'texto';
+    src: url('../fonte/proxima_nova_alt_reg-webfont.woff2') format('woff2'),
+         url('../fonte/proxima_nova_alt_reg-webfont.woff') format('woff');
+    font-weight: normal;
+    font-style: normal;
+}
+/*link*/
+@font-face {
+    font-family: 'saibaMais';
+    src: url('../fonte/proxima_nova_condensed_semibold-webfont.woff2') format('woff2'),
+         url('../fonte/proxima_nova_condensed_semibold-webfont.woff') format('woff');
+    font-weight: normal;
+    font-style: normal;
+}
+
+/* titulos */
+@font-face {
+    font-family: 'titulo';
+    src: url('../fonte/proximanovacond-extrabld-webfont.woff2') format('woff2'),
+         url('../fonte/proximanovacond-extrabld-webfont.woff') format('woff');
+    font-weight: bold;
+    font-style: normal;
+}
+
+/* website fonts */
+.font-russia{
+  font-family: sans-serif;
+}
+
+.font-titulo{
+  font-family: 'titulo';
+}
+.font-texto{
+  font-family: 'texto';
+}
+.font-bolas{
+  font-family: 'saibaMais';
+}
+
+.font-menu{
+  font-family: 'menu';
+}
+
+h1{
+  font-size: 1.8rem;
+  margin-top: 1.5rem;
+  margin-bottom: 0.43rem;
+  margin-left: 0;
+  margin-right: 0;
+  font-weight: 400;
+}
+
+h2 {
+  display: block;
+  font-size: 1.5em;
+  margin-top: 0.43rem;
+  margin-bottom: 0.43rem;
+  margin-left: 0;
+  margin-right: 0;
+  font-weight: 500;
+}
+
+h3 {
+  display: block;
+  font-size: 1.17em;
+  margin-top: 0.43rem;
+  margin-bottom: 0.43rem;
+  margin-left: 0;
+  margin-right: 0;
+  font-weight: 500;
+}
+
+h4 {
+  display: block;
+  font-size: 1em;
+  margin-top: 0.43rem;
+  margin-bottom: 0.43rem;
+  margin-left: 0;
+  margin-right: 0;
+  font-weight: 500;
+}
+
+h5 {
+  display: block;
+  font-size: 0.95em;
+  margin-top: 1.5rem;
+  margin-bottom: 0.43rem;
+  margin-left: 0;
+  margin-right: 0;
+  font-weight: 500;
+}
+
+/* colors do site */
+.black{
+  color: black;
+}
+
+.branco{
+  color: #F1EFF0;
+}
+
+.amarelo{
+  color: #E9CA77;
+}
+
+.br{
+  clip-path: polygon(93% 52%, 99% 99%, 8% 93%, 3% 46%);
+  background: #E7443A;
+  font-weight: normal;
+  font-family: 'idiomas';
+  padding: 75px 20px 20px 70px;
+  font-size: 80px;
+  height: 180px;
+  width: 464px;
+}
+
+.br a:link, .br a:visited, .br a:active{
+  text-decoration: none;
+  color: #f0f0ef;
+  font-weight: normal;
+} 
+.en a:link, .en a:visited, .en a:active{
+  text-decoration: none;
+  color: #f0f0ef;
+  font-weight: normal;
+}
+.ru a:link, .ru a:visited, .ru a:active {
+  text-decoration: none;
+  color: #f0f0ef;
+  font-weight: normal;
+}
+
+.en{
+  clip-path: polygon(93% 52%, 99% 99%, 8% 93%, 3% 46%);
+  background: #E7443A;
+  font-weight: normal;
+  font-family: 'idiomas';
+  padding: 75px 20px 20px 110px;
+  font-size: 80px;
+  height: 180px;
+  width: 464px;
+}
+
+.ru{
+  clip-path: polygon(93% 52%, 99% 99%, 8% 93%, 3% 46%);
+  background: #E7443A;
+  font-weight: normal;
+  font-family: 'idiomas';
+  padding: 75px 20px 20px 110px;
+  font-size: 80px;
+  height: 180px;
+  width: 464px;
+}
+
+/* website links */
+.submenu a:link, .submenu a:visited, .submenu a:active{
+  text-decoration: none;
+  color: black;
+  font-weight: 500;
+}
+
+#box a:link, #box a:visited, #box a:active{
+  text-decoration: none;
+  text-transform: uppercase;
+  color: #f0f0ef;
+}
+
+/* seleção do site */
+::selection {
+    background: #E7E2C3;
+    color: #2f2e2a;
+}
+
+/* website menu */
+
+#lateral{
+  background: #E7E2C3 url(../imagens/zig-zag.png); 
+  width: 314px; height: 100%;
+
+  position: fixed; top: 0;
+  left: 0px; margin-left: 0px;
+  margin-top: 0px; z-index: 999;
+}
+
+ul{
+  list-style-type: none; background: none;
+  margin-left: 0px; margin-top: 260px; /* fiz uma gambiarra aqui, mas se puder fazer igual as imagens agradeço <3 */
+  color: black;
+  height: 1.5em; width: 0 auto; max-width: 15em;
+  z-index: 99999;
+}
+
+ul li.submenu{
+  text-align: right;
+  margin: 0px; padding: 0px;
+  box-sizing: none; float: none;
+  font-family: 'menu';
+  /* coloquei este tamanho mais ou menos isso, vou te encaminhar as imagens do esboço, ok?*/
+  cursor: pointer;
+  color: black;
+  z-index: 99999;
+}
+
+.menusizeRU{
+  font-size: 25px;
+}
+
+.menusize{
+  font-size: 30px;
+}
+
+ul li.submenu a:hover{
+  color: black;
+}
+
+
+/* blog */
+.blog{
+  color: #fff;
+
+}
+.blog:hover{
+  color: #fff;
+}
+
+/* logo */
+.logoLoxodonta{
+  margin-top: 40px;
+  margin-left: 33px;
+  height: 199px;
+  width: 249px;
+  position: fixed;
+  cursor: pointer;
+}
+
+/*redes sociais fixadas */
+/* este estou verficando com o meu artista sobre a arte que ficará aqui, 
+e é bem provavelmente que ficará nos contatos mesmo abaixo do nome da empresa etc,
+e os tamanhos podem serem os mesmo, ok?*/
+.twitter-logo{
+  height: 71px;
+  width: 72px;
+  bottom: 180px;
+  left: 100px;
+  z-index: 3;
+    display: none;
+  position: fixed;
+}
+.behance-logo{
+  height: 71px;
+  width: 72px;
+  bottom: 180px;
+  left: 175px;
+  z-index: 5;
+    display: none;
+  position: fixed;
+}
+.linkedin-logo{
+  height: 71px;
+  width: 72px;
+  bottom: 120px;
+  left: 100px;
+  z-index: 3;
+    display: none;
+  position: fixed;
+}
+.instagram-logo{
+  height: 71px;
+  width: 72px;
+  bottom: 120px;
+  left: 175px;
+  z-index: 7;
+    display: none;
+  position: fixed;
+}
+
+/* a posição do conteudo do site */
+#conteudo {
+  min-height:800px;
+  margin:0;
+  padding:25px 25px 25px 350px; /*a posição para desktop*/
+}
+
+/*espaço para ficar certinho com a tela */
+.espaco{
+  height: 300px;
+}
+/* este é o espaço da parte superior do site */
+.espaco-title{
+  height: 50px;
+}
+
+/*estúdio */
+.aboutus{
+  margin-top: 0px; margin-left: 0px;
+  float: left;
+  width: 50%;
+}
+/* bom um adendo, acredito que esta parte das bolitas vão sair.. e vai ter uma arte, vou ver com o artista tmb ;-; <3 */
+.emblam{
+  margin-top: 0px; margin-right: 0px;
+  float: right;
+  width: 50%;
+}
+
+.size-x {
+    height: 150px;
+    width: 150px;
+}
+
+.circle {
+    background: #2d2d2d;
+    color: #f0f0ef;
+    border-radius: 50%;
+    font-size: 1.1em;
+    
+    display: -webkit-flex;
+     display: -ms-flexbox;
+            display: flex;
+
+    -webkit-align-items: center;
+      -webkit-box-align: center;
+   -ms-flex-align: center;
+      align-items: center;
+    
+  justify-content: center;
+
+  border: 2px solid #f0f0ef;
+
+  float: left;
+  margin: 5px;
+}
+/* jogos (games) */
+/* bom, gostaria que fizetes uma animação quando passe-se o mouse, deles indo para esquerda, sabe?*/
+.box{
+  margin: 0px; box-sizing: border-box;
+  float: left; height: 275px; width: 265px;
+}
+
+.detalhes{
+  background: #151611; margin-top: 0px;
+  margin-left: 0px; padding-left: 10px; padding-top: 10px;
+  height: 30px; width: 260px; text-align: left;
+}
+
+.img{
+  height: 240px; width: 260px;
+  background: #1776B8;
+}
+
+.box :hover{
+  cursor: pointer;
+}
+
+    /*detalhes do games*/
+.overlay {
+    height: 100%;
+  width: 0;
+  position: fixed;
+  z-index: 1;
+  top: 0;
+  left: 290px;
+  background:  rgba(47, 46, 42,0.75) url(../imagens/arches.png);
+  overflow: hidden;
+  transition: 0.3s;
+}
+/*este é do post do blog */
+.overlay-post {
+    height:0;
+  width:100% ;
+  position: fixed;
+  z-index: 1;
+  bottom: 0;
+  left: 0;
+  background: rgba(237, 151, 96,0.95);
+  overflow: hidden;
+  transition: 0.3s;
+}
+
+.overlay-content {
+    position: relative;
+    top: 10px;
+    width: 68vw;
+    height: 700px;
+    left: 80px;
+    overflow-y: scroll;
+    overflow-x: hidden;
+    margin-top: 10px;
+    padding: 10px;
+}
+
+.overlay-content-blog {
+  position: relative;
+  top: 50px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  left: 0;
+  overflow: hidden;
+  text-align: center;
+  margin-top: 30px;
+  float: left;
+}
+
+/*scroll do mais detalhes e do blog */
+/* do mais detalhes do game*/
+.overlay-content::-webkit-scrollbar {
+  width: 17px;
+}
+
+.overlay-content::-webkit-scrollbar-track {
+  background: #EDEBDC url(../imagens/arches.png);
+  border-radius: 3px;
+}
+
+.overlay-content::-webkit-scrollbar-track-piece{
+  height: 70px;
+}
+
+.overlay-content::-webkit-scrollbar-thumb {
+  background: #5AAFE2 url(../imagens/zig-zag.png);
+}
+
+/* do mais detalhes posts*/
+.overlay-content-blog::-webkit-scrollbar {
+  width: 17px;
+}
+
+.overlay-content-blog::-webkit-scrollbar-track {
+  background: #EDEBDC url(../imagens/arches.png);
+  border-radius: 3px;
+}
+
+.overlay-content-blog::-webkit-scrollbar-track-piece{
+  height: 70px;
+}
+
+.overlay-content-blog::-webkit-scrollbar-thumb {
+  background: #5AAFE2 url(../imagens/zig-zag.png);
+}
+
+/* do mais detalhes dos links do posts*/
+#conteudoBlog::-webkit-scrollbar {
+  width: 17px;
+}
+
+#conteudoBlog::-webkit-scrollbar-track {
+  background: #EDEBDC url(../imagens/arches.png);
+  border-radius: 3px;
+}
+
+#conteudoBlog::-webkit-scrollbar-track-piece{
+  height: 70px;
+}
+
+#conteudoBlog::-webkit-scrollbar-thumb {
+  background: #5AAFE2 url(../imagens/zig-zag.png);
+}
+
+/* tentei colocar que o track do scroll seja menor do que o scrollbar, mas não consegui, mas acredito que ficou muito bom assim,
+mas me fala o que vc acha? */
+
+/* blog */
+
+#fundo-blog{
+  background: #E9E4C5 url(../imagens/arches.png);
+  height: 83vh;
+  width: 100%;
+  float: left; box-sizing: border-box;
+}
+
+/* #EBEBEB  */
+
+#conteudoBlog{
+  margin:0;
+  margin-top: 10px;
+  margin-left: 10px;
+  height: 600px;
+  max-width: 960px;
+  z-index: 9999;
+  overflow-y: scroll;
+}
+
+#conteudoBlog-detalhes{
+  margin-top: 200px;
+  margin-left: 0;
+  height: 450px;
+  width: 100%;
+  background: #EDEDED;
+  overflow-y: scroll;
+  padding: 25px 25px 25px 25px;
+}
+
+#conteudoBlogRedes{
+  margin:0; top: 0;
+  left: 925px;
+  position: absolute;
+  padding:15px 25px 25px 25px;
+}
+
+.boxblog{
+  margin: 0px; padding: 20px;
+  box-sizing: border-box;
+  float: left; height: 300px; width: 469px;
+  border: 1px solid #f0f0ef;
+}
+
+.titulo-blog{
+  font-size: 2.19rem;
+  color:#E9CA77;
+  margin-bottom: 20px;
+}
+
+.texto-blog{
+  font-size: 1.3rem;
+  margin-bottom: 20px;
+}
+
+.saibamais-blog{
+  font-size: 1.2rem;
+  margin-bottom: 10px;
+  margin-top: 20px;
+  margin-left: 0;
+  padding-top: 5px;
+  padding-left: 5px;
+  float: left;
+  z-index: 999;
+  color: #FFF;
+  font-weight: bold;
+  cursor: pointer;
+  height: 30px;
+  width: 100%;
+  max-width: 130px;
+  border-radius: 5px;
+  background: #AC4F6F url(../imagens/saiba-mais.fw.png);
+  background-repeat: no-repeat;
+  background-position: right;
+}
+
+.saibamais-blog:hover{
+  color: #6C1E35;
+  background: #AC4F6F url(../imagens/saiba-mais-hover.fw.png);
+  background-repeat: no-repeat;
+  background-position: right;
+}
+
+.data-blog{
+  font-size: 1.3rem;
+  margin-bottom: 10px;
+  margin-top: 20px;
+  margin-right: 0;
+  float: right;
+}
+
+.destaque{
+  height: 200px; width: 600px;
+}
+
+.post{
+  height: 200px; width: 200px;
+}
+
+.redes{
+  height: 100px; width: 100px;
+}
+
+.redesDestaque{
+  height: 200px; width: 200px;
+}
+
+#rodape-blog{
+  background: #AC4F6F;
+  height: 5vh;
+  width: 100%;
+  bottom: 0;
+  padding-top: 10px;
+  padding-bottom: 10px;
+  position: fixed;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  color: #262C38;
+  font-family: 'titulo';
+  font-size: 1.8rem;
+  font-weight: none;
+  border-top: 4px solid #ED9760;
+  z-index: 999999;
+}
+
+/*detalhes dos jogos do site */
+.video-content{
+  margin: 10px;
+  width: 1024px;
+  height: 600px;
+}
+
+.texto-content{
+  margin: 10px;
+  width: 1024px;
+  height: auto;
+  max-height: 700px;
+}
+
+.textPort{
+  font-family: 'texto';
+  margin:  20px;
+  font-size: 1.5em;
+}
+
+.titulo-port{
+  font-family: 'titulo';
+  font-size: 2.7rem;
+  font-weight: 700;
+}
+
+.overlay a {
+  height: 50px; width: 60px;
+  text-decoration: none;
+  display: block;
+  overflow: hidden;
+  transition: 0.3s;
+}
+
+.overlay a:hover, .overlay a:focus {
+  color: #AC9EED;
+}
+
+.closebtn {
+  width: 69px;
+  height: 55px;
+  position: absolute;
+  left: 15px;
+  top: 20px;
+  background: url(../imagens/voltar.fw.png);
+  margin: 0 auto; justify-content: center; align-items: center;
+}
+
+.close-post {
+  width: 70px;
+  height: 70px;
+  left: 0;
+  top: 0px;
+  position: absolute;
+  background: #AC4F6F url(../imagens/voltar-blog.fw.png);
+  background-repeat: no-repeat;
+  margin: 0 auto; 
+  justify-content: center; 
+  align-items: center;
+}
+
+
+#resultadoNews {
+  font-size:25px;
+  padding-top:30px;
+}
+
+#resultado {
+  font-size:25px;
+  padding-top:30px;
+}
+
+/* web english */
+#box{
+  
+  padding-top: 15px;
+  color: #f0f0ef;
+  text-align: center;
+  z-index: 999;
+  position: fixed;
+  cursor: pointer;
+  box-sizing: border-box;
+}
+#box:hover{
+  right: 0;
+}
+
+/*website newsletters */
+#boxNews {
+    width: 300px;
+    height: 120px;
+    position: fixed;
+    right: -260px;
+    top: 30px;
+    background: #1776B8;
+    transition: all 0.7s ease;
+    padding: 15px;
+    font-weight: bold;
+    text-align: center;
+    z-index: 9999;
+}
+ 
+#boxNews:hover { right: 0; }
+
+.seuEmail {
+padding: 5px;
+padding: 10px;
+background: #fff;
+width: 220px;
+height: 30px;
+border-radius: 2px;
+}
+
+.enviarNews {
+background: #115582;
+margin: 5px;
+padding: 10px;
+height: 40px;
+width: 220px;
+color: #f0f0ef;
+font-weight: bold;
+cursor: pointer;
+border-radius: 2px;
+}
+ 
+#conteudoNews {
+float: right;
+width: 240px;
+margin-top: 7px;
+}
+ 
+.newsSignUp {
+margin-bottom: 10px;
+text-align: center;
+font-size: 18px;
+line-height: 22px;
+}
+ 
+#boxNews h1 { }
+#newsletter { background: url(../imagens/newsletter.png) no-repeat; height: 100px; }
+
+
+.form_cont {
+  width:380px;
+  background-color:#292929;
+  border:#4d4d4d thin solid;
+  color:#CCC;
+  font-family: 'texto';
+  font-size:14px;
+  margin-bottom:10px;
+  padding:8px;
+}
+
+.form_estado {
+  width:80px;
+  background-color:#292929;
+  border:#4d4d4d thin solid;
+  color:#CCC;
+  font-family: 'texto';
+  font-style:italic;
+  font-size:14px;
+  margin-bottom:10px;
+  padding:8px;
+}
+
+.formulario {
+  float:left;
+  margin-right:25px;
+}
+
+.enviar {
+    background: none repeat scroll 0 center transparent;
+    border: 0 none;
+    color: #FFB400;
+    cursor: pointer;
+    font-family: 'Lexend', sans-serif;
+    font-size: 1.5em;
+    font-weight: 700;
+}
+
+/* páginas extras */
+#menu{
+  height: 5.1rem;
+  width: 100%;
+  position: fixed;
+  top: 0; left: 0;
+  background: #E7E2C3 url(../imagens/arches.png);
+}
+
+
+#conteudo_select{
+  margin:  40px 0px 0px 0px;
+  padding: 25px 50px 0px 25px;
+  width: 200px;
+  position: fixed;
+}
+
+#conteudo_descricao{
+  margin:  250px 0px 0px 0px;
+  padding: 25px 50px 0px 325px;
+  height: auto;
+  min-height: 600px;
+  background: rgb(220,220,220);
+}
+/* copiado com site, mas é mais ou menos essa a ideia <3 */
+/* The container must be positioned relative: */
+.custom-select {
+  position: relative;
+  font-family: 'texto';
+}
+
+.custom-select select {
+  display: none; /*hide original SELECT element: */
+}
+
+.select-selected {
+  background-color: DodgerBlue;
+}
+
+/* Style the arrow inside the select element: */
+.select-selected:after {
+  position: absolute;
+  content: "";
+  top: 14px;
+  right: 10px;
+  width: 0;
+  height: 0;
+  border: 6px solid transparent;
+  border-color: #fff transparent transparent transparent;
+}
+
+/* Point the arrow upwards when the select box is open (active): */
+.select-selected.select-arrow-active:after {
+  border-color: transparent transparent #fff transparent;
+  top: 7px;
+}
+
+/* style the items (options), including the selected item: */
+.select-items div,.select-selected {
+  color: #ffffff;
+  padding: 8px 16px;
+  border: 1px solid transparent;
+  border-color: transparent transparent rgba(0, 0, 0, 0.1) transparent;
+  cursor: pointer;
+}
+
+/* Style items (options): */
+.select-items {
+  position: absolute;
+  background-color: DodgerBlue;
+  top: 100%;
+  left: 0;
+  right: 0;
+  z-index: 99;
+}
+
+/* Hide the items when the select box is closed: */
+.select-hide {
+  display: none;
+}
+
+.select-items div:hover, .same-as-selected {
+  background-color: rgba(0, 0, 0, 0.1);
+}
+/* fim do select */
+
+/* ajustes responsivos e formulários estáticos */
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  overflow-x: hidden;
+}
+
+img {
+  max-width: 100%;
+  height: auto;
+}
+
+.menu-toggle {
+  display: none;
+}
+
+.form-result {
+  display: none;
+  margin-top: 8px;
+  font-size: 1rem;
+  line-height: 1.35;
+  color: #8ee89a;
+}
+
+.form-result.visible {
+  display: block;
+}
+
+.form-result.error {
+  color: #ffb3b3;
+}
+
+#resultadoNews.form-result {
+  font-size: 1.02rem;
+  padding-top: 8px;
+  color: #f0f0ef;
+}
+
+#resultado.form-result {
+  font-size: 1.02rem;
+  padding-top: 8px;
+}
+
+@media (max-width: 1200px) {
+  #lateral {
+    width: 260px;
+  }
+
+  #conteudo {
+    padding: 25px 18px 25px 285px;
+  }
+
+  .logoLoxodonta {
+    width: 215px;
+    margin-left: 20px;
+  }
+
+  .overlay {
+    left: 260px;
+  }
+
+  .overlay-content {
+    left: 24px;
+    width: calc(100vw - 310px);
+    height: calc(100vh - 40px);
+  }
+
+  .video-content,
+  .texto-content {
+    width: 100%;
+    max-width: 100%;
+    height: auto;
+  }
+}
+
+@media (max-width: 980px) {
+  .aboutus,
+  .emblam {
+    width: 100%;
+    float: none;
+  }
+
+  .emblam {
+    display: flex;
+    flex-wrap: wrap;
+    margin-top: 20px;
+  }
+
+  .circle {
+    margin: 4px;
+  }
+
+  #conteudoBlog {
+    max-width: none;
+    width: 100%;
+    padding-right: 10px;
+  }
+
+  .boxblog {
+    width: 100%;
+    height: auto;
+    min-height: 260px;
+  }
+}
+
+@media (max-width: 860px) {
+  #boxNews {
+    top: auto;
+    bottom: 0;
+    right: 0;
+    width: 100%;
+    height: auto;
+    padding: 10px 14px 12px;
+    transition: none;
+  }
+
+  #boxNews:hover {
+    right: 0;
+  }
+
+  #newsletter {
+    background: none;
+    height: auto;
+  }
+
+  #conteudoNews {
+    float: none;
+    width: 100%;
+    margin-top: 0;
+  }
+
+  .seuEmail,
+  .enviarNews {
+    width: 100%;
+  }
+
+  #lateral {
+    position: sticky;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: auto;
+    padding: 10px 14px 14px;
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 8px;
+    border-bottom: 2px solid #c7bf99;
+  }
+
+  .logoLoxodonta {
+    position: static;
+    margin: 0;
+    height: auto;
+    width: auto;
+    max-width: 165px;
+  }
+
+  .menu-toggle {
+    display: inline-flex;
+    margin-left: auto;
+    padding: 8px 12px;
+    border: 1px solid #2f2e2a;
+    border-radius: 2px;
+    background: #e7e2c3;
+    color: #2f2e2a;
+    font-family: 'texto';
+    font-size: 0.95rem;
+    cursor: pointer;
+  }
+
+  #lateral ul {
+    margin: 0;
+    width: 100%;
+    max-height: 0;
+    overflow: hidden;
+    transition: max-height 0.3s ease;
+    max-width: 100%;
+    height: auto;
+    background: #e7e2c3;
+  }
+
+  #lateral.open ul {
+    max-height: 360px;
+  }
+
+  ul li.submenu {
+    text-align: left;
+    padding: 4px 10px;
+  }
+
+  .menusize,
+  .menusizeRU {
+    font-size: 1.55rem;
+  }
+
+  #conteudo {
+    padding: 22px 14px;
+    min-height: auto;
+  }
+
+  .espaco {
+    height: 60px;
+  }
+
+  .size-x {
+    width: 108px;
+    height: 108px;
+    font-size: 0.88rem;
+  }
+
+  .box {
+    width: 100%;
+    max-width: 360px;
+    height: auto;
+  }
+
+  .detalhes,
+  .img {
+    width: 100%;
+  }
+
+  .img {
+    height: 230px;
+  }
+
+  .overlay {
+    left: 0;
+    z-index: 1001;
+  }
+
+  .overlay-content {
+    top: 65px;
+    left: 0;
+    margin: 0 auto;
+    width: 94vw;
+    height: calc(100vh - 84px);
+  }
+
+  .closebtn {
+    top: 8px;
+    left: 10px;
+  }
+
+  .formulario {
+    width: 100%;
+    float: none;
+    margin-right: 0;
+    margin-bottom: 24px;
+  }
+
+  .form_cont {
+    width: 100%;
+  }
+
+  #fundo-blog {
+    height: auto;
+    min-height: 100vh;
+  }
+
+  #conteudoBlog {
+    margin: 0;
+    padding: 12px;
+    height: calc(100vh - 80px);
+  }
+
+  .overlay-content-blog {
+    top: 0;
+    margin-top: 0;
+  }
+
+  #conteudoBlog-detalhes {
+    margin-top: 70px;
+    height: calc(100vh - 90px);
+    padding: 16px;
+  }
+
+  #rodape-blog {
+    position: static;
+    height: auto;
+    min-height: 56px;
+    font-size: 1.15rem;
+  }
+}
+
+@media (max-width: 640px) {
+  #elefante-bg {
+    position: relative;
+    width: 100%;
+    min-height: 100vh;
+    height: auto;
+    padding: 18px 12px 22px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-start;
+    gap: 14px;
+  }
+
+  .logo-inicio {
+    position: relative;
+    top: auto;
+    float: none;
+    width: min(84vw, 420px);
+    height: 220px;
+    background-size: contain;
+    background-position: center;
+  }
+
+  .elefante {
+    float: none;
+    position: relative;
+    left: auto;
+    top: auto;
+    width: min(72vw, 260px);
+  }
+
+  #campo-idioma {
+    width: 100%;
+    max-width: 500px;
+    float: none;
+    display: grid;
+    gap: 10px;
+  }
+
+  .br,
+  .en,
+  .ru {
+    width: 100%;
+    height: auto;
+    min-height: 118px;
+    padding: 44px 18px 24px 22px;
+    font-size: clamp(2rem, 9vw, 3.4rem);
+  }
+}
