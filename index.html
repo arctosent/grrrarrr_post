@@ -1,240 +1,79 @@
 <!DOCTYPE html>
-<html lang="pt-br">
+<html lang="pt-BR">
 <head>
-	<meta charset="utf-8">
-	<meta http-equiv="Content-Language" content="pt-br, en, ru">
-	<meta name="viewport" content="width=device-width, initial-scale=1">
-	<meta name="twitter:card" content="">
-	<meta name="twitter:description" content="Olá pessoas! Somos o Loxodonta Game Studio, amamos design de jogos, estamos fornecendo e criando jogos em Unity e com a linguagem em C-sharp, e estamos localizados no centro-oeste do Brasil.">
-	<meta name="twitter:title" content="">
-	<meta name="robots" content="index, follow">
-	<meta name="theme-color" content="#E7E2C3">
-	<meta property="og:type" content="website">
-	<meta property="og:site_name" content="">
-	<meta property="og:title" content="">
-	<meta property="og:description" content="Olá pessoas! Somos o Loxodonta Game Studio, amamos design de jogos, estamos fornecendo e criando jogos em Unity e com a linguagem em C-sharp, e estamos localizados no centro-oeste do Brasil.">
-	<meta property="og:url" content="https://www.loxodonta.com.br/">
-	<meta property="og:image" content="">
-	<title>Loxodonta Game Studio</title>
-    <link rel="alternate" href="https://loxodonta.com.br/ru" hreflang="ru">
-	<link rel="alternate" href="https://loxodonta.com.br/en" hreflang="en">
-	<link rel="alternate" href="https://loxodonta.com.br/" hreflang="pt-br">
-	<link rel="stylesheet" type="text/css" href="css/styles.css">
-	<link rel="icon" type="image/x-icon" href="favicon.fw.png">
-	<script src="js/script.js" defer></script>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Arctos Chess Arena</title>
+  <link rel="icon" type="image/png" href="icon.png" />
+  <link rel="stylesheet" href="styles.css" />
 </head>
 <body>
-<div id="boxNews">
-<div id="newsletter">
-    <div id="conteudoNews">
-        <span id="resultadoNews" class="form-result" aria-live="polite"></span>
-        <div id="contFormNews">
-            <form
-                name="senddata"
-                method="post"
-                action="#"
-                id="formNews"
-                class="js-static-form"
-                data-form-kind="newsletter"
-                data-form-email="loxodonta@loxodonta.com.br"
-                data-loading="Enviando..."
-                data-success="Inscricao feita com sucesso."
-                data-error="Nao foi possivel enviar agora. Tente novamente em alguns minutos."
-                data-hide-on-success="#contFormNews"
-                data-result-target="#resultadoNews"
-            >
-            <input type="email" id="emailNews" name="emailNews" placeholder="Insira o seu e-mail aqui" required class="seuEmail">
-            <input type="submit" id="enviar" name="enviar" value="Receba as novidades" class="enviarNews" />
-        </form>
+  <main class="app-shell">
+    <section class="phone-card" aria-label="Arctos Chess Arena">
+      <section class="arena-grid">
+        <aside class="left-panel" aria-label="Russell">
+          <div class="bear-stage" aria-hidden="true">
+            <div id="bear" class="bear"></div>
+          </div>
+          <p class="bot-rating">Bot Russell • Rating 1800</p>
+        </aside>
+
+        <section class="center-panel">
+          <header class="masthead">
+            <img id="logoFrame" class="logo" src="imagem/LOGOGAME1.png" alt="Arctos Game Logo" />
+          </header>
+
+          <section class="hud" aria-label="Controles de jogo">
+            <p id="statusText">Sua vez (brancas).</p>
+            <div class="hud-actions">
+              <label for="difficultySelect">IA</label>
+              <select id="difficultySelect" aria-label="Dificuldade da IA">
+                <option value="easy">Facil</option>
+                <option value="medium" selected>Media</option>
+                <option value="hard">Dificil</option>
+              </select>
+              <button id="resetBtn" type="button">Novo jogo</button>
+            </div>
+            <p id="botPhrase" class="bot-phrase">Russell (1800): Vamos jogar um xadrez elegante.</p>
+            <div class="store-cta">
+              <a
+                id="playStoreBtn"
+                class="store-link"
+                href="https://play.google.com/store/apps/details?id=com.arctos.russellsmate"
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                Baixar Russell's Mate no Google Play
+              </a>
+            </div>
+          </section>
+        </section>
+
+        <section class="board-wrap">
+          <div id="board" class="board" role="grid" aria-label="Tabuleiro de xadrez"></div>
+        </section>
+      </section>
+
+      <footer class="foot-note">
+        <div class="foot-left">
+          <img class="footer-logo" src="imagem/LogoArctos.png" alt="Logo Arctos" />
         </div>
-    </div>
-</div></div>
-<div id="lateral">
-    <!------- Este logo vai ser animado, vou te encaminhar os sprites, conforme lhe falei será animado uma unica vez --------->
-    <div class="logoLoxodonta"><a href="index.html"><img src="imagens/logo.png"></a></div>
-    <button type="button" class="menu-toggle" aria-expanded="false" aria-controls="menu-principal">Menu</button>
-    <ul id="menu-principal">
-        <li class="submenu menusize">
-            <a href="#estudio">estúdio</a>
-        </li>
-        <li class="submenu menusize">
-            <a href="#equipe">equipe</a>
-        </li>
-        <li class="submenu menusize">
-            <a href="#games">jogos</a>
-        </li>
-        <li class="submenu menusize">
-            <a href="#contato">contato</a>
-        </li>
-        <!------- gostaria muito que ficasse como na página de index como os idiomas, e eu tentei fazer e não consegui...
-            Por isso que esta em branco :/ --------->
-        <li class="submenu menusize">
-            <a href="blog.html"><span class="blog">blog</span></a>
-        </li>
-    </ul>
-    <!------- Bom, esta parte vou ver com o meu artista, e bem provavel que vou colocar o wade com o controle --------->
-    <!------- E vamos ter uma "imagem" em preto e branco do lado da lateral --------->
-    <!------- Lateral > "imagens" em preto e branco > e o fundo do site --------->
-    <div class="persongens"></div>
-    <div class="twitter-logo"><a href="https://twitter.com/loxodontagames/"><img src="imagens/logo-twitter.fw.png"></a></div>
-    <div class="behance-logo"><a href="https://behance.net/loxodonta/"><img src="imagens/logo-behance.fw.png"></a></div>
-    <div class="linkedin-logo"><a href="https://www.linkedin.com/company/estudiodegames/"><img src="imagens/logo-linkedin.fw.png"></a></div>
-    <div class="instagram-logo"><a href="https://instagram.com/loxodontagames/"><img src="imagens/logo-instagram.fw.png"></a></div>
-</div>
-<!------- estudio --------->
-<div id="conteudo">
-    <p id="estudio">
-        <!------- este espaço para caber certinho com a tela <3 --------->
-    <div class="espaco-title"></div>
-    <div class="aboutus">
-    	<h1 class="font-titulo amarelo">Sobre nós</h1>
-    	<h2 class="font-texto branco">Olá pessoal! Somos o Loxodonta Game Studio, amamos design de jogos, estamos fornecendo e criando jogos em Unity e com a linguagem em C-sharp, e estamos localizados no centro-oeste do Brasil.<br>
-		Estamos comprometidos em colocar nossos corações em tudo que criamos, e sempre em orientação do Senhor Jesus Cristo.<br>
-		Isso nos permite desenvolver e querer aprender ainda mais sobre os jogos, e não pretendemos parar tão cedo.</h2>
-    	<h1 class="font-titulo amarelo">Nossa missão</h1>
-    	<h2 class="font-texto">Este estúdio criativo, com a nossa missão de entreter, informar e inspirar as pessoas ao redor, como nós mesmo, e sempre aprendendo a cada meta em nosso caminho, e ganhando ainda mais as experiências.</h2>
-    	<h1 class="font-titulo amarelo">Slogan</h1>
-    	<h2 class="font-texto">Tornando o seu entretenimento ainda mais divertido.</h2>
-	</div>
-    <!------- Bom, gostaria de saber se eu posso manter dessa forma, ou prefere que eu coloque uma imagem,
-        por gentileza, vc poderia me ajudar? Ou colocar em :hover em cada circulos, o que vc acha, ket?  --------->
-    <div class="emblam">
-    <div class='font-bolas size-x circle'>design de jogos</div>
-    <div class='font-bolas size-x circle'>desenvolvimento</div>
-    <div class='font-bolas size-x circle'>jogos mobile</div>
-    <div class='font-bolas size-x circle'>jogos em 3D</div>
-    <div class='font-bolas size-x circle'>unity</div>
-    <div class='font-bolas size-x circle'>c-sharp</div>
-    <div class='font-bolas size-x circle'>design</div>
-    <div class='font-bolas size-x circle'>planejamento</div>
-    <div class='font-bolas size-x circle'>multiplayer</div>
-    </div>
-</div>
-<!------- e este espaço para preencher a tela, apenas <3 --------->
-<div class="espaco"></div>
-<div class="espaco"></div>
-<div class="espaco"></div>
-<!------- equipe ------------>
-<div id="conteudo">
-    <!------- Conforme havia solicitado a do canvas, sabe? se vc fizer isso, eu digo que vc é foda para caralho vei <3 --------->
-<p id="equipe">
-	<div class="espaco-title"></div>
-</div>
-<div class="espaco"></div>
-<div class="espaco"></div>
-<div class="espaco"></div>
-<!------- games --------->
-<div id="conteudo">
-    <!------- Esta parte do games, queria que ficasse fixo, mas eu falo no detalhes, eu vi aqui e quando vc aperta ele pode subir e descer,
-        E isso pode ser um bug sei lá uhuahshauhsuha --------->
-    <p id="games">
-   	<div class="espaco-title"></div>
-    <div class="box" onclick="games()">
-        <div class="detalhes">Games</div>
-        <div class="img"></div>
-    </div>
-</div>
-<div class="espaco"></div>
-<div class="espaco"></div>
-<div class="espaco"></div>
-<!------- detalhes do game --------->
-<!------- O loading vai estar aqui, e vou te encaminhar os sprites dele:
-    o logo vai dar um loop uma vez só <3
-
-    e escrito em baixo carregando
-    o loop vai ser nos pontinhos
-    carregando.
-    carregando..
-    carregando...
-
-    tudo bem?
-    --------->
-<!------- Pensei dessa forma ket:
-    > vem o video do comercial 
-    > e a texto da ideia do jogo
-    > Ai vem umas gravações de como foi feito, por video, sabe?
-    > Gostaria também de colocar o personagem em 3D que dê pro usuario colocar em rotação <3 e a descrição do personagem do lado
-    
-    Um adendo, vão ser 10 (9) caixinhas assim... (*pois não sei se coloco o vilão junto com os seus comparças,
-    ou faço um do vilão e outro dos comparças*).
-    
-    e em baixo coloca o logo do jogo no centro da "subpagina" --------->
-	<!-- game -->
-	<div id="game-detalhes" class="overlay">
-	  <a href="javascript:void(0)" class="closebtn" onclick="closeNav()"></a>
-	  <div class="overlay-content">
-          <!------- este video vai ser do comercial do jogo, que será updado do meu site mesmo,
-            Felizmente não vou upar nada para o youtube com coligação do site, eu até posso upar la sim,
-            mas aqui será do meu site mesmo   --------->
-        <video class="video-content" controls="controls" autoplay="autoplay">
-            <!------- O tamanho se puder colocar resposivo da parte do desktop, vou agradecer e muito <3
-                e ainda mais pode constumizar para mim? Gostei muito como o site da band fez, colocou o play do lado esquerdo centralizado.
-                e a parte do volume e as demais coisas na parte direita do video <3 --------->
-            <source src="imagens/video.mp4" type="video/mp4">
-            <!------- este video só para teste mesmo hehehehe --------->
-                O seu navegador não suporta a tag vídeo
-        </video>
-        <div class="texto-content">
-           <h3 class="font-texto branco"> Lorem ipsum dolor sit amet, consectetur adipiscing elit. Praesent nunc arcu, pellentesque ut vestibulum at, posuere nec arcu. Cras in auctor arcu. Nullam malesuada eros mauris, ut sodales ante tempus rhoncus. Donec eleifend pellentesque pulvinar. Aliquam et augue eget tortor placerat sagittis. Pellentesque enim lorem, tincidunt sit amet augue ut, tempor ornare felis. Nam fermentum laoreet lectus at imperdiet.
-
-Praesent porta ligula nec nisi scelerisque dictum. Praesent ac lacus feugiat, blandit odio vel, iaculis tortor. Vestibulum pulvinar neque at tortor facilisis, vitae luctus dui bibendum. Duis feugiat gravida nibh, sit amet ultrices leo fermentum ut. Proin consectetur sit amet diam eget eleifend. Integer augue sapien, vehicula non eleifend id, elementum eget dui. Vivamus suscipit hendrerit turpis, vitae volutpat neque tincidunt eu. Etiam purus libero, dignissim quis auctor id, dapibus vitae lorem. In dapibus rutrum vehicula. In hac habitasse platea dictumst. Donec semper sollicitudin urna, quis vehicula sapien scelerisque ut. Maecenas tincidunt fringilla luctus.
-
-Pellentesque convallis sapien vitae turpis mattis consectetur. Ut lobortis libero lacus, eget convallis nibh bibendum eu. Maecenas in dui venenatis, varius enim ac, dapibus tortor. Aenean quis massa lacinia, aliquam magna vitae, tempor purus. Mauris ut quam imperdiet, luctus elit vel, dignissim arcu. Praesent turpis nisl, tristique eu ultrices sed, efficitur quis massa. Etiam ornare, dolor vitae feugiat egestas, ligula libero laoreet sapien, at porta elit ex quis risus. Fusce nisi ligula, venenatis sed dolor sit amet, semper vulputate elit. Ut eget leo posuere, mollis dolor finibus, luctus turpis. Sed laoreet pellentesque risus, nec vulputate velit tristique eget. Curabitur dignissim turpis eget metus scelerisque, nec auctor turpis tristique. Curabitur ut purus ut lacus semper auctor vitae sed felis. Nunc eget volutpat enim, posuere dignissim lacus. Praesent hendrerit lectus id accumsan euismod. Cras sollicitudin lorem sed ligula lobortis, non blandit dolor dignissim. Nulla rhoncus sed lacus at cursus.</h3>
-        </div>
-	  </div>
-	</div>
-
-<!------- contato --------->
-<!------- formulário ta ok, só no inglês que eu acho que vou ter que alterar do ingles e portugues,
-    Se tiver como fazer isso no js, para mim tá otimo, não sei se vc conhece de php hahaha
-    Pois este arquivo em php, eu tenho ele a muito tempo hahahaha
-    Agora não sei como vai ser no russo, meu Deus hahuhsuahsuhauhsha
-    eu tirei as newsletters da pagina russa, podemos deleta isso tambem de lá?   --------->
-<div id="conteudo">
-    <p id="contato">
-    <div class="espaco-title"></div>
-    <div class="formulario">
-    <h1 class="font-titulo amarelo">Contato</h1>
-          <form
-            name="senddata"
-            method="post"
-            action="#"
-            id="formContato"
-            class="js-static-form"
-            data-form-kind="contact"
-            data-form-email="loxodonta@loxodonta.com.br"
-            data-loading="Enviando..."
-            data-success="Mensagem enviada com sucesso."
-            data-error="Nao foi possivel enviar agora. Tente novamente em alguns minutos."
+        <div class="foot-right">
+          <a
+            class="privacy-link"
+            href="https://privacy-policy-steel-ten.vercel.app"
+            target="_blank"
+            rel="noopener noreferrer"
           >
-            <input type="text" placeholder="Nome" 
-            required class="form_cont" id="seunome" name="seunome"><br>
-            <input type="email" placeholder="E-mail" 
-            required class="form_cont" id="seuemail" name="seuemail"><br>
-           <textarea class="form_cont" placeholder="Mensagem"
-           required id="mensagem" name="mensagem" cols="45" rows="5"></textarea>
-        <div id="resultado" class="form-result" aria-live="polite"></div><br>
-            <input type="submit" id="enviar" name="enviar" value="Enviar" class="enviar" />
-            </form> 
-    </div>
-<!------- para mim tá muito bom assim, mas como não tem a rede social fixa,
-    acredito que seja muito bom colocar aqui abaixo do e-mail, pode usar as mesmas imagens que esta na pasta.
-     --------->
-    <div class="formulario">
-              <h1 class="font-titulo amarelo">loxodonta game studio</h1>
-              <h3 class="font-texto branco">Tornando o seu entretenimento ainda mais divertido.<br>
-              loxodonta@loxodonta.com.br</h3>
-              <!------- Acredito que aqui, vou demorar um pouco mais para te encaminhar, mas estas paginas esta na parte do extra --------->
-              <h5 class="font-texto branco">Guia para Pais | Política de Jogo Limpo e Seguro | Termos de Serviço | Política de Privacidade<br>
-              © 2026 Arctos Medved </h5>
-              <!------- não sei se fica incoveniente mas tenho mais duas logos da companhia, e eu pensei colocar aqui em cor branca,
-                depois eu passo com calma, beleza <3 --------->
-    </div>
-</div>
-<div class="espaco"></div>
-<div class="espaco"></div>
-<div class="espaco"></div>
+            Politica de privacidade
+          </a>
+          <a class="contact-mail" href="mailto:arctosent@icloud.com">arctosent@icloud.com</a>
+          <p class="contact-address">R. Shelma Lombardi Kato, L Katto, 104 Santa Cruz RONDONOPOLIS - MT 78715-211 Brazil</p>
+        </div>
+      </footer>
+    </section>
+  </main>
 
-<!------- as definições são para todas as páginas <3 --------->
+  <script src="script.js"></script>
 </body>
 </html>
