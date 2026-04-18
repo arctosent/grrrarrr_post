@@ -3,77 +3,3239 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Arctos Chess Arena</title>
-  <link rel="icon" type="image/png" href="icon.png" />
-  <link rel="stylesheet" href="styles.css" />
+  <title>Arctos Entertainment | @arctos | grrrarrr</title>
+  <style>
+    @font-face {
+      font-family: "RobotoLocal";
+      src: url("img/Roboto-Regular.ttf") format("truetype"), url("/img/Roboto-Regular.ttf") format("truetype");
+      font-weight: 400;
+      font-style: normal;
+      font-display: swap;
+    }
+
+    :root {
+      --panel-border: #f0c4cc;
+      --token: #b6263d;
+      --ink: #332427;
+      --brand-700: #6c1420;
+      --brand-600: #8e1e2d;
+      --brand-500: #ba2d41;
+      --brand-300: #e8a3af;
+      --brand-soft: #fff2f4;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      min-height: 100vh;
+      padding-top: 74px;
+      font-family: "RobotoLocal", "Segoe UI", Tahoma, sans-serif;
+      color: var(--ink);
+      background:
+        linear-gradient(180deg, #f7c8d0 0, #fde2e6 180px, #fff2f4 100%),
+        repeating-linear-gradient(
+          -28deg,
+          rgba(255, 255, 255, 0.25),
+          rgba(255, 255, 255, 0.25) 8px,
+          transparent 8px,
+          transparent 24px
+        );
+    }
+
+    .topbar {
+      min-height: 56px;
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      z-index: 2000;
+      background: linear-gradient(180deg, #1b1b1b 0%, #000 100%);
+      border-bottom: 1px solid rgba(255, 255, 255, 0.14);
+      box-shadow: 0 1px 0 rgba(255, 255, 255, 0.12) inset;
+    }
+
+    .topbar-inner {
+      width: min(1100px, 95vw);
+      margin: 0 auto;
+      min-height: 56px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px;
+      flex-wrap: wrap;
+      padding: 8px 0;
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      color: #fff;
+      font-size: 1.25rem;
+      text-shadow: 0 1px 0 rgba(0, 0, 0, 0.35);
+      letter-spacing: 0.02em;
+    }
+
+    .brand img {
+      width: 30px;
+      height: 30px;
+      border-radius: 6px;
+      background: rgba(255, 255, 255, 0.12);
+      padding: 2px;
+    }
+
+    .topbar-controls {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin-left: auto;
+      flex-wrap: wrap;
+      justify-content: flex-end;
+    }
+
+    .search-form {
+      width: min(360px, 56vw);
+      display: flex;
+      gap: 8px;
+    }
+
+    .search-input {
+      width: 100%;
+      border: 1px solid #cb8592;
+      border-radius: 16px;
+      padding: 8px 12px;
+      background: #fff;
+      color: #5e1f2a;
+      font-size: 0.95rem;
+    }
+
+    .search-button,
+    .clear-button,
+    .post-button,
+    .logout-button,
+    .comment-submit {
+      border: 1px solid #8f2231;
+      border-radius: 16px;
+      background: linear-gradient(180deg, #d1455a 0%, #b72f43 100%);
+      color: #fff;
+      padding: 8px 14px;
+      font-size: 0.9rem;
+      font-weight: 700;
+      cursor: pointer;
+    }
+
+    .search-button:hover,
+    .clear-button:hover,
+    .post-button:hover,
+    .logout-button:hover,
+    .comment-submit:hover {
+      filter: brightness(1.06);
+    }
+
+    .auth-zone {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      color: #fff;
+    }
+
+    .login-link {
+      color: #ffe3e7;
+      text-decoration: none;
+      font-size: 0.88rem;
+      border-bottom: 1px dotted rgba(255, 227, 231, 0.8);
+    }
+
+    .user-pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 0.83rem;
+      padding: 3px 8px;
+      border-radius: 999px;
+      background: rgba(255, 241, 244, 0.16);
+      border: 1px solid rgba(255, 221, 227, 0.42);
+      color: #fff2f4;
+    }
+
+    .user-pill-avatar {
+      width: 20px;
+      height: 20px;
+      border-radius: 50%;
+      object-fit: cover;
+      border: 1px solid rgba(255, 228, 234, 0.65);
+      background: rgba(255, 255, 255, 0.3);
+    }
+
+    .admin-pill {
+      font-size: 0.82rem;
+      padding: 3px 8px;
+      border-radius: 999px;
+      background: rgba(19, 43, 57, 0.45);
+      border: 1px solid rgba(220, 241, 253, 0.4);
+      color: #e9f6ff;
+    }
+
+    .logout-button {
+      padding: 6px 10px;
+      font-size: 0.8rem;
+    }
+
+    .page {
+      width: min(1100px, 95vw);
+      margin: 18px auto 32px;
+      display: grid;
+      grid-template-columns: 290px minmax(0, 1fr);
+      gap: 18px;
+      align-items: start;
+    }
+
+    .panel {
+      background: #fff;
+      border: 1px solid var(--panel-border);
+      border-radius: 6px;
+      overflow: hidden;
+      box-shadow: 0 1px 0 rgba(255, 255, 255, 0.8) inset;
+    }
+
+    .left-column {
+      display: grid;
+      gap: 14px;
+    }
+
+    .about-box {
+      padding: 14px 14px 10px;
+    }
+
+    .about-title {
+      margin: 0 0 10px;
+      color: #8e2232;
+      font-size: 1.05rem;
+    }
+
+    .stats {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 8px;
+      text-align: center;
+    }
+
+    .stat-number {
+      margin: 0;
+      color: #b62b40;
+      font-size: 1.1rem;
+      font-weight: 700;
+    }
+
+    .stat-label {
+      margin: 4px 0 0;
+      color: #886067;
+      font-size: 0.8rem;
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+    }
+
+    .small-note {
+      margin: 12px 0 0;
+      color: #7e5a61;
+      font-size: 0.88rem;
+      line-height: 1.35;
+    }
+
+    .trending-block {
+      margin-top: 12px;
+      padding-top: 10px;
+      border-top: 1px solid #efd2d7;
+      display: grid;
+      gap: 8px;
+    }
+
+    .trending-title {
+      margin: 0;
+      color: #8e2232;
+      font-size: 0.84rem;
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+      font-weight: 700;
+    }
+
+    .trending-list {
+      display: grid;
+      gap: 6px;
+    }
+
+    .trend-chip {
+      border: 1px solid #e9bcc4;
+      border-radius: 999px;
+      background: #fff8f9;
+      color: #8d2a3a;
+      padding: 5px 9px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 8px;
+      width: 100%;
+      text-align: left;
+      font-size: 0.82rem;
+      line-height: 1.2;
+      cursor: pointer;
+      font-family: inherit;
+    }
+
+    .trend-chip:hover {
+      background: #ffeef2;
+      border-color: #df9cab;
+    }
+
+    .trend-count {
+      font-size: 0.76rem;
+      color: #9b5f69;
+      white-space: nowrap;
+      margin-left: auto;
+    }
+
+    .trending-note {
+      margin: 0;
+      color: #816067;
+      font-size: 0.8rem;
+      line-height: 1.35;
+    }
+
+    .profile-card {
+      padding: 16px;
+      border-bottom: 1px solid var(--panel-border);
+      display: grid;
+      grid-template-columns: 140px minmax(0, 1fr);
+      gap: 14px;
+      background: linear-gradient(180deg, #fff 0%, #fff4f6 100%);
+    }
+
+    .profile-photo {
+      width: 140px;
+      height: 140px;
+      border: 1px solid #efc7ce;
+      border-radius: 8px;
+      position: relative;
+      overflow: hidden;
+      background: linear-gradient(130deg, #ffe8ec 0%, #f9d8df 100%);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .profile-photo img {
+      width: 100%;
+      height: 100%;
+      object-fit: contain;
+    }
+
+    .edit-profile-trigger {
+      position: absolute;
+      left: 8px;
+      right: 8px;
+      bottom: 8px;
+      border: 1px solid #8f2231;
+      border-radius: 999px;
+      background: linear-gradient(180deg, #d1455a 0%, #b72f43 100%);
+      color: #fff;
+      padding: 6px 10px;
+      font-size: 0.8rem;
+      font-weight: 700;
+      cursor: pointer;
+      font-family: inherit;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 120ms ease;
+    }
+
+    .profile-photo:hover .edit-profile-trigger,
+    .profile-photo:focus-within .edit-profile-trigger {
+      opacity: 1;
+      pointer-events: auto;
+    }
+
+    .profile-title {
+      margin: 0;
+      font-size: 2rem;
+      line-height: 1;
+      color: #27353f;
+    }
+
+    .name-with-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      white-space: nowrap;
+    }
+
+    .verified-badge {
+      width: 21px;
+      height: 21px;
+      display: inline-block;
+      object-fit: contain;
+      flex-shrink: 0;
+    }
+
+    .verified-badge-sm {
+      width: 16px;
+      height: 16px;
+      margin-left: 4px;
+    }
+
+    .handle {
+      margin: 6px 0 10px;
+      color: #7a5259;
+      font-size: 1.25rem;
+    }
+
+    .bio {
+      margin: 0 0 10px;
+      color: #2f3d46;
+      font-size: 1.04rem;
+      line-height: 1.42;
+    }
+
+    .country {
+      color: #7c5e63;
+      font-size: 0.95rem;
+      margin: 0;
+    }
+
+    .profile-editor-backdrop {
+      position: fixed;
+      inset: 0;
+      background: rgba(44, 14, 20, 0.52);
+      z-index: 2600;
+      display: none;
+      align-items: center;
+      justify-content: center;
+      padding: 14px;
+    }
+
+    .profile-editor-card {
+      width: min(560px, 96vw);
+      max-height: 92vh;
+      overflow-y: auto;
+      border: 1px solid #efcad1;
+      border-radius: 12px;
+      background: #fff7f9;
+      box-shadow: 0 14px 30px rgba(52, 21, 29, 0.22);
+      padding: 14px;
+      display: grid;
+      gap: 10px;
+    }
+
+    .profile-editor-head {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px;
+    }
+
+    .profile-editor-title {
+      margin: 0;
+      color: #7b2231;
+      font-size: 1.05rem;
+    }
+
+    .profile-editor-close {
+      border: 1px solid #d4a2ad;
+      border-radius: 999px;
+      background: #fff;
+      color: #8f3a49;
+      padding: 5px 10px;
+      font-size: 0.8rem;
+      cursor: pointer;
+      font-family: inherit;
+    }
+
+    .profile-editor-form {
+      display: grid;
+      gap: 10px;
+    }
+
+    .profile-editor-field {
+      display: grid;
+      gap: 6px;
+    }
+
+    .profile-editor-field label {
+      color: #7b5b62;
+      font-size: 0.84rem;
+      font-weight: 700;
+    }
+
+    .profile-editor-field input,
+    .profile-editor-field textarea {
+      width: 100%;
+      border: 1px solid #efcad1;
+      border-radius: 8px;
+      padding: 10px;
+      font-size: 0.94rem;
+      color: #52363b;
+      background: #fff;
+      font-family: inherit;
+    }
+
+    .profile-editor-field textarea {
+      min-height: 96px;
+      resize: vertical;
+    }
+
+    .profile-editor-file {
+      border: 1px solid #efcad1;
+      border-radius: 10px;
+      background: #fff;
+      padding: 8px;
+      font-size: 0.88rem;
+    }
+
+    .profile-editor-file::file-selector-button {
+      border: 1px solid #8f2231;
+      border-radius: 999px;
+      background: linear-gradient(180deg, #d1455a 0%, #b72f43 100%);
+      color: #fff;
+      padding: 6px 10px;
+      margin-right: 8px;
+      cursor: pointer;
+      font-family: inherit;
+    }
+
+    .profile-editor-preview {
+      display: grid;
+      gap: 6px;
+    }
+
+    .profile-editor-preview p {
+      margin: 0;
+      color: #7b5b62;
+      font-size: 0.82rem;
+      font-weight: 700;
+    }
+
+    .profile-editor-preview img {
+      width: 90px;
+      height: 90px;
+      border: 1px solid #efcad1;
+      border-radius: 10px;
+      object-fit: cover;
+      background: #fff4f6;
+    }
+
+    .profile-editor-actions {
+      display: flex;
+      justify-content: flex-end;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+
+    .profile-editor-save {
+      border: 1px solid #8f2231;
+      border-radius: 999px;
+      background: linear-gradient(180deg, #d1455a 0%, #b72f43 100%);
+      color: #fff;
+      padding: 7px 14px;
+      font-size: 0.85rem;
+      font-weight: 700;
+      cursor: pointer;
+      font-family: inherit;
+    }
+
+    .profile-actions {
+      margin-top: 12px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+
+    .follow-btn {
+      border: 1px solid #2d7f3f;
+      border-radius: 16px;
+      background: linear-gradient(180deg, #45b86a 0%, #2f9f56 100%);
+      color: #fff;
+      padding: 7px 14px;
+      font-size: 0.88rem;
+      font-weight: 700;
+      cursor: pointer;
+    }
+
+    .follow-btn.following {
+      background: linear-gradient(180deg, #2f9f56 0%, #258345 100%);
+      border-color: #1f6f39;
+    }
+
+    .follow-note {
+      color: #7f5d63;
+      font-size: 0.86rem;
+    }
+
+    .tabs {
+      display: flex;
+      border-bottom: 1px solid var(--panel-border);
+      background: #fffafb;
+      overflow-x: auto;
+    }
+
+    .tab {
+      border: none;
+      background: transparent;
+      padding: 14px 16px 12px;
+      color: #4b7184;
+      font-size: 1rem;
+      cursor: pointer;
+      border-right: 1px solid #e7f0f7;
+      white-space: nowrap;
+    }
+
+    .tab b {
+      color: #c33b50;
+      margin-left: 6px;
+    }
+
+    .tab b.tab-count-alert {
+      color: #fff;
+      background: #c73a4f;
+      border-radius: 999px;
+      padding: 1px 6px;
+      margin-left: 8px;
+      font-size: 0.78rem;
+    }
+
+    .tab.active {
+      color: #202f39;
+      font-weight: 700;
+      background: #fff;
+      box-shadow: 0 -2px 0 #ce4358 inset;
+    }
+
+    .composer {
+      padding: 14px;
+      border-bottom: 1px solid var(--panel-border);
+      background: #fff2f4;
+      display: grid;
+      gap: 8px;
+    }
+
+    .composer textarea,
+    .composer input {
+      width: 100%;
+      border: 1px solid #efcad1;
+      border-radius: 8px;
+      padding: 10px;
+      font-size: 0.95rem;
+      color: #52363b;
+      font-family: inherit;
+      resize: vertical;
+      min-height: 76px;
+    }
+
+    .composer input {
+      min-height: auto;
+    }
+
+    .composer-file-row {
+      display: grid;
+      gap: 6px;
+    }
+
+    .composer-file-row label {
+      color: #7b5b62;
+      font-size: 0.84rem;
+      font-weight: 700;
+    }
+
+    .composer input[type="file"] {
+      padding: 8px;
+      min-height: auto;
+      background: #fff;
+      border-radius: 10px;
+      border: 1px solid #efcad1;
+    }
+
+    .composer input[type="file"]::file-selector-button {
+      border: 1px solid #8f2231;
+      border-radius: 999px;
+      background: linear-gradient(180deg, #d1455a 0%, #b72f43 100%);
+      color: #fff;
+      padding: 6px 10px;
+      margin-right: 10px;
+      cursor: pointer;
+    }
+
+    .media-preview {
+      border: 1px solid #efcad1;
+      border-radius: 10px;
+      background: #fff7f8;
+      padding: 8px;
+      display: grid;
+      gap: 8px;
+    }
+
+    .media-preview img {
+      width: 100%;
+      max-height: 260px;
+      object-fit: contain;
+      border-radius: 8px;
+      background: #fff;
+    }
+
+    .clear-photo-button {
+      border: 1px solid #d9a7a7;
+      border-radius: 999px;
+      background: #fff4f4;
+      color: #9a3f3f;
+      padding: 4px 10px;
+      font-size: 0.82rem;
+      cursor: pointer;
+      justify-self: start;
+    }
+
+    .clear-photo-button:hover {
+      background: #ffe7e7;
+    }
+
+    .composer-foot {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+
+    .helper-text {
+      color: #7b5b62;
+      font-size: 0.84rem;
+    }
+
+    .composer-locked {
+      padding: 14px;
+      border-bottom: 1px solid var(--panel-border);
+      background: #fff4f6;
+      color: #78595f;
+      font-size: 0.93rem;
+      line-height: 1.4;
+    }
+
+    .composer-locked a {
+      color: #b6263d;
+      text-decoration: none;
+      font-weight: 700;
+    }
+
+    .dm-panel {
+      padding: 14px;
+      border-bottom: 1px solid var(--panel-border);
+      background: #fff6f8;
+      display: grid;
+      gap: 10px;
+    }
+
+    .dm-head h3 {
+      margin: 0;
+      color: #7b2231;
+      font-size: 1rem;
+    }
+
+    .dm-head p {
+      margin: 4px 0 0;
+      color: #815a61;
+      font-size: 0.86rem;
+    }
+
+    .dm-locked {
+      padding: 12px;
+      border: 1px solid #efcad1;
+      border-radius: 10px;
+      background: #fff;
+      color: #6f5056;
+      font-size: 0.9rem;
+      line-height: 1.4;
+    }
+
+    .dm-locked a {
+      color: #b6263d;
+      text-decoration: none;
+      font-weight: 700;
+    }
+
+    .dm-layout {
+      border: 1px solid #efcad1;
+      border-radius: 12px;
+      overflow: hidden;
+      min-height: 430px;
+      display: grid;
+      grid-template-columns: 250px minmax(0, 1fr);
+    }
+
+    .dm-users {
+      background: #fff4f6;
+      border-right: 1px solid #efcad1;
+      padding: 10px;
+      display: grid;
+      gap: 8px;
+      align-content: start;
+    }
+
+    .dm-users-title {
+      margin: 0;
+      color: #8c2333;
+      font-size: 0.9rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.03em;
+    }
+
+    .dm-users-list {
+      display: grid;
+      gap: 6px;
+      max-height: 360px;
+      overflow-y: auto;
+      padding-right: 2px;
+    }
+
+    .dm-user-btn {
+      width: 100%;
+      border: 1px solid #e7b7c0;
+      border-radius: 10px;
+      background: #fff4f6;
+      padding: 8px;
+      display: grid;
+      grid-template-columns: 34px minmax(0, 1fr);
+      gap: 8px;
+      align-items: center;
+      text-align: left;
+      cursor: pointer;
+    }
+
+    .dm-user-btn.active {
+      border-color: #cd6a7c;
+      background: #ffdbe3;
+      box-shadow: 0 0 0 1px rgba(205, 106, 124, 0.2) inset;
+    }
+
+    .dm-user-main {
+      min-width: 0;
+      display: grid;
+      gap: 3px;
+    }
+
+    .dm-user-name {
+      display: block;
+      color: #5f2f39;
+      font-size: 0.84rem;
+      font-weight: 700;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      margin: 0;
+    }
+
+    .dm-user-meta {
+      display: block;
+      color: #8d6870;
+      font-size: 0.74rem;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      margin: 0;
+    }
+
+    .dm-user-unread {
+      justify-self: start;
+      background: #bf2f47;
+      color: #fff;
+      border-radius: 999px;
+      padding: 1px 6px;
+      font-size: 0.72rem;
+      font-weight: 700;
+    }
+
+    .dm-chat {
+      min-width: 0;
+      background: #fff4f6;
+      display: grid;
+      grid-template-rows: auto minmax(0, 1fr) auto;
+    }
+
+    .dm-chat-head {
+      padding: 10px 12px;
+      border-bottom: 1px solid #efcad1;
+      background: #fff0f3;
+      color: #7b2231;
+      font-size: 0.88rem;
+      font-weight: 700;
+    }
+
+    .dm-list {
+      max-height: 360px;
+      overflow-y: auto;
+      display: grid;
+      gap: 8px;
+      align-content: start;
+      padding: 10px;
+      background: #fff7f8;
+    }
+
+    .dm-form {
+      border-top: 1px solid #efcad1;
+      background: #fff2f5;
+      display: grid;
+      gap: 8px;
+      padding: 10px;
+    }
+
+    .dm-form textarea {
+      width: 100%;
+      min-height: 80px;
+      border: 1px solid #efcad1;
+      border-radius: 8px;
+      padding: 10px;
+      font-size: 0.94rem;
+      color: #52363b;
+      background: #fff;
+      font-family: inherit;
+      resize: vertical;
+    }
+
+    .dm-foot {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+
+    .dm-item {
+      display: grid;
+      grid-template-columns: 34px minmax(0, 1fr);
+      gap: 8px;
+      align-items: start;
+    }
+
+    .dm-item-own {
+      grid-template-columns: minmax(0, 1fr) 34px;
+    }
+
+    .dm-item-own .dm-avatar {
+      order: 2;
+    }
+
+    .dm-item-own .dm-bubble {
+      order: 1;
+      background: #ffeef3;
+      border-color: #efc4cf;
+    }
+
+    .dm-avatar {
+      width: 34px;
+      height: 34px;
+      border-radius: 50%;
+      object-fit: cover;
+      border: 1px solid #e8c6cc;
+      background: #fff;
+      margin-top: 1px;
+    }
+
+    .dm-bubble {
+      min-width: 0;
+      border: 1px solid #efd2d7;
+      border-radius: 10px;
+      background: #fff;
+      padding: 8px;
+    }
+
+    .dm-meta {
+      margin: 0 0 4px;
+      color: #7f6268;
+      font-size: 0.74rem;
+      display: flex;
+      align-items: baseline;
+      gap: 6px;
+      flex-wrap: wrap;
+    }
+
+    .dm-meta strong {
+      color: #5f3f46;
+      font-size: 0.83rem;
+    }
+
+    .dm-text {
+      margin: 0;
+      font-size: 0.88rem;
+      line-height: 1.35;
+      color: #52383d;
+      word-break: break-word;
+    }
+
+    .dm-users-empty {
+      margin: 0;
+      color: #8f6770;
+      font-size: 0.84rem;
+      padding: 8px 6px;
+    }
+
+    .search-status {
+      padding: 10px 14px;
+      color: #7f545c;
+      background: #fff0f3;
+      border-bottom: 1px solid #efcad1;
+      display: none;
+      align-items: center;
+      justify-content: space-between;
+      gap: 8px;
+    }
+
+    .sync-status {
+      display: none;
+      padding: 10px 14px;
+      border-bottom: 1px solid #efcad1;
+      background: #fff8e6;
+      color: #7c4a00;
+      font-size: 0.88rem;
+      line-height: 1.35;
+    }
+
+    .timeline {
+      margin: 0;
+      padding: 0;
+      list-style: none;
+    }
+
+    .post {
+      display: grid;
+      grid-template-columns: 54px minmax(0, 1fr);
+      gap: 10px;
+      padding: 14px;
+      border-bottom: 1px solid #ebf2f7;
+    }
+
+    .post:last-child {
+      border-bottom: none;
+    }
+
+    .post-avatar {
+      width: 54px;
+      height: 54px;
+      border: 1px solid #efc9d0;
+      border-radius: 6px;
+      padding: 4px;
+      background: #fff4f6;
+      object-fit: contain;
+    }
+
+    .post-head {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: baseline;
+      gap: 6px;
+      margin: 0 0 4px;
+    }
+
+    .post-name {
+      font-weight: 700;
+      color: #24303a;
+      display: inline-flex;
+      align-items: center;
+    }
+
+    .post-handle,
+    .post-time {
+      color: #8f656c;
+      font-size: 0.9rem;
+    }
+
+    .post-text {
+      margin: 0;
+      line-height: 1.45;
+      color: #293943;
+      word-break: break-word;
+    }
+
+    .post-media {
+      margin-top: 10px;
+      border: 1px solid #efcad1;
+      border-radius: 8px;
+      background: #fff4f6;
+      padding: 8px;
+    }
+
+    .post-media img {
+      width: 100%;
+      max-height: 240px;
+      object-fit: contain;
+      border-radius: 6px;
+      display: block;
+    }
+
+    .post-actions {
+      margin-top: 8px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+
+    .fav-btn {
+      border: 1px solid #e7b4be;
+      border-radius: 999px;
+      background: #fff;
+      color: #885a62;
+      padding: 4px 10px;
+      font-size: 0.82rem;
+      cursor: pointer;
+    }
+
+    .fav-btn.active {
+      border-color: #d6939f;
+      color: #922f40;
+      background: #ffeef1;
+    }
+
+    .delete-btn {
+      border: 1px solid #d9a7a7;
+      border-radius: 999px;
+      background: #fff4f4;
+      color: #9a3f3f;
+      padding: 4px 10px;
+      font-size: 0.82rem;
+      cursor: pointer;
+    }
+
+    .delete-btn:hover {
+      background: #ffe7e7;
+    }
+
+    .status-link {
+      color: #b6263d;
+      text-decoration: none;
+      font-size: 0.82rem;
+      font-weight: 700;
+      border-bottom: 1px dotted #d57b8a;
+      padding-bottom: 1px;
+    }
+
+    .status-link:hover {
+      color: #8f1f31;
+      border-bottom-color: #b44e62;
+    }
+
+    .copy-status-btn {
+      border: 1px solid #e7b4be;
+      border-radius: 999px;
+      background: #fff;
+      color: #885a62;
+      padding: 4px 10px;
+      font-size: 0.82rem;
+      cursor: pointer;
+    }
+
+    .copy-status-btn:hover {
+      background: #fff0f3;
+    }
+
+    .token-link {
+      border: none;
+      background: transparent;
+      padding: 0;
+      margin: 0;
+      color: var(--token);
+      cursor: pointer;
+      font: inherit;
+      font-weight: 700;
+    }
+
+    .comment-list {
+      margin-top: 10px;
+      display: grid;
+      gap: 6px;
+    }
+
+    .comment-item {
+      background: #fff7f8;
+      border: 1px solid #efd2d7;
+      border-radius: 8px;
+      padding: 8px;
+      display: grid;
+      grid-template-columns: 34px minmax(0, 1fr);
+      gap: 8px;
+      align-items: start;
+    }
+
+    .comment-item.no-avatar {
+      grid-template-columns: 1fr;
+    }
+
+    .comment-avatar {
+      width: 34px;
+      height: 34px;
+      border-radius: 50%;
+      object-fit: cover;
+      border: 1px solid #e8c6cc;
+      background: #fff;
+      margin-top: 1px;
+    }
+
+    .comment-content {
+      min-width: 0;
+    }
+
+    .comment-head {
+      display: flex;
+      align-items: baseline;
+      gap: 6px;
+      flex-wrap: wrap;
+      margin-bottom: 4px;
+    }
+
+    .comment-author {
+      font-size: 0.84rem;
+      font-weight: 700;
+      color: #5f3f46;
+    }
+
+    .comment-time {
+      font-size: 0.75rem;
+      color: #8f676e;
+    }
+
+    .comment-text {
+      margin: 0;
+      font-size: 0.88rem;
+      line-height: 1.35;
+      color: #52383d;
+      word-break: break-word;
+    }
+
+    .comment-form {
+      margin-top: 10px;
+      display: grid;
+      gap: 6px;
+      grid-template-columns: minmax(0, 1fr) auto;
+    }
+
+    .comment-input {
+      border: 1px solid #efcad1;
+      border-radius: 999px;
+      padding: 8px 10px;
+      font-size: 0.84rem;
+      font-family: inherit;
+      min-width: 0;
+    }
+
+    .comment-input {
+      border-radius: 8px;
+    }
+
+    .comment-submit {
+      padding: 7px 11px;
+      font-size: 0.82rem;
+      align-self: stretch;
+    }
+
+    .empty {
+      padding: 22px 16px;
+      color: #628091;
+    }
+
+    @media (max-width: 920px) {
+      body {
+        padding-top: 158px;
+      }
+
+      .topbar-inner {
+        justify-content: center;
+        padding: 10px 0 12px;
+      }
+
+      .brand {
+        width: 100%;
+        justify-content: center;
+        text-align: center;
+      }
+
+      .brand strong {
+        text-align: center;
+      }
+
+      .topbar-controls {
+        width: 100%;
+        margin-left: 0;
+        justify-content: center;
+      }
+
+      .search-form {
+        width: min(680px, 100%);
+      }
+
+      .auth-zone {
+        width: 100%;
+        justify-content: center;
+      }
+
+      .page {
+        grid-template-columns: 1fr;
+      }
+
+      .profile-card {
+        grid-template-columns: 90px minmax(0, 1fr);
+      }
+
+      .profile-photo {
+        width: 90px;
+        height: 90px;
+      }
+
+      .profile-title {
+        font-size: 1.5rem;
+      }
+
+      .handle {
+        font-size: 1rem;
+      }
+
+      .comment-form {
+        grid-template-columns: 1fr;
+      }
+
+      .dm-layout {
+        grid-template-columns: 1fr;
+        min-height: auto;
+      }
+
+      .dm-users {
+        border-right: none;
+        border-bottom: 1px solid #efcad1;
+      }
+
+      .dm-users-list {
+        display: flex;
+        gap: 8px;
+        overflow-x: auto;
+        overflow-y: hidden;
+        max-height: none;
+        padding-bottom: 2px;
+      }
+
+      .dm-user-btn {
+        min-width: 210px;
+      }
+
+      .edit-profile-trigger {
+        opacity: 1;
+        pointer-events: auto;
+      }
+    }
+
+    @media (max-width: 560px) {
+      body {
+        padding-top: 170px;
+      }
+
+      .search-form {
+        flex-wrap: wrap;
+        justify-content: center;
+      }
+
+      .search-input {
+        min-width: 0;
+        flex: 1 1 260px;
+      }
+    }
+  </style>
 </head>
 <body>
-  <main class="app-shell">
-    <section class="phone-card" aria-label="Arctos Chess Arena">
-      <section class="arena-grid">
-        <aside class="left-panel" aria-label="Russell">
-          <div class="bear-stage" aria-hidden="true">
-            <div id="bear" class="bear"></div>
+  <header class="topbar">
+    <div class="topbar-inner">
+      <div class="brand">
+        <strong>Blog</strong>
+      </div>
+      <div class="topbar-controls">
+        <form class="search-form" id="searchForm">
+          <input
+            id="searchInput"
+            class="search-input"
+            type="search"
+            placeholder="Buscar @arctos ou #letItArctos"
+            aria-label="Buscar no site"
+          />
+          <button type="submit" class="search-button">Buscar</button>
+        </form>
+        <div class="auth-zone" id="authZone"></div>
+      </div>
+    </div>
+  </header>
+
+  <main class="page">
+    <aside class="left-column">
+      <section class="panel about-box">
+        <h2 class="about-title">Sobre <button class="token-link" data-token="@arctos">@arctos</button></h2>
+        <div class="stats">
+          <div>
+            <p id="sidebarPosts" class="stat-number">0</p>
+            <p class="stat-label">grrrarrr</p>
           </div>
-          <p class="bot-rating">Bot Russell • Rating 1800</p>
-        </aside>
+          <div>
+            <p id="sidebarFollowers" class="stat-number">1</p>
+            <p class="stat-label">Seguidores</p>
+          </div>
+        </div>
+        <p class="small-note" id="followerNote">1 pessoa seguiu.</p>
+        <div class="trending-block">
+          <p class="trending-title">Trending Topics</p>
+          <div class="trending-list" id="trendingTopics"></div>
+          <p class="trending-note" id="trendingNote">Sem hashtags ainda.</p>
+        </div>
+      </section>
+    </aside>
 
-        <section class="center-panel">
-          <header class="masthead">
-            <img id="logoFrame" class="logo" src="imagem/LOGOGAME1.png" alt="Arctos Game Logo" />
-          </header>
+    <section class="panel">
+      <div class="profile-card">
+        <div class="profile-photo">
+          <img id="profileAvatar" src="img/icon.png" onerror="this.onerror=null;this.src='/img/icon.png';" alt="Foto da empresa Arctos Entertainment" />
+          <button id="editProfileButton" class="edit-profile-trigger" type="button" style="display:none;">Editar perfil</button>
+        </div>
+        <div>
+          <h1 class="profile-title"><span class="name-with-badge"><span id="profileNameText">Arctos Entertainment</span><img class="verified-badge" src="img/Twitter_Verified_Badge.svg" alt="Conta verificada" title="Conta verificada" aria-label="Conta verificada"></span></h1>
+          <p class="handle">@arctos</p>
+          <p class="bio" id="profileBio">O blog oficial da Arctos Entertainment. <button class="token-link" data-token="#letitarctos">#letItArctos</button></p>
+          <p class="country" id="profileCountry">País: Brasil</p>
+          <div class="profile-actions">
+            <button id="followButton" class="follow-btn" type="button">Seguir @arctos</button>
+            <span id="followState" class="follow-note"></span>
+          </div>
+        </div>
+      </div>
 
-          <section class="hud" aria-label="Controles de jogo">
-            <p id="statusText">Sua vez (brancas).</p>
-            <div class="hud-actions">
-              <label for="difficultySelect">IA</label>
-              <select id="difficultySelect" aria-label="Dificuldade da IA">
-                <option value="easy">Facil</option>
-                <option value="medium" selected>Media</option>
-                <option value="hard">Dificil</option>
-              </select>
-              <button id="resetBtn" type="button">Novo jogo</button>
-            </div>
-            <p id="botPhrase" class="bot-phrase">Russell (1800): Vamos jogar um xadrez elegante.</p>
-            <div class="store-cta">
-              <a
-                id="playStoreBtn"
-                class="store-link"
-                href="https://play.google.com/store/apps/details?id=com.arctos.russellsmate"
-                target="_blank"
-                rel="noopener noreferrer"
-              >
-                Baixar Russell's Mate no Google Play
-              </a>
-            </div>
+      <nav class="tabs" aria-label="Filtros">
+        <button class="tab active" data-tab="grrrarrr">grrrarrr <b id="tabPosts">0</b></button>
+        <button class="tab" data-tab="favoritos">Favoritos <b id="tabFavorites">0</b></button>
+        <button class="tab" data-tab="midias">Mídias <b id="tabMedia">0</b></button>
+        <button class="tab" data-tab="mensagens">Mensagens <b id="tabMessages">0</b></button>
+      </nav>
+
+      <div id="composerLocked" class="composer-locked" style="display:none;">
+        Para postar novo <strong>grrrarrr</strong>, acesse
+        <a href="login.html?mode=login">Entrar</a>
+        ou
+        <a href="login.html?mode=signup">Criar conta</a>.
+      </div>
+
+      <form class="composer" id="composer">
+        <textarea
+          id="newPostText"
+          placeholder="Escreva um novo grrrarrr... use @ e # para busca"
+        ></textarea>
+        <input id="newMediaUrl" type="url" placeholder="URL da mídia (opcional)" />
+        <div class="composer-file-row">
+          <label for="newPhotoFile">Foto (admin)</label>
+          <input id="newPhotoFile" type="file" accept="image/*" />
+        </div>
+        <div id="mediaPreview" class="media-preview" style="display:none;">
+          <img id="mediaPreviewImage" alt="Prévia da foto para publicação" />
+          <button id="clearPhotoButton" class="clear-photo-button" type="button">Remover foto</button>
+        </div>
+        <div class="composer-foot">
+          <span class="helper-text" id="composerHint">Dica: clique em @ ou # para filtrar o conteúdo. Admin também pode enviar foto.</span>
+          <button class="post-button" type="submit">Postar</button>
+        </div>
+      </form>
+
+      <div class="search-status" id="searchStatus">
+        <span id="searchStatusText"></span>
+        <button id="clearSearch" class="clear-button" type="button">Limpar</button>
+      </div>
+      <div class="sync-status" id="syncStatus"></div>
+      <section class="dm-panel" id="dmPanel" style="display:none;">
+        <div class="dm-head">
+          <h3>Mensagens privadas</h3>
+          <p>Conversa no privado com @arctos.</p>
+        </div>
+        <div id="dmLocked" class="dm-locked" style="display:none;">
+          Entre para mandar DM para <strong>@arctos</strong>:
+          <a href="login.html?mode=login">Entrar</a>
+          ou
+          <a href="login.html?mode=signup">Criar conta</a>.
+        </div>
+        <div class="dm-layout" id="dmLayout" style="display:none;">
+          <aside class="dm-users">
+            <p class="dm-users-title">Usuários</p>
+            <div class="dm-users-list" id="dmUsersList"></div>
+          </aside>
+          <section class="dm-chat">
+            <div class="dm-chat-head" id="dmChatHead">Conversa privada</div>
+            <div class="dm-list" id="dmList"></div>
+            <form class="dm-form" id="dmForm" style="display:none;">
+              <textarea id="dmInput" maxlength="1200" placeholder="Escreva sua mensagem privada"></textarea>
+              <div class="dm-foot">
+                <span class="helper-text" id="dmHint">Mensagem privada: só você e @arctos conseguem ver.</span>
+                <button class="post-button" type="submit">Enviar DM</button>
+              </div>
+            </form>
           </section>
-        </section>
-
-        <section class="board-wrap">
-          <div id="board" class="board" role="grid" aria-label="Tabuleiro de xadrez"></div>
-        </section>
+        </div>
       </section>
 
-      <footer class="foot-note">
-        <div class="foot-left">
-          <img class="footer-logo" src="imagem/LogoArctos.png" alt="Logo Arctos" />
-        </div>
-        <div class="foot-right">
-          <a
-            class="privacy-link"
-            href="https://privacy-policy-steel-ten.vercel.app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Politica de privacidade
-          </a>
-          <a class="contact-mail" href="mailto:arctosent@icloud.com">arctosent@icloud.com</a>
-          <p class="contact-address">R. Shelma Lombardi Kato, L Katto, 104 Santa Cruz RONDONOPOLIS - MT 78715-211 Brazil</p>
-        </div>
-      </footer>
+      <ul class="timeline" id="timeline"></ul>
     </section>
   </main>
 
-  <script src="script.js"></script>
+  <div class="profile-editor-backdrop" id="profileEditorBackdrop" style="display:none;">
+    <section class="profile-editor-card" aria-label="Editor de perfil da Arctos">
+      <div class="profile-editor-head">
+        <h2 class="profile-editor-title">Editar perfil</h2>
+        <button class="profile-editor-close" id="closeProfileEditor" type="button">Fechar</button>
+      </div>
+      <form class="profile-editor-form" id="profileEditorForm">
+        <div class="profile-editor-field">
+          <label for="profileNameInput">Nome</label>
+          <input id="profileNameInput" type="text" maxlength="60" required />
+        </div>
+        <div class="profile-editor-field">
+          <label for="profileCountryInput">País</label>
+          <input id="profileCountryInput" type="text" maxlength="50" required />
+        </div>
+        <div class="profile-editor-field">
+          <label for="profileBioInput">Bio</label>
+          <textarea id="profileBioInput" maxlength="420" required></textarea>
+        </div>
+        <div class="profile-editor-field">
+          <label for="profileAvatarFileInput">Enviar foto do dispositivo (opcional)</label>
+          <input id="profileAvatarFileInput" class="profile-editor-file" type="file" accept="image/*" />
+        </div>
+        <div class="profile-editor-preview">
+          <p>Prévia da foto</p>
+          <img id="profileEditorPreview" src="img/icon.png" alt="Prévia da foto de perfil" />
+        </div>
+        <div class="profile-editor-actions">
+          <button class="profile-editor-close" id="cancelProfileEditor" type="button">Cancelar</button>
+          <button class="profile-editor-save" type="submit">Salvar perfil</button>
+        </div>
+      </form>
+    </section>
+  </div>
+
+  <script>
+    const STORAGE_KEYS = {
+      posts: "arctos_posts_v2",
+      session: "arctos_user_session_v1",
+      legacyAdminSession: "arctos_admin_session_v1",
+      favorites: "arctos_user_favorites_v1",
+      followers: "arctos_followers_v1",
+      directMessages: "arctos_direct_messages_v1",
+      profile: "arctos_profile_v1"
+    };
+    const DEFAULT_USER_AVATAR = window.location.protocol === "file:" ? "img/icon.png" : "/img/icon.png";
+
+    const DEFAULT_POSTS = [];
+    const DEFAULT_PROFILE = {
+      name: "Arctos Entertainment",
+      bio: "O blog oficial da Arctos Entertainment. #letItArctos",
+      country: "Brasil",
+      avatar: DEFAULT_USER_AVATAR
+    };
+
+    const state = {
+      activeTab: "grrrarrr",
+      query: "",
+      statusFilter: "",
+      baseFollowers: 1,
+      currentUser: null,
+      isAdmin: false,
+      followersSet: new Set(),
+      posts: [],
+      userFavorites: new Set(),
+      directMessages: [],
+      activeDmThread: "",
+      profile: DEFAULT_PROFILE
+    };
+
+    const timelineEl = document.getElementById("timeline");
+    const searchForm = document.getElementById("searchForm");
+    const searchInput = document.getElementById("searchInput");
+    const searchStatus = document.getElementById("searchStatus");
+    const searchStatusText = document.getElementById("searchStatusText");
+    const clearSearchButton = document.getElementById("clearSearch");
+    const syncStatus = document.getElementById("syncStatus");
+    const composer = document.getElementById("composer");
+    const composerLocked = document.getElementById("composerLocked");
+    const newPostText = document.getElementById("newPostText");
+    const newMediaUrl = document.getElementById("newMediaUrl");
+    const newPhotoFile = document.getElementById("newPhotoFile");
+    const mediaPreview = document.getElementById("mediaPreview");
+    const mediaPreviewImage = document.getElementById("mediaPreviewImage");
+    const clearPhotoButton = document.getElementById("clearPhotoButton");
+    const composerHint = document.getElementById("composerHint");
+    const tabButtons = document.querySelectorAll(".tab");
+    const sidebarPosts = document.getElementById("sidebarPosts");
+    const sidebarFollowers = document.getElementById("sidebarFollowers");
+    const followerNote = document.getElementById("followerNote");
+    const trendingTopics = document.getElementById("trendingTopics");
+    const trendingNote = document.getElementById("trendingNote");
+    const tabPosts = document.getElementById("tabPosts");
+    const tabFavorites = document.getElementById("tabFavorites");
+    const tabMedia = document.getElementById("tabMedia");
+    const tabMessages = document.getElementById("tabMessages");
+    const authZone = document.getElementById("authZone");
+    const followButton = document.getElementById("followButton");
+    const followState = document.getElementById("followState");
+    const profileAvatar = document.getElementById("profileAvatar");
+    const profileNameText = document.getElementById("profileNameText");
+    const profileBio = document.getElementById("profileBio");
+    const profileCountry = document.getElementById("profileCountry");
+    const editProfileButton = document.getElementById("editProfileButton");
+    const profileEditorBackdrop = document.getElementById("profileEditorBackdrop");
+    const closeProfileEditor = document.getElementById("closeProfileEditor");
+    const cancelProfileEditor = document.getElementById("cancelProfileEditor");
+    const profileEditorForm = document.getElementById("profileEditorForm");
+    const profileNameInput = document.getElementById("profileNameInput");
+    const profileCountryInput = document.getElementById("profileCountryInput");
+    const profileBioInput = document.getElementById("profileBioInput");
+    const profileAvatarFileInput = document.getElementById("profileAvatarFileInput");
+    const profileEditorPreview = document.getElementById("profileEditorPreview");
+    const dmPanel = document.getElementById("dmPanel");
+    const dmLocked = document.getElementById("dmLocked");
+    const dmLayout = document.getElementById("dmLayout");
+    const dmUsersList = document.getElementById("dmUsersList");
+    const dmChatHead = document.getElementById("dmChatHead");
+    const dmForm = document.getElementById("dmForm");
+    const dmInput = document.getElementById("dmInput");
+    const dmHint = document.getElementById("dmHint");
+    const dmList = document.getElementById("dmList");
+    const DEFAULT_COMPOSER_HINT = "Dica: clique em @ ou # para filtrar o conteúdo. Admin também pode enviar foto.";
+    const DEFAULT_DM_HINT = "Mensagem privada: só você e @arctos conseguem ver.";
+    const REMOTE_SYNC = {
+      enabled: /^https?:$/i.test(window.location.protocol),
+      endpoint: "/api/posts",
+      pollMs: 5000
+    };
+    let pendingPhotoData = "";
+    let isProcessingPhoto = false;
+    let allowRemotePush = false;
+    let remotePushTimer = null;
+    let remotePullTimer = null;
+    let isApplyingRemotePosts = false;
+    let lastLocalMutationAt = 0;
+    let hasRemoteInitialized = false;
+    let remoteSyncIssue = "";
+    let pendingProfileAvatarData = "";
+
+    function setRemoteSyncIssue(message) {
+      const nextMessage = String(message || "").trim();
+      if (nextMessage === remoteSyncIssue) return;
+      remoteSyncIssue = nextMessage;
+      if (!syncStatus) return;
+      if (!remoteSyncIssue) {
+        syncStatus.style.display = "none";
+        syncStatus.textContent = "";
+        return;
+      }
+      syncStatus.textContent = remoteSyncIssue;
+      syncStatus.style.display = "block";
+    }
+
+    function normalizeAvatarUrl(value) {
+      const avatar = String(value || "").trim();
+      return avatar || DEFAULT_USER_AVATAR;
+    }
+
+    function normalizePost(post, index) {
+      return {
+        id: String(post.id || "post-" + Date.now() + "-" + index),
+        statusId: normalizeStatusId(post.statusId || post.status || post.id),
+        text: String(post.text || ""),
+        media: String(post.media || ""),
+        favoriteCount: Math.max(0, Number(post.favoriteCount || (post.favorite ? 1 : 0) || 0)),
+        comments: Array.isArray(post.comments)
+          ? post.comments.map((comment, cIndex) => ({
+              id: String(comment.id || "comment-" + index + "-" + cIndex + "-" + Date.now()),
+              author: String(comment.author || "Visitante"),
+              text: String(comment.text || ""),
+              avatar: normalizeAvatarUrl(comment.avatar),
+              createdAt: comment.createdAt || new Date().toISOString()
+            }))
+          : [],
+        createdAt: post.createdAt || new Date().toISOString()
+      };
+    }
+
+    function loadPosts() {
+      const raw = localStorage.getItem(STORAGE_KEYS.posts);
+      if (!raw) {
+        const seed = DEFAULT_POSTS.map((post, index) => normalizePost(post, index));
+        localStorage.setItem(STORAGE_KEYS.posts, JSON.stringify(seed));
+        return seed;
+      }
+
+      try {
+        const parsed = JSON.parse(raw);
+        if (!Array.isArray(parsed)) throw new Error("Formato inválido");
+        return parsed.map((post, index) => normalizePost(post, index));
+      } catch (_error) {
+        const fallback = DEFAULT_POSTS.map((post, index) => normalizePost(post, index));
+        localStorage.setItem(STORAGE_KEYS.posts, JSON.stringify(fallback));
+        return fallback;
+      }
+    }
+
+    function savePosts() {
+      try {
+        localStorage.setItem(STORAGE_KEYS.posts, JSON.stringify(state.posts));
+        lastLocalMutationAt = Date.now();
+        if (!isApplyingRemotePosts && allowRemotePush) {
+          scheduleRemotePush();
+        }
+        return true;
+      } catch (_error) {
+        return false;
+      }
+    }
+
+    function scheduleRemotePush() {
+      if (!REMOTE_SYNC.enabled) return;
+      if (remotePushTimer) {
+        clearTimeout(remotePushTimer);
+      }
+      remotePushTimer = setTimeout(() => {
+        remotePushTimer = null;
+        pushRemotePosts();
+      }, 450);
+    }
+
+    async function pushRemotePosts(keepalive) {
+      if (!REMOTE_SYNC.enabled) return false;
+      try {
+        const response = await fetch(REMOTE_SYNC.endpoint, {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json"
+          },
+          cache: "no-store",
+          keepalive: !!keepalive,
+          body: JSON.stringify({
+            posts: state.posts,
+            followers: Array.from(state.followersSet)
+          })
+        });
+        if (!response.ok) {
+          setRemoteSyncIssue("Sincronização online indisponível no momento.");
+          return false;
+        }
+        setRemoteSyncIssue("");
+        return true;
+      } catch (_error) {
+        setRemoteSyncIssue("Sincronização online indisponível no momento.");
+        return false;
+      }
+    }
+
+    async function pullRemotePosts(isInitial) {
+      if (!REMOTE_SYNC.enabled) return;
+
+      try {
+        const response = await fetch(REMOTE_SYNC.endpoint, {
+          method: "GET",
+          cache: "no-store"
+        });
+        if (!response.ok) {
+          setRemoteSyncIssue("Sincronização online indisponível no momento.");
+          return;
+        }
+
+        const contentType = String(response.headers.get("content-type") || "").toLowerCase();
+        if (!contentType.includes("application/json")) {
+          const snippet = (await response.text()).slice(0, 240).toLowerCase();
+          if (snippet.includes("<html") || snippet.includes("<!doctype")) {
+            setRemoteSyncIssue("API offline: endpoint retornou HTML em vez de JSON.");
+          } else {
+            setRemoteSyncIssue("API respondeu em formato inválido para sincronização.");
+          }
+          return;
+        }
+
+        const payload = await response.json();
+        setRemoteSyncIssue("");
+        const incomingPosts = Array.isArray(payload)
+          ? payload
+          : Array.isArray(payload && payload.posts)
+            ? payload.posts
+            : null;
+        if (!incomingPosts) return;
+
+        const incomingFollowers = Array.isArray(payload && payload.followers)
+          ? payload.followers
+          : null;
+
+        const normalizedPosts = incomingPosts.map((post, index) => normalizePost(post, index));
+        const normalizedFollowers = incomingFollowers
+          ? incomingFollowers.map((item) => String(item || "").trim().toLowerCase()).filter(Boolean)
+          : Array.from(state.followersSet);
+        const uniqueFollowers = Array.from(new Set(normalizedFollowers));
+
+        if (
+          isInitial &&
+          normalizedPosts.length === 0 &&
+          uniqueFollowers.length === 0 &&
+          (state.posts.length > 0 || state.followersSet.size > 0)
+        ) {
+          await pushRemotePosts();
+          return;
+        }
+
+        const localFollowers = Array.from(state.followersSet).map((item) => String(item)).sort();
+        const remoteFollowers = uniqueFollowers.slice().sort();
+        const remoteSignature = JSON.stringify({
+          posts: normalizedPosts,
+          followers: remoteFollowers
+        });
+        const localSignature = JSON.stringify({
+          posts: state.posts,
+          followers: localFollowers
+        });
+
+        if (remoteSignature === localSignature) return;
+        if (!isInitial && Date.now() - lastLocalMutationAt < 1800) return;
+
+        isApplyingRemotePosts = true;
+        state.posts = normalizedPosts;
+        state.followersSet = new Set(uniqueFollowers);
+        localStorage.setItem(STORAGE_KEYS.posts, JSON.stringify(normalizedPosts));
+        localStorage.setItem(STORAGE_KEYS.followers, JSON.stringify(uniqueFollowers));
+        isApplyingRemotePosts = false;
+        render();
+      } catch (_error) {
+        setRemoteSyncIssue("Sincronização online indisponível no momento.");
+      }
+    }
+
+    async function initializeRemoteSync() {
+      if (!REMOTE_SYNC.enabled) return;
+      if (hasRemoteInitialized) return;
+      hasRemoteInitialized = true;
+
+      await pullRemotePosts(true);
+      allowRemotePush = true;
+
+      remotePullTimer = setInterval(() => {
+        pullRemotePosts(false);
+      }, REMOTE_SYNC.pollMs);
+
+      document.addEventListener("visibilitychange", () => {
+        if (document.visibilityState === "visible") {
+          pullRemotePosts(false);
+        }
+      });
+
+      window.addEventListener("beforeunload", () => {
+        if (remotePushTimer) {
+          clearTimeout(remotePushTimer);
+          remotePushTimer = null;
+          pushRemotePosts(true);
+        }
+      });
+    }
+
+    function loadFavorites() {
+      try {
+        const parsed = JSON.parse(localStorage.getItem(STORAGE_KEYS.favorites) || "[]");
+        if (!Array.isArray(parsed)) return new Set();
+        return new Set(parsed.map(String));
+      } catch (_error) {
+        return new Set();
+      }
+    }
+
+    function saveFavorites() {
+      localStorage.setItem(STORAGE_KEYS.favorites, JSON.stringify(Array.from(state.userFavorites)));
+    }
+
+    function normalizeSession(rawSession) {
+      if (!rawSession || rawSession.logged !== true) return null;
+      const username = String(rawSession.username || "").trim().toLowerCase();
+      if (!username) return null;
+      return {
+        logged: true,
+        name: String(rawSession.name || username),
+        username,
+        email: String(rawSession.email || ""),
+        avatar: normalizeAvatarUrl(rawSession.avatar),
+        isAdmin: username === "arctos",
+        loggedAt: rawSession.loggedAt || new Date().toISOString()
+      };
+    }
+
+    function loadSession() {
+      try {
+        const parsed = JSON.parse(localStorage.getItem(STORAGE_KEYS.session) || "null");
+        const normalized = normalizeSession(parsed);
+        if (normalized) return normalized;
+      } catch (_error) {
+      }
+
+      try {
+        const legacy = JSON.parse(localStorage.getItem(STORAGE_KEYS.legacyAdminSession) || "null");
+        if (legacy && legacy.logged === true && legacy.username === "arctos") {
+          const migrated = normalizeSession({
+            logged: true,
+            name: "Arctos Entertainment",
+            username: "arctos",
+            email: "",
+            avatar: DEFAULT_USER_AVATAR,
+            loggedAt: legacy.loggedAt || new Date().toISOString()
+          });
+          if (migrated) {
+            localStorage.setItem(STORAGE_KEYS.session, JSON.stringify(migrated));
+            localStorage.removeItem(STORAGE_KEYS.legacyAdminSession);
+            return migrated;
+          }
+        }
+      } catch (_error) {
+      }
+      return null;
+    }
+
+    function loadFollowers() {
+      try {
+        const parsed = JSON.parse(localStorage.getItem(STORAGE_KEYS.followers) || "[]");
+        if (!Array.isArray(parsed)) return new Set();
+        return new Set(parsed.map((item) => String(item).trim().toLowerCase()).filter(Boolean));
+      } catch (_error) {
+        return new Set();
+      }
+    }
+
+    function saveFollowers() {
+      localStorage.setItem(STORAGE_KEYS.followers, JSON.stringify(Array.from(state.followersSet)));
+      lastLocalMutationAt = Date.now();
+      if (!isApplyingRemotePosts && allowRemotePush) {
+        scheduleRemotePush();
+      }
+    }
+
+    function normalizeUsername(value) {
+      return String(value || "").trim().toLowerCase();
+    }
+
+    function normalizeDirectMessage(message, index) {
+      const fromUsername = normalizeUsername(message.fromUsername || message.from || message.author);
+      const toUsername = normalizeUsername(message.toUsername || message.to || "arctos") || "arctos";
+      const safeFromUsername = fromUsername || "visitante";
+      const senderName = String(message.fromName || message.senderName || "").trim();
+      const isToArctos = toUsername === "arctos";
+      const readByArctos = isToArctos ? Boolean(message.readByArctos) : true;
+
+      return {
+        id: String(message.id || "dm-" + Date.now() + "-" + index),
+        fromUsername: safeFromUsername,
+        fromName: senderName || "@" + safeFromUsername,
+        fromAvatar: normalizeAvatarUrl(message.fromAvatar || message.avatar),
+        toUsername,
+        text: String(message.text || ""),
+        createdAt: message.createdAt || new Date().toISOString(),
+        readByArctos
+      };
+    }
+
+    function loadDirectMessages() {
+      try {
+        const parsed = JSON.parse(localStorage.getItem(STORAGE_KEYS.directMessages) || "[]");
+        if (!Array.isArray(parsed)) return [];
+        return parsed.map((message, index) => normalizeDirectMessage(message, index));
+      } catch (_error) {
+        return [];
+      }
+    }
+
+    function saveDirectMessages() {
+      localStorage.setItem(STORAGE_KEYS.directMessages, JSON.stringify(state.directMessages));
+    }
+
+    function normalizeProfile(rawProfile) {
+      const source = rawProfile || {};
+      const name = String(source.name || "").trim() || DEFAULT_PROFILE.name;
+      const bio = String(source.bio || "").trim() || DEFAULT_PROFILE.bio;
+      const country = String(source.country || "").trim() || DEFAULT_PROFILE.country;
+      const avatar = normalizeAvatarUrl(source.avatar || DEFAULT_PROFILE.avatar);
+      return { name, bio, country, avatar };
+    }
+
+    function loadProfile() {
+      try {
+        const parsed = JSON.parse(localStorage.getItem(STORAGE_KEYS.profile) || "null");
+        return normalizeProfile(parsed);
+      } catch (_error) {
+        return normalizeProfile(DEFAULT_PROFILE);
+      }
+    }
+
+    function saveProfile() {
+      localStorage.setItem(STORAGE_KEYS.profile, JSON.stringify(state.profile));
+    }
+
+    function getArctosDisplayName() {
+      return normalizeProfile(state.profile).name;
+    }
+
+    function getArctosAvatar() {
+      return normalizeProfile(state.profile).avatar;
+    }
+
+    function syncCurrentSessionWithProfile() {
+      if (!state.currentUser || state.currentUser.username !== "arctos") return;
+      state.currentUser.name = getArctosDisplayName();
+      state.currentUser.avatar = getArctosAvatar();
+      localStorage.setItem(STORAGE_KEYS.session, JSON.stringify(state.currentUser));
+    }
+
+    function applyProfileToArctosMessages() {
+      let changed = false;
+      const nextName = getArctosDisplayName();
+      const nextAvatar = getArctosAvatar();
+      state.directMessages = state.directMessages.map((message) => {
+        if (message.fromUsername !== "arctos") return message;
+        changed = true;
+        return {
+          ...message,
+          fromName: nextName,
+          fromAvatar: nextAvatar
+        };
+      });
+      if (changed) {
+        saveDirectMessages();
+      }
+    }
+
+    function renderProfileCard() {
+      const safeProfile = normalizeProfile(state.profile);
+      if (profileNameText) {
+        profileNameText.textContent = safeProfile.name;
+      }
+      if (profileAvatar) {
+        profileAvatar.src = safeProfile.avatar;
+        profileAvatar.alt = "Foto da empresa " + safeProfile.name;
+      }
+      if (profileBio) {
+        profileBio.innerHTML = parseTokens(safeProfile.bio);
+      }
+      if (profileCountry) {
+        profileCountry.textContent = "País: " + safeProfile.country;
+      }
+    }
+
+    function syncProfileEditorAccess() {
+      if (!editProfileButton) return;
+      editProfileButton.style.display = state.isAdmin ? "inline-flex" : "none";
+    }
+
+    function closeProfileEditorModal() {
+      if (!profileEditorBackdrop) return;
+      profileEditorBackdrop.style.display = "none";
+      pendingProfileAvatarData = "";
+      if (profileAvatarFileInput) {
+        profileAvatarFileInput.value = "";
+      }
+    }
+
+    function openProfileEditorModal() {
+      if (!state.isAdmin || !profileEditorBackdrop) return;
+      const safeProfile = normalizeProfile(state.profile);
+      profileNameInput.value = safeProfile.name;
+      profileCountryInput.value = safeProfile.country;
+      profileBioInput.value = safeProfile.bio;
+      pendingProfileAvatarData = "";
+      profileEditorPreview.src = safeProfile.avatar;
+      profileEditorBackdrop.style.display = "flex";
+    }
+
+    function clearSession() {
+      localStorage.removeItem(STORAGE_KEYS.session);
+      state.currentUser = null;
+      state.isAdmin = false;
+      state.activeDmThread = "";
+      closeProfileEditorModal();
+      render();
+    }
+
+    function escapeHtml(text) {
+      return text
+        .replaceAll("&", "&amp;")
+        .replaceAll("<", "&lt;")
+        .replaceAll(">", "&gt;")
+        .replaceAll('"', "&quot;")
+        .replaceAll("'", "&#39;");
+    }
+
+    function parseTokens(text) {
+      const safe = escapeHtml(text);
+      return safe
+        .replace(/([@#][\wÀ-ÿ]+)/g, (token) => {
+          const normalized = token.toLowerCase();
+          return '<button class="token-link" data-token="' + normalized + '">' + token + "</button>";
+        })
+        .replaceAll("\n", "<br>");
+    }
+
+    function formatRelativeTime(isoDate) {
+      const then = new Date(isoDate).getTime();
+      const minutes = Math.max(0, Math.floor((Date.now() - then) / 60000));
+      if (minutes < 1) return "agora";
+      if (minutes < 60) return "há " + minutes + " min";
+      const hours = Math.floor(minutes / 60);
+      if (hours < 24) return "há " + hours + " h";
+      const days = Math.floor(hours / 24);
+      if (days < 7) return "há " + days + " d";
+      return new Date(isoDate).toLocaleDateString("pt-BR");
+    }
+
+    function parseStatusId(value) {
+      const digits = String(value || "").replace(/\D/g, "");
+      return digits.length >= 8 ? digits.slice(0, 24) : "";
+    }
+
+    function createStatusId() {
+      const timestamp = Date.now().toString();
+      if (window.crypto && typeof window.crypto.getRandomValues === "function") {
+        const randomArray = new Uint32Array(1);
+        window.crypto.getRandomValues(randomArray);
+        const random = String(randomArray[0] % 1000000000).padStart(9, "0");
+        return timestamp + random;
+      }
+      const random = String(Math.floor(Math.random() * 1000000000)).padStart(9, "0");
+      return timestamp + random;
+    }
+
+    function normalizeStatusId(value) {
+      return parseStatusId(value) || createStatusId();
+    }
+
+    function buildStatusHash(statusId) {
+      return "/status/" + statusId;
+    }
+
+    function buildStatusUrl(statusId) {
+      const cleanId = parseStatusId(statusId);
+      const url = new URL("status.html", window.location.href);
+      if (cleanId) {
+        url.searchParams.set("id", cleanId);
+      }
+      url.hash = "";
+      return url.toString();
+    }
+
+    function syncStatusUrl(statusId) {
+      const url = new URL(window.location.href);
+      if (statusId) {
+        url.hash = buildStatusHash(statusId);
+      } else {
+        url.hash = "";
+      }
+      history.replaceState(null, "", url.toString());
+    }
+
+    function extractStatusFromLocation() {
+      const hashMatch = window.location.hash.match(/#\/?status\/([0-9]+)/i);
+      const hashStatus = parseStatusId(hashMatch && hashMatch[1]);
+      if (hashStatus) return hashStatus;
+
+      const queryStatus = parseStatusId(new URLSearchParams(window.location.search).get("status"));
+      if (queryStatus) return queryStatus;
+
+      const pathMatch = window.location.pathname.match(/\/status\/([0-9]+)/i);
+      return parseStatusId(pathMatch && pathMatch[1]);
+    }
+
+    function copyTextToClipboard(value) {
+      if (navigator.clipboard && window.isSecureContext) {
+        return navigator.clipboard.writeText(value);
+      }
+
+      return new Promise((resolve, reject) => {
+        const textarea = document.createElement("textarea");
+        textarea.value = value;
+        textarea.setAttribute("readonly", "");
+        textarea.style.position = "absolute";
+        textarea.style.left = "-9999px";
+        document.body.appendChild(textarea);
+        textarea.select();
+        textarea.setSelectionRange(0, textarea.value.length);
+        try {
+          const ok = document.execCommand("copy");
+          document.body.removeChild(textarea);
+          if (!ok) throw new Error("copy failed");
+          resolve();
+        } catch (error) {
+          document.body.removeChild(textarea);
+          reject(error);
+        }
+      });
+    }
+
+    function setComposerHint(message) {
+      composerHint.textContent = message || DEFAULT_COMPOSER_HINT;
+    }
+
+    function clearPhotoDraft() {
+      pendingPhotoData = "";
+      newPhotoFile.value = "";
+      mediaPreviewImage.removeAttribute("src");
+      mediaPreview.style.display = "none";
+      setComposerHint(DEFAULT_COMPOSER_HINT);
+    }
+
+    function fileToDataUrl(file) {
+      return new Promise((resolve, reject) => {
+        const reader = new FileReader();
+        reader.onload = () => resolve(String(reader.result || ""));
+        reader.onerror = () => reject(new Error("Falha ao ler arquivo"));
+        reader.readAsDataURL(file);
+      });
+    }
+
+    function loadImageElement(src) {
+      return new Promise((resolve, reject) => {
+        const image = new Image();
+        image.onload = () => resolve(image);
+        image.onerror = () => reject(new Error("Falha ao carregar imagem"));
+        image.src = src;
+      });
+    }
+
+    async function optimizePhoto(file) {
+      const source = await fileToDataUrl(file);
+      try {
+        const image = await loadImageElement(source);
+        const maxSide = 1600;
+        let targetWidth = image.width;
+        let targetHeight = image.height;
+        if (targetWidth > maxSide || targetHeight > maxSide) {
+          const ratio = Math.min(maxSide / targetWidth, maxSide / targetHeight);
+          targetWidth = Math.round(targetWidth * ratio);
+          targetHeight = Math.round(targetHeight * ratio);
+        }
+
+        const canvas = document.createElement("canvas");
+        canvas.width = targetWidth;
+        canvas.height = targetHeight;
+        const context = canvas.getContext("2d");
+        if (!context) return source;
+        context.drawImage(image, 0, 0, targetWidth, targetHeight);
+
+        if ((file.type || "").toLowerCase() === "image/png") {
+          return canvas.toDataURL("image/png");
+        }
+        return canvas.toDataURL("image/jpeg", 0.86);
+      } catch (_error) {
+        return source;
+      }
+    }
+
+    function syncComposerVisibility() {
+      if (state.activeTab === "mensagens") {
+        composer.style.display = "none";
+        composerLocked.style.display = "none";
+        return;
+      }
+
+      if (state.isAdmin) {
+        composer.style.display = "grid";
+        composerLocked.style.display = "none";
+      } else {
+        composer.style.display = "none";
+        composerLocked.style.display = state.currentUser ? "none" : "block";
+        if (pendingPhotoData) {
+          clearPhotoDraft();
+        }
+      }
+    }
+
+    function syncFollowButton() {
+      if (!state.currentUser) {
+        followButton.style.display = "inline-block";
+        followButton.textContent = "Entrar para seguir";
+        followButton.classList.remove("following");
+        followState.textContent = "Crie sua conta para me seguir.";
+        return;
+      }
+
+      if (state.currentUser.username === "arctos") {
+        followButton.style.display = "none";
+        followState.textContent = "Você é @arctos.";
+        return;
+      }
+
+      followButton.style.display = "inline-block";
+      const isFollowing = state.followersSet.has(state.currentUser.username);
+      followButton.classList.toggle("following", isFollowing);
+      followButton.textContent = isFollowing ? "Seguindo @arctos" : "Seguir @arctos";
+      followState.textContent = isFollowing
+        ? "Você está seguindo @arctos."
+        : "Clique para seguir @arctos.";
+    }
+
+    function renderAuth() {
+      if (state.currentUser) {
+        const isArctosSession = state.currentUser.username === "arctos";
+        const avatarSrc = escapeHtml(
+          isArctosSession ? getArctosAvatar() : state.currentUser.avatar || DEFAULT_USER_AVATAR
+        );
+        const avatarAlt = "Avatar de @" + escapeHtml(state.currentUser.username);
+        authZone.innerHTML =
+          '<span class="user-pill"><img class="user-pill-avatar" src="' +
+          avatarSrc +
+          '" alt="' +
+          avatarAlt +
+          '">' +
+          '<span>@' +
+          escapeHtml(state.currentUser.username) +
+          "</span></span>" +
+          '<button type="button" class="logout-button" id="logoutButton">Sair</button>';
+      } else {
+        authZone.innerHTML =
+          '<a class="login-link" href="login.html?mode=login">Entrar</a>' +
+          '<a class="login-link" href="login.html?mode=signup">Criar conta</a>';
+      }
+    }
+
+    function setDmHint(message) {
+      dmHint.textContent = message || DEFAULT_DM_HINT;
+    }
+
+    function getConversationMessages(userA, userB) {
+      const first = normalizeUsername(userA);
+      const second = normalizeUsername(userB);
+      if (!first || !second) return [];
+      return state.directMessages
+        .filter(
+          (message) =>
+            (message.fromUsername === first && message.toUsername === second) ||
+            (message.fromUsername === second && message.toUsername === first)
+        )
+        .sort((a, b) => new Date(a.createdAt) - new Date(b.createdAt));
+    }
+
+    function getArctosInboxThreads() {
+      const threadsByUser = new Map();
+      state.directMessages.forEach((message) => {
+        if (message.fromUsername !== "arctos" && message.toUsername !== "arctos") return;
+        const partner = message.fromUsername === "arctos" ? message.toUsername : message.fromUsername;
+        if (!partner || partner === "arctos") return;
+
+        const thread = threadsByUser.get(partner) || {
+          username: partner,
+          displayName: "@" + partner,
+          avatar: DEFAULT_USER_AVATAR,
+          unreadCount: 0,
+          lastCreatedAt: "",
+          lastText: ""
+        };
+
+        if (message.fromUsername === partner && message.fromName) {
+          thread.displayName = message.fromName;
+        }
+        if (message.fromUsername === partner && message.fromAvatar) {
+          thread.avatar = message.fromAvatar;
+        }
+        if (message.toUsername === "arctos" && message.fromUsername === partner && !message.readByArctos) {
+          thread.unreadCount += 1;
+        }
+        if (!thread.lastCreatedAt || new Date(message.createdAt) > new Date(thread.lastCreatedAt)) {
+          thread.lastCreatedAt = message.createdAt;
+          thread.lastText = message.text;
+        }
+
+        threadsByUser.set(partner, thread);
+      });
+
+      return Array.from(threadsByUser.values()).sort((a, b) => new Date(b.lastCreatedAt) - new Date(a.lastCreatedAt));
+    }
+
+    function ensureValidDmThread(threads) {
+      const hasCurrent = threads.some((thread) => thread.username === state.activeDmThread);
+      if (!hasCurrent) {
+        state.activeDmThread = threads.length ? threads[0].username : "";
+      }
+    }
+
+    function getDmThreadsForCurrentUser() {
+      if (!state.currentUser) return [];
+
+      if (state.currentUser.username === "arctos") {
+        return getArctosInboxThreads();
+      }
+
+      const conversation = getConversationMessages(state.currentUser.username, "arctos");
+      const lastMessage = conversation.length ? conversation[conversation.length - 1] : null;
+      return [
+        {
+          username: "arctos",
+          displayName: getArctosDisplayName() + " (@arctos)",
+          avatar: getArctosAvatar(),
+          unreadCount: 0,
+          lastCreatedAt: lastMessage ? lastMessage.createdAt : "",
+          lastText: lastMessage ? lastMessage.text : ""
+        }
+      ];
+    }
+
+    function countUnreadDmForArctos() {
+      return state.directMessages.filter(
+        (message) => message.toUsername === "arctos" && message.fromUsername !== "arctos" && !message.readByArctos
+      ).length;
+    }
+
+    function countDmForCurrentUser() {
+      if (!state.currentUser) return 0;
+      if (state.currentUser.username === "arctos") {
+        return countUnreadDmForArctos();
+      }
+      return getConversationMessages(state.currentUser.username, "arctos").length;
+    }
+
+    function markCurrentAdminThreadAsRead() {
+      if (!state.currentUser || state.currentUser.username !== "arctos" || !state.activeDmThread) {
+        return false;
+      }
+
+      let changed = false;
+      state.directMessages.forEach((message) => {
+        if (message.toUsername === "arctos" && message.fromUsername === state.activeDmThread && !message.readByArctos) {
+          message.readByArctos = true;
+          changed = true;
+        }
+      });
+
+      if (changed) {
+        saveDirectMessages();
+      }
+      return changed;
+    }
+
+    function renderDmPanel() {
+      const isMessagesTab = state.activeTab === "mensagens";
+      dmPanel.style.display = isMessagesTab ? "grid" : "none";
+      timelineEl.style.display = isMessagesTab ? "none" : "";
+      if (!isMessagesTab) {
+        return;
+      }
+
+      searchStatus.style.display = "none";
+
+      if (!state.currentUser) {
+        dmLocked.style.display = "block";
+        dmLayout.style.display = "none";
+        dmForm.style.display = "none";
+        dmChatHead.textContent = "Conversa privada";
+        dmList.innerHTML = '<p class="empty">As mensagens privadas aparecem aqui após entrar na conta.</p>';
+        setDmHint("Entre na sua conta para enviar DM para @arctos.");
+        return;
+      }
+
+      dmLocked.style.display = "none";
+      dmLayout.style.display = "grid";
+
+      const isArctos = state.currentUser.username === "arctos";
+      if (!isArctos) {
+        state.activeDmThread = "arctos";
+      }
+      let threads = getDmThreadsForCurrentUser();
+      ensureValidDmThread(threads);
+      if (isArctos && markCurrentAdminThreadAsRead()) {
+        updateCounts();
+        threads = getDmThreadsForCurrentUser();
+        ensureValidDmThread(threads);
+      }
+      const partnerUsername = state.activeDmThread;
+
+      dmUsersList.innerHTML = threads.length
+        ? threads
+            .map((thread) => {
+              const isActive = thread.username === partnerUsername;
+              const preview = String(thread.lastText || "").replace(/\s+/g, " ").trim();
+              const previewText = preview || "Sem mensagens ainda";
+              const timeText = thread.lastCreatedAt ? formatRelativeTime(thread.lastCreatedAt) : "sem conversa";
+              const unreadBadge = thread.unreadCount
+                ? '<span class="dm-user-unread">' + thread.unreadCount + " nova(s)</span>"
+                : "";
+              return (
+                '<button type="button" class="dm-user-btn ' +
+                (isActive ? "active" : "") +
+                '" data-action="select-dm-thread" data-dm-user="' +
+                escapeHtml(thread.username) +
+                '">' +
+                '<img class="dm-avatar" src="' +
+                escapeHtml(thread.avatar || DEFAULT_USER_AVATAR) +
+                '" alt="Avatar de ' +
+                escapeHtml(thread.displayName || ("@" + thread.username)) +
+                '">' +
+                '<span class="dm-user-main">' +
+                '<span class="dm-user-name">' +
+                escapeHtml(thread.displayName || ("@" + thread.username)) +
+                "</span>" +
+                '<span class="dm-user-meta">' +
+                escapeHtml(timeText + " · " + previewText) +
+                "</span>" +
+                unreadBadge +
+                "</span>" +
+                "</button>"
+              );
+            })
+            .join("")
+        : '<p class="dm-users-empty">Sem usuários ainda.</p>';
+
+      if (!partnerUsername) {
+        dmChatHead.textContent = "Nenhuma conversa selecionada";
+        dmForm.style.display = "none";
+        dmList.innerHTML = '<p class="empty">Quando alguém enviar DM, a conversa aparece aqui.</p>';
+        setDmHint("Selecione um usuário para responder no privado.");
+        return;
+      }
+
+      dmChatHead.textContent = partnerUsername === "arctos"
+        ? "Conversa com " + getArctosDisplayName() + " (@arctos)"
+        : "Conversa com @" + partnerUsername;
+      dmForm.style.display = partnerUsername ? "grid" : "none";
+      dmInput.disabled = !partnerUsername;
+      dmInput.placeholder = isArctos
+        ? partnerUsername
+          ? "Responder em privado para @" + partnerUsername + "..."
+          : "Sem conversas privadas no momento."
+        : "Escreva sua mensagem privada para @arctos";
+
+      if (isArctos) {
+        setDmHint(
+          partnerUsername
+            ? "Resposta privada: só você e @" + partnerUsername + " conseguem ver."
+            : "Quando alguém mandar DM para @arctos, aparece aqui."
+        );
+      } else {
+        setDmHint(DEFAULT_DM_HINT);
+      }
+
+      const currentUsername = isArctos ? "arctos" : state.currentUser.username;
+      const conversation = getConversationMessages(currentUsername, partnerUsername);
+
+      if (!conversation.length) {
+        dmList.innerHTML = '<p class="empty">Nenhuma mensagem ainda. Envie a primeira DM.</p>';
+        return;
+      }
+
+      dmList.innerHTML = conversation
+        .map((message) => {
+          const isOwn = message.fromUsername === state.currentUser.username;
+          const safeAvatar = escapeHtml(message.fromAvatar || DEFAULT_USER_AVATAR);
+          const safeName = escapeHtml(message.fromName || "@" + message.fromUsername);
+          const safeAlt = "Avatar de @" + escapeHtml(message.fromUsername);
+          const safeText = escapeHtml(message.text).replaceAll("\n", "<br>");
+
+          return (
+            '<article class="dm-item ' +
+            (isOwn ? "dm-item-own" : "") +
+            '">' +
+            '<img class="dm-avatar" src="' +
+            safeAvatar +
+            '" alt="' +
+            safeAlt +
+            '">' +
+            '<div class="dm-bubble">' +
+            '<p class="dm-meta"><strong>' +
+            safeName +
+            '</strong><span>· ' +
+            formatRelativeTime(message.createdAt) +
+            "</span></p>" +
+            '<p class="dm-text">' +
+            safeText +
+            "</p>" +
+            "</div>" +
+            "</article>"
+          );
+        })
+        .join("");
+    }
+
+    function updateCounts() {
+      const totalPosts = state.posts.length;
+      const postsWithFavorites = state.posts.filter((post) => post.favoriteCount > 0).length;
+      const totalMedia = state.posts.filter((post) => post.media).length;
+      const totalFollowers = state.baseFollowers + state.followersSet.size;
+      const format = (value) => value.toLocaleString("pt-BR");
+
+      sidebarPosts.textContent = format(totalPosts);
+      sidebarFollowers.textContent = format(totalFollowers);
+      followerNote.textContent =
+        totalFollowers === 1
+          ? "1 pessoa seguiu."
+          : totalFollowers + " pessoas seguiram.";
+      tabPosts.textContent = format(totalPosts);
+      tabFavorites.textContent = format(postsWithFavorites);
+      tabMedia.textContent = format(totalMedia);
+      const messageCount = countDmForCurrentUser();
+      tabMessages.textContent = format(messageCount);
+      tabMessages.classList.toggle(
+        "tab-count-alert",
+        !!state.currentUser && state.currentUser.username === "arctos" && messageCount > 0
+      );
+    }
+
+    function applyTabFilter(posts) {
+      if (state.activeTab === "favoritos") {
+        return posts.filter((post) => post.favoriteCount > 0);
+      }
+      if (state.activeTab === "midias") {
+        return posts.filter((post) => post.media);
+      }
+      return posts;
+    }
+
+    function applySearchFilter(posts) {
+      const query = state.query.trim().toLowerCase();
+      if (!query) return posts;
+      return posts.filter((post) => {
+        const commentsBlob = post.comments.map((comment) => comment.text).join(" ");
+        const haystack = (post.text + " " + commentsBlob + " @arctos #letitarctos").toLowerCase();
+        return haystack.includes(query);
+      });
+    }
+
+    function renderSearchStatus(resultsCount) {
+      if (state.statusFilter) {
+        searchStatus.style.display = "flex";
+        clearSearchButton.textContent = "Voltar ao feed";
+        searchStatusText.textContent =
+          "Exibindo link status/" + state.statusFilter + " · " + resultsCount + " resultado(s).";
+        return;
+      }
+
+      clearSearchButton.textContent = "Limpar";
+      if (!state.query.trim()) {
+        searchStatus.style.display = "none";
+        return;
+      }
+      searchStatus.style.display = "flex";
+      searchStatusText.textContent = 'Busca por "' + state.query + '" com ' + resultsCount + " resultado(s).";
+    }
+
+    function renderComments(post) {
+      if (!post.comments.length) {
+        return '<div class="comment-list"><div class="comment-item no-avatar"><div class="comment-content"><p class="comment-text">Nenhum comentário ainda.</p></div></div></div>';
+      }
+
+      const ordered = [...post.comments].sort((a, b) => new Date(a.createdAt) - new Date(b.createdAt));
+      return (
+        '<div class="comment-list">' +
+        ordered
+          .map(
+            (comment) =>
+              '<div class="comment-item">' +
+              '<img class="comment-avatar" src="' +
+              escapeHtml(comment.avatar || DEFAULT_USER_AVATAR) +
+              '" alt="Avatar de usuário">' +
+              '<div class="comment-content">' +
+              '<div class="comment-head">' +
+              '<span class="comment-author">' +
+              escapeHtml(comment.author) +
+              '</span>' +
+              '<span class="comment-time">· ' +
+              formatRelativeTime(comment.createdAt) +
+              '</span>' +
+              '</div>' +
+              '<p class="comment-text">' +
+              parseTokens(comment.text) +
+              '</p></div>' +
+              '</div>'
+          )
+          .join("") +
+        '</div>'
+      );
+    }
+
+    function extractHashtags(text) {
+      const matches = String(text || "").match(/#[\wÀ-ÿ]+/g);
+      if (!matches) return [];
+      return matches.map((token) => token.toLowerCase());
+    }
+
+    function collectTrendingTopics(limit) {
+      const trendMap = new Map();
+      const maxTopics = Math.max(1, Number(limit || 6));
+
+      function includeToken(rawToken, createdAt) {
+        const token = String(rawToken || "").trim().toLowerCase();
+        if (!token || token.length < 2) return;
+        if (!trendMap.has(token)) {
+          trendMap.set(token, { token, count: 0, lastAt: 0 });
+        }
+        const entry = trendMap.get(token);
+        entry.count += 1;
+        const timestamp = new Date(createdAt || Date.now()).getTime();
+        if (timestamp > entry.lastAt) {
+          entry.lastAt = timestamp;
+        }
+      }
+
+      state.posts.forEach((post) => {
+        extractHashtags(post.text).forEach((token) => includeToken(token, post.createdAt));
+        post.comments.forEach((comment) => {
+          extractHashtags(comment.text).forEach((token) => includeToken(token, comment.createdAt || post.createdAt));
+        });
+      });
+
+      return Array.from(trendMap.values())
+        .sort((a, b) => b.count - a.count || b.lastAt - a.lastAt || a.token.localeCompare(b.token, "pt-BR"))
+        .slice(0, maxTopics);
+    }
+
+    function renderTrendingTopics() {
+      if (!trendingTopics || !trendingNote) return;
+
+      const topics = collectTrendingTopics(6);
+      if (!topics.length) {
+        trendingTopics.innerHTML = '<button class="trend-chip" data-token="#letitarctos">#letitarctos<span class="trend-count">sugestão</span></button>';
+        trendingNote.textContent = "Sem hashtags nos grrrarrrs ainda. Comece com #letItArctos.";
+        return;
+      }
+
+      trendingTopics.innerHTML = topics
+        .map(
+          (topic) =>
+            '<button class="trend-chip" data-token="' +
+            escapeHtml(topic.token) +
+            '">' +
+            escapeHtml(topic.token) +
+            '<span class="trend-count">' +
+            topic.count.toLocaleString("pt-BR") +
+            " menção(ões)</span></button>"
+        )
+        .join("");
+
+      trendingNote.textContent =
+        topics.length === 1
+          ? "1 tópico em alta agora."
+          : topics.length.toLocaleString("pt-BR") + " tópicos em alta agora.";
+    }
+
+    function renderPosts() {
+      const ordered = [...state.posts].sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
+      let visiblePosts;
+      if (state.statusFilter) {
+        visiblePosts = ordered.filter((post) => post.statusId === state.statusFilter);
+      } else {
+        const filteredByTab = applyTabFilter(ordered);
+        visiblePosts = applySearchFilter(filteredByTab);
+      }
+      renderSearchStatus(visiblePosts.length);
+
+      if (visiblePosts.length === 0) {
+        timelineEl.innerHTML = '<li class="empty">Ainda não foi publicado nenhum grrrarrr.</li>';
+        return;
+      }
+
+      timelineEl.innerHTML = visiblePosts
+        .map((post) => {
+          const arctosNameSafe = escapeHtml(getArctosDisplayName());
+          const arctosAvatarSafe = escapeHtml(getArctosAvatar());
+          const userLiked = state.userFavorites.has(post.id);
+          const favClass = userLiked ? "fav-btn active" : "fav-btn";
+          const favLabel = userLiked ? "★ Favoritado" : "☆ Favoritar";
+          const deleteButton = state.isAdmin
+            ? '<button class="delete-btn" data-action="delete-post" data-post-id="' +
+              post.id +
+              '">Excluir grrrarrr</button>'
+            : "";
+          const statusText = "status/" + post.statusId;
+          const statusHref = buildStatusUrl(post.statusId);
+          const mediaBlock = post.media
+            ? '<div class="post-media"><img src="' + escapeHtml(post.media) + '" alt="Mídia do grrrarrr"></div>'
+            : "";
+
+          return (
+            '<li class="post">' +
+            '<img class="post-avatar" src="' + arctosAvatarSafe + '" alt="' + arctosNameSafe + '">' +
+            '<div>' +
+            '<p class="post-head">' +
+            '<span class="post-name">' + arctosNameSafe + '<img class="verified-badge verified-badge-sm" src="img/Twitter_Verified_Badge.svg" alt="Conta verificada" title="Conta verificada" aria-label="Conta verificada"></span>' +
+            '<span class="post-handle">@arctos</span>' +
+            '<span class="post-time">· ' +
+            formatRelativeTime(post.createdAt) +
+            '</span>' +
+            '</p>' +
+            '<p class="post-text">' +
+            parseTokens(post.text) +
+            '</p>' +
+            mediaBlock +
+            '<div class="post-actions">' +
+            '<button class="' +
+            favClass +
+            '" data-action="toggle-favorite" data-post-id="' +
+            post.id +
+            '">' +
+            favLabel +
+            " (" +
+            post.favoriteCount +
+            ")</button>" +
+            deleteButton +
+            '<a class="status-link" href="' +
+            escapeHtml(statusHref) +
+            '" data-action="open-status" data-status-id="' +
+            post.statusId +
+            '">' +
+            statusText +
+            "</a>" +
+            '<button class="copy-status-btn" type="button" data-action="copy-status-link" data-status-id="' +
+            post.statusId +
+            '">Copiar link</button>' +
+            '</div>' +
+            renderComments(post) +
+            '<form class="comment-form" data-action="comment-form" data-post-id="' +
+            post.id +
+            '">' +
+            '<input class="comment-input" name="comment" maxlength="280" placeholder="' +
+            (state.currentUser
+              ? "Comentar como @" + escapeHtml(state.currentUser.username)
+              : "Comente nesse grrrarrr") +
+            '" required>' +
+            '<button class="comment-submit" type="submit">Comentar</button>' +
+            '</form>' +
+            '</div>' +
+            '</li>'
+          );
+        })
+        .join("");
+    }
+
+    function renderTabs() {
+      tabButtons.forEach((button) => {
+        button.classList.toggle("active", button.dataset.tab === state.activeTab);
+      });
+    }
+
+    function render() {
+      syncComposerVisibility();
+      renderProfileCard();
+      renderAuth();
+      syncFollowButton();
+      syncProfileEditorAccess();
+      updateCounts();
+      renderTrendingTopics();
+      renderTabs();
+      if (state.activeTab === "mensagens") {
+        renderDmPanel();
+      } else {
+        renderPosts();
+        renderDmPanel();
+      }
+    }
+
+    function createId(prefix) {
+      if (window.crypto && typeof window.crypto.randomUUID === "function") {
+        return prefix + "-" + window.crypto.randomUUID();
+      }
+      return prefix + "-" + Date.now() + "-" + Math.floor(Math.random() * 1e6);
+    }
+
+    tabButtons.forEach((button) => {
+      button.addEventListener("click", () => {
+        if (state.statusFilter) {
+          state.statusFilter = "";
+          syncStatusUrl("");
+        }
+        state.activeTab = button.dataset.tab;
+        render();
+      });
+    });
+
+    searchForm.addEventListener("submit", (event) => {
+      event.preventDefault();
+      if (state.statusFilter) {
+        state.statusFilter = "";
+        syncStatusUrl("");
+      }
+      if (state.activeTab === "mensagens") {
+        state.activeTab = "grrrarrr";
+      }
+      state.query = searchInput.value.trim();
+      render();
+    });
+
+    clearSearchButton.addEventListener("click", () => {
+      state.query = "";
+      searchInput.value = "";
+      if (state.statusFilter) {
+        state.statusFilter = "";
+        syncStatusUrl("");
+      }
+      render();
+    });
+
+    newPhotoFile.addEventListener("change", async () => {
+      const file = newPhotoFile.files && newPhotoFile.files[0];
+      if (!file) {
+        clearPhotoDraft();
+        return;
+      }
+
+      if (!String(file.type || "").startsWith("image/")) {
+        setComposerHint("Selecione um arquivo de imagem válido.");
+        clearPhotoDraft();
+        return;
+      }
+
+      isProcessingPhoto = true;
+      setComposerHint("Processando foto...");
+      try {
+        pendingPhotoData = await optimizePhoto(file);
+        mediaPreviewImage.src = pendingPhotoData;
+        mediaPreview.style.display = "grid";
+        setComposerHint("Foto pronta. Ela vai aparecer na aba Mídias.");
+      } catch (_error) {
+        clearPhotoDraft();
+        setComposerHint("Não foi possível processar a foto.");
+      } finally {
+        isProcessingPhoto = false;
+      }
+    });
+
+    clearPhotoButton.addEventListener("click", () => {
+      clearPhotoDraft();
+    });
+
+    editProfileButton.addEventListener("click", () => {
+      openProfileEditorModal();
+    });
+
+    closeProfileEditor.addEventListener("click", () => {
+      closeProfileEditorModal();
+    });
+
+    cancelProfileEditor.addEventListener("click", () => {
+      closeProfileEditorModal();
+    });
+
+    profileEditorBackdrop.addEventListener("click", (event) => {
+      if (event.target !== profileEditorBackdrop) return;
+      closeProfileEditorModal();
+    });
+
+    profileAvatarFileInput.addEventListener("change", async () => {
+      const file = profileAvatarFileInput.files && profileAvatarFileInput.files[0];
+      if (!file) {
+        pendingProfileAvatarData = "";
+        profileEditorPreview.src = getArctosAvatar();
+        return;
+      }
+
+      if (!String(file.type || "").startsWith("image/")) {
+        pendingProfileAvatarData = "";
+        profileAvatarFileInput.value = "";
+        window.alert("Selecione uma imagem válida para a foto do perfil.");
+        return;
+      }
+
+      try {
+        pendingProfileAvatarData = await optimizePhoto(file);
+        profileEditorPreview.src = pendingProfileAvatarData || getArctosAvatar();
+      } catch (_error) {
+        pendingProfileAvatarData = "";
+        profileEditorPreview.src = getArctosAvatar();
+      }
+    });
+
+    profileEditorPreview.addEventListener("error", () => {
+      profileEditorPreview.src = getArctosAvatar();
+    });
+
+    profileEditorForm.addEventListener("submit", (event) => {
+      event.preventDefault();
+      if (!state.isAdmin) return;
+
+      const nextName = profileNameInput.value.trim();
+      const nextCountry = profileCountryInput.value.trim();
+      const nextBio = profileBioInput.value.trim();
+      const nextAvatar =
+        pendingProfileAvatarData ||
+        normalizeAvatarUrl(state.profile.avatar);
+
+      state.profile = normalizeProfile({
+        name: nextName,
+        country: nextCountry,
+        bio: nextBio,
+        avatar: nextAvatar
+      });
+      saveProfile();
+      syncCurrentSessionWithProfile();
+      applyProfileToArctosMessages();
+      closeProfileEditorModal();
+      render();
+    });
+
+    composer.addEventListener("submit", (event) => {
+      event.preventDefault();
+      if (!state.isAdmin) {
+        window.location.href = "login.html?mode=login";
+        return;
+      }
+
+      if (isProcessingPhoto) {
+        setComposerHint("Aguarde: a foto ainda está sendo processada.");
+        return;
+      }
+
+      const text = newPostText.value.trim();
+      const mediaUrl = newMediaUrl.value.trim();
+      const media = mediaUrl || pendingPhotoData;
+      if (!text && !media) {
+        setComposerHint("Escreva algo ou adicione uma foto para publicar.");
+        return;
+      }
+
+      state.posts.unshift({
+        id: createId("post"),
+        statusId: createStatusId(),
+        text,
+        media,
+        favoriteCount: 0,
+        comments: [],
+        createdAt: new Date().toISOString()
+      });
+
+      const persisted = savePosts();
+      if (!persisted) {
+        state.posts.shift();
+        setComposerHint("Não foi possível salvar. Tente uma foto menor.");
+        return;
+      }
+
+      newPostText.value = "";
+      newMediaUrl.value = "";
+      clearPhotoDraft();
+      state.activeTab = "grrrarrr";
+      render();
+    });
+
+    dmUsersList.addEventListener("click", (event) => {
+      const button = event.target.closest('[data-action="select-dm-thread"]');
+      if (!button) return;
+      const threadUsername = normalizeUsername(button.dataset.dmUser);
+      if (!threadUsername || threadUsername === state.activeDmThread) return;
+      state.activeDmThread = threadUsername;
+      render();
+    });
+
+    dmForm.addEventListener("submit", (event) => {
+      event.preventDefault();
+
+      if (!state.currentUser) {
+        window.location.href = "login.html?mode=login";
+        return;
+      }
+
+      const text = dmInput.value.trim();
+      if (!text) {
+        setDmHint("Escreva uma mensagem antes de enviar.");
+        return;
+      }
+
+      const senderUsername = state.currentUser.username;
+      const isSenderArctos = senderUsername === "arctos";
+      const targetUsername = isSenderArctos ? state.activeDmThread : "arctos";
+      if (!targetUsername) {
+        setDmHint("Selecione uma conversa para responder.");
+        return;
+      }
+
+      state.directMessages.push(
+        normalizeDirectMessage(
+          {
+            id: createId("dm"),
+            fromUsername: senderUsername,
+            fromName: isSenderArctos ? getArctosDisplayName() : state.currentUser.name || "@" + senderUsername,
+            fromAvatar: isSenderArctos ? getArctosAvatar() : normalizeAvatarUrl(state.currentUser.avatar),
+            toUsername: targetUsername,
+            text,
+            createdAt: new Date().toISOString(),
+            readByArctos: !(!isSenderArctos && targetUsername === "arctos")
+          },
+          state.directMessages.length
+        )
+      );
+      saveDirectMessages();
+
+      dmInput.value = "";
+      setDmHint(
+        isSenderArctos
+          ? "Resposta privada enviada para @" + targetUsername + "."
+          : "DM enviada para @arctos com sucesso."
+      );
+      render();
+    });
+
+    timelineEl.addEventListener("submit", (event) => {
+      const form = event.target.closest('[data-action="comment-form"]');
+      if (!form) return;
+      event.preventDefault();
+
+      const postId = form.dataset.postId;
+      const formData = new FormData(form);
+      const author = state.currentUser
+        ? "@" + state.currentUser.username
+        : "Visitante";
+      const text = String(formData.get("comment") || "").trim();
+      if (!text) return;
+
+      const post = state.posts.find((item) => item.id === postId);
+      if (!post) return;
+
+      post.comments.push({
+        id: createId("comment"),
+        author,
+        text,
+        avatar: state.currentUser
+          ? normalizeAvatarUrl(state.currentUser.avatar)
+          : DEFAULT_USER_AVATAR,
+        createdAt: new Date().toISOString()
+      });
+
+      savePosts();
+      render();
+    });
+
+    document.addEventListener("click", (event) => {
+      const tokenButton = event.target.closest("[data-token]");
+      if (tokenButton) {
+        if (state.activeTab === "mensagens") {
+          state.activeTab = "grrrarrr";
+        }
+        state.query = tokenButton.dataset.token;
+        searchInput.value = state.query;
+        if (state.statusFilter) {
+          state.statusFilter = "";
+          syncStatusUrl("");
+        }
+        render();
+        return;
+      }
+
+      const statusLink = event.target.closest('[data-action="open-status"]');
+      if (statusLink) {
+        event.preventDefault();
+        const statusId = parseStatusId(statusLink.dataset.statusId);
+        if (!statusId) return;
+        window.location.href = buildStatusUrl(statusId);
+        return;
+      }
+
+      const copyStatusButton = event.target.closest('[data-action="copy-status-link"]');
+      if (copyStatusButton) {
+        const statusId = parseStatusId(copyStatusButton.dataset.statusId);
+        if (!statusId) return;
+        const statusUrl = buildStatusUrl(statusId);
+        copyTextToClipboard(statusUrl)
+          .then(() => {
+            window.alert("Link copiado: " + statusUrl);
+          })
+          .catch(() => {
+            window.prompt("Copie o link deste grrrarrr:", statusUrl);
+          });
+        return;
+      }
+
+      const favButton = event.target.closest('[data-action="toggle-favorite"]');
+      if (favButton) {
+        const postId = favButton.dataset.postId;
+        const post = state.posts.find((item) => item.id === postId);
+        if (!post) return;
+
+        if (state.userFavorites.has(postId)) {
+          state.userFavorites.delete(postId);
+          post.favoriteCount = Math.max(0, post.favoriteCount - 1);
+        } else {
+          state.userFavorites.add(postId);
+          post.favoriteCount += 1;
+        }
+
+        saveFavorites();
+        savePosts();
+        render();
+        return;
+      }
+
+      const deleteButton = event.target.closest('[data-action="delete-post"]');
+      if (deleteButton) {
+        if (!state.isAdmin) return;
+        const postId = deleteButton.dataset.postId;
+        const shouldDelete = window.confirm("Deseja excluir este grrrarrr?");
+        if (!shouldDelete) return;
+
+        state.posts = state.posts.filter((item) => item.id !== postId);
+        state.userFavorites.delete(postId);
+        saveFavorites();
+        savePosts();
+        render();
+        return;
+      }
+
+      const logoutButton = event.target.closest("#logoutButton");
+      if (logoutButton) {
+        clearSession();
+      }
+    });
+
+    followButton.addEventListener("click", () => {
+      if (!state.currentUser) {
+        window.location.href = "login.html?mode=login";
+        return;
+      }
+
+      if (state.currentUser.username === "arctos") {
+        return;
+      }
+
+      if (state.followersSet.has(state.currentUser.username)) {
+        state.followersSet.delete(state.currentUser.username);
+      } else {
+        state.followersSet.add(state.currentUser.username);
+      }
+      saveFollowers();
+      render();
+    });
+
+    window.addEventListener("hashchange", () => {
+      const routeStatus = extractStatusFromLocation();
+      if (routeStatus === state.statusFilter) return;
+      state.statusFilter = routeStatus;
+      if (routeStatus) {
+        state.activeTab = "grrrarrr";
+      }
+      render();
+    });
+
+    document.addEventListener("keydown", (event) => {
+      if (event.key !== "Escape") return;
+      if (profileEditorBackdrop.style.display === "flex") {
+        closeProfileEditorModal();
+      }
+    });
+
+    state.posts = loadPosts();
+    // Persist normalized posts so every grrrarrr tenha statusId fixo para link próprio.
+    savePosts();
+    state.profile = loadProfile();
+    state.userFavorites = loadFavorites();
+    state.directMessages = loadDirectMessages();
+    state.currentUser = loadSession();
+    state.isAdmin = !!(state.currentUser && state.currentUser.isAdmin);
+    syncCurrentSessionWithProfile();
+    state.activeDmThread = state.currentUser && state.currentUser.username !== "arctos" ? "arctos" : "";
+    state.followersSet = loadFollowers();
+    state.statusFilter = extractStatusFromLocation();
+    if (state.statusFilter) {
+      state.activeTab = "grrrarrr";
+    }
+
+    render();
+    initializeRemoteSync();
+  </script>
 </body>
 </html>

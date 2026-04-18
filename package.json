@@ -1,0 +1,9 @@
+{
+  "name": "blog-oficial-arctos",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Servidor JS para o blog oficial da Arctos (site estático + API /api/posts).",
+  "scripts": {
+    "start": "node server.js"
+  }
+}

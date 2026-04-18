@@ -1,0 +1,581 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Conta | Arctos Entertainment</title>
+  <style>
+    @font-face {
+      font-family: "RobotoLocal";
+      src: url("img/Roboto-Regular.ttf") format("truetype"), url("/img/Roboto-Regular.ttf") format("truetype");
+      font-weight: 400;
+      font-style: normal;
+      font-display: swap;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      min-height: 100vh;
+      font-family: "RobotoLocal", "Segoe UI", Tahoma, sans-serif;
+      background:
+        linear-gradient(180deg, #f7c8d0 0, #fde2e6 180px, #fff2f4 100%),
+        repeating-linear-gradient(
+          -28deg,
+          rgba(255, 255, 255, 0.25),
+          rgba(255, 255, 255, 0.25) 8px,
+          transparent 8px,
+          transparent 24px
+        );
+      color: #332427;
+    }
+
+    .topbar {
+      height: 56px;
+      background: linear-gradient(180deg, #1b1b1b 0%, #000 100%);
+      border-bottom: 1px solid rgba(255, 255, 255, 0.14);
+      box-shadow: 0 1px 0 rgba(255, 255, 255, 0.12) inset;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 0 14px;
+    }
+
+    .topbar-inner {
+      width: min(1100px, 95vw);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px;
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      color: #fff;
+      font-size: 1.2rem;
+      text-shadow: 0 1px 0 rgba(0, 0, 0, 0.35);
+    }
+
+    .brand img {
+      width: 30px;
+      height: 30px;
+      border-radius: 6px;
+      background: rgba(255, 255, 255, 0.12);
+      padding: 2px;
+    }
+
+    .back-link {
+      color: #ffe3e7;
+      text-decoration: none;
+      font-size: 0.9rem;
+      border-bottom: 1px dotted rgba(255, 227, 231, 0.8);
+    }
+
+    .wrap {
+      width: min(620px, 92vw);
+      margin: 42px auto;
+    }
+
+    .card {
+      background: #fff;
+      border: 1px solid #f0c4cc;
+      border-radius: 8px;
+      box-shadow: 0 1px 0 rgba(255, 255, 255, 0.8) inset;
+      overflow: hidden;
+    }
+
+    .card-head {
+      background: linear-gradient(180deg, #ffffff 0%, #fff4f6 100%);
+      border-bottom: 1px solid #f1cfd5;
+      padding: 16px;
+    }
+
+    .card-head h1 {
+      margin: 0;
+      font-size: 1.35rem;
+      color: #4b2f34;
+    }
+
+    .card-head p {
+      margin: 8px 0 0;
+      color: #7c5a61;
+      font-size: 0.92rem;
+      line-height: 1.4;
+    }
+
+    .mode-nav {
+      display: flex;
+      gap: 8px;
+      padding: 14px 16px 0;
+    }
+
+    .mode-link {
+      text-decoration: none;
+      border: 1px solid #d9a8b1;
+      border-bottom: none;
+      border-radius: 8px 8px 0 0;
+      background: #ffeef1;
+      color: #8f3343;
+      padding: 8px 12px;
+      font-size: 0.88rem;
+      font-weight: 700;
+    }
+
+    .mode-link.active {
+      background: #fff;
+      color: #6d1f2d;
+    }
+
+    .form-panel {
+      padding: 16px;
+      border-top: 1px solid #efd2d7;
+      display: none;
+      grid-template-columns: 1fr;
+      gap: 10px;
+    }
+
+    .form-panel.active {
+      display: grid;
+    }
+
+    .form-panel label {
+      display: grid;
+      gap: 5px;
+      font-size: 0.88rem;
+      color: #865c63;
+    }
+
+    .form-panel input {
+      border: 1px solid #efcad1;
+      border-radius: 8px;
+      padding: 10px;
+      font-size: 0.96rem;
+      font-family: inherit;
+    }
+
+    .submit-btn {
+      border: 1px solid #8f2231;
+      border-radius: 16px;
+      background: linear-gradient(180deg, #d1455a 0%, #b72f43 100%);
+      color: #fff;
+      padding: 9px 14px;
+      font-size: 0.92rem;
+      font-weight: 700;
+      cursor: pointer;
+      width: fit-content;
+    }
+
+    .submit-btn:hover {
+      filter: brightness(1.06);
+    }
+
+    .status {
+      margin: 0;
+      min-height: 20px;
+      font-size: 0.88rem;
+    }
+
+    .status.error {
+      color: #b13a3a;
+    }
+
+    .status.success {
+      color: #2b7f57;
+    }
+
+    .hint {
+      padding: 0 16px 16px;
+      font-size: 0.82rem;
+      color: #7f5f64;
+      line-height: 1.45;
+    }
+  </style>
+</head>
+<body>
+  <header class="topbar">
+    <div class="topbar-inner">
+      <div class="brand">
+        <strong>Blog</strong>
+      </div>
+      <a class="back-link" href="index.html">Voltar para o feed</a>
+    </div>
+  </header>
+
+  <main class="wrap">
+    <section class="card">
+      <div class="card-head">
+        <h1>Conta de usuário</h1>
+        <p>Use <strong>Entrar</strong> se já criou conta ou <strong>Criar conta</strong> para registrar uma nova.</p>
+      </div>
+
+      <nav class="mode-nav">
+        <a id="linkLogin" class="mode-link" href="login.html?mode=login">Entrar</a>
+        <a id="linkSignup" class="mode-link" href="login.html?mode=signup">Criar conta</a>
+      </nav>
+
+      <form id="loginForm" class="form-panel" autocomplete="off">
+        <label>
+          Nome de usuário
+          <input name="username" type="text" placeholder="seu usuário" maxlength="20" required />
+        </label>
+
+        <label>
+          Senha
+          <input name="password" type="password" placeholder="Sua senha" minlength="4" required />
+        </label>
+
+        <button class="submit-btn" type="submit">Entrar na conta</button>
+        <p id="loginStatus" class="status"></p>
+      </form>
+
+      <form id="signupForm" class="form-panel" autocomplete="off">
+        <label>
+          Nome
+          <input name="name" type="text" placeholder="Seu nome" maxlength="40" required />
+        </label>
+
+        <label>
+          Nome de usuário
+          <input name="username" type="text" placeholder="seu usuário" maxlength="20" required />
+        </label>
+
+        <label>
+          Criar a sua senha
+          <input name="password" type="password" placeholder="Criar a sua senha" minlength="4" required />
+        </label>
+
+        <label>
+          Imagem anexo do usuário (opcional)
+          <input name="avatar" type="file" accept="image/*" />
+        </label>
+
+        <button class="submit-btn" type="submit">Criar conta</button>
+        <p id="signupStatus" class="status"></p>
+      </form>
+
+    </section>
+  </main>
+
+  <script>
+    const STORAGE_KEY_SESSION = "arctos_user_session_v1";
+    const STORAGE_KEY_ACCOUNTS = "arctos_accounts_v1";
+    const ADMIN_USERNAME = "arctos";
+    const ADMIN_PASSWORD = "rittoz-1puxty-cAjtaf";
+    const ADMIN_NAME = "Arctos Entertainment";
+    const DEFAULT_USER_AVATAR = window.location.protocol === "file:" ? "img/icon.png" : "/img/icon.png";
+
+    const linkLogin = document.getElementById("linkLogin");
+    const linkSignup = document.getElementById("linkSignup");
+    const loginForm = document.getElementById("loginForm");
+    const signupForm = document.getElementById("signupForm");
+    const loginStatus = document.getElementById("loginStatus");
+    const signupStatus = document.getElementById("signupStatus");
+
+    function normalizeUsername(value) {
+      return String(value || "")
+        .trim()
+        .toLowerCase()
+        .replace(/\s+/g, "")
+        .replace(/[^a-z0-9_\.]/g, "");
+    }
+
+    function normalizeName(value) {
+      return String(value || "").trim().replace(/\s+/g, " ");
+    }
+
+    function normalizePassword(value) {
+      return String(value || "").trim();
+    }
+
+    function normalizeAvatar(value) {
+      return String(value || "").trim();
+    }
+
+    function normalizeAccount(account) {
+      const username = normalizeUsername(account && account.username);
+      if (!username) return null;
+      return {
+        name: normalizeName((account && account.name) || username),
+        username,
+        // Compatibilidade: contas antigas sem senha usam o email antigo como senha temporária.
+        password: normalizePassword((account && account.password) || (account && account.email) || ""),
+        avatar: normalizeAvatar((account && account.avatar) || ""),
+        createdAt: (account && account.createdAt) || new Date().toISOString()
+      };
+    }
+
+    function loadAccounts() {
+      try {
+        const parsed = JSON.parse(localStorage.getItem(STORAGE_KEY_ACCOUNTS) || "[]");
+        if (!Array.isArray(parsed)) return [];
+        return parsed.map(normalizeAccount).filter(Boolean);
+      } catch (_error) {
+        return [];
+      }
+    }
+
+    function saveAccounts(accounts) {
+      localStorage.setItem(STORAGE_KEY_ACCOUNTS, JSON.stringify(accounts));
+    }
+
+    function ensureAdminAccount() {
+      const accounts = loadAccounts();
+      const adminIndex = accounts.findIndex((item) => {
+        return normalizeUsername(item.username) === ADMIN_USERNAME;
+      });
+
+      if (adminIndex >= 0) {
+        accounts[adminIndex] = {
+          ...accounts[adminIndex],
+          name: ADMIN_NAME,
+          username: ADMIN_USERNAME,
+          password: ADMIN_PASSWORD,
+          avatar: DEFAULT_USER_AVATAR
+        };
+      } else {
+        accounts.push({
+          name: ADMIN_NAME,
+          username: ADMIN_USERNAME,
+          password: ADMIN_PASSWORD,
+          avatar: DEFAULT_USER_AVATAR,
+          createdAt: new Date().toISOString()
+        });
+      }
+      saveAccounts(accounts);
+    }
+
+    function fileToDataUrl(file) {
+      return new Promise((resolve, reject) => {
+        const reader = new FileReader();
+        reader.onload = () => resolve(String(reader.result || ""));
+        reader.onerror = () => reject(new Error("Falha ao ler imagem"));
+        reader.readAsDataURL(file);
+      });
+    }
+
+    function loadImageElement(src) {
+      return new Promise((resolve, reject) => {
+        const image = new Image();
+        image.onload = () => resolve(image);
+        image.onerror = () => reject(new Error("Falha ao abrir imagem"));
+        image.src = src;
+      });
+    }
+
+    async function optimizeAvatar(file) {
+      const source = await fileToDataUrl(file);
+      try {
+        const image = await loadImageElement(source);
+        const maxSide = 480;
+        let targetWidth = image.width;
+        let targetHeight = image.height;
+        if (targetWidth > maxSide || targetHeight > maxSide) {
+          const ratio = Math.min(maxSide / targetWidth, maxSide / targetHeight);
+          targetWidth = Math.round(targetWidth * ratio);
+          targetHeight = Math.round(targetHeight * ratio);
+        }
+
+        const canvas = document.createElement("canvas");
+        canvas.width = targetWidth;
+        canvas.height = targetHeight;
+        const context = canvas.getContext("2d");
+        if (!context) return source;
+        context.drawImage(image, 0, 0, targetWidth, targetHeight);
+        return canvas.toDataURL("image/jpeg", 0.86);
+      } catch (_error) {
+        return source;
+      }
+    }
+
+    function setStatus(element, message, type) {
+      element.textContent = message;
+      element.className = "status " + type;
+    }
+
+    function activateMode(mode) {
+      const isLogin = mode === "login";
+      linkLogin.classList.toggle("active", isLogin);
+      linkSignup.classList.toggle("active", !isLogin);
+      loginForm.classList.toggle("active", isLogin);
+      signupForm.classList.toggle("active", !isLogin);
+    }
+
+    const params = new URLSearchParams(window.location.search);
+    const requestedMode = params.get("mode") === "login" ? "login" : "signup";
+    activateMode(requestedMode);
+    ensureAdminAccount();
+
+    const activeSession = (() => {
+      try {
+        return JSON.parse(localStorage.getItem(STORAGE_KEY_SESSION) || "null");
+      } catch (_error) {
+        return null;
+      }
+    })();
+
+    if (activeSession && activeSession.username && (activeSession.password || activeSession.email)) {
+      const accounts = loadAccounts();
+      const exists = accounts.some((item) => {
+        return normalizeUsername(item.username) === normalizeUsername(activeSession.username);
+      });
+      if (!exists) {
+        accounts.push({
+          name: normalizeName(activeSession.name || activeSession.username),
+          username: normalizeUsername(activeSession.username),
+          password: normalizePassword(activeSession.password || activeSession.email),
+          avatar: normalizeAvatar(activeSession.avatar || ""),
+          createdAt: activeSession.loggedAt || new Date().toISOString()
+        });
+        saveAccounts(accounts);
+      }
+    }
+
+    if (activeSession && activeSession.logged && activeSession.username) {
+      setStatus(
+        loginStatus,
+        "Conta ativa detectada: @" + activeSession.username + ". Você pode entrar em outra ou voltar ao feed.",
+        "success"
+      );
+    }
+
+    signupForm.addEventListener("submit", async (event) => {
+      event.preventDefault();
+
+      const formData = new FormData(signupForm);
+      const name = normalizeName(formData.get("name"));
+      const username = normalizeUsername(formData.get("username"));
+      const password = normalizePassword(formData.get("password"));
+      const avatarFile = signupForm.querySelector('input[name="avatar"]').files[0];
+
+      if (!name || !username || !password) {
+        setStatus(signupStatus, "Preencha todos os campos.", "error");
+        return;
+      }
+
+      if (username.length < 3) {
+        setStatus(signupStatus, "O nome de usuário precisa ter pelo menos 3 caracteres.", "error");
+        return;
+      }
+
+      if (password.length < 4) {
+        setStatus(signupStatus, "A senha precisa ter pelo menos 4 caracteres.", "error");
+        return;
+      }
+
+      const accounts = loadAccounts();
+      const hasUsername = accounts.some((account) => normalizeUsername(account.username) === username);
+      if (hasUsername) {
+        setStatus(signupStatus, "Esse nome de usuário já existe. Tente outro.", "error");
+        return;
+      }
+
+      let avatar = "";
+      if (avatarFile) {
+        if (!String(avatarFile.type || "").startsWith("image/")) {
+          setStatus(signupStatus, "O anexo precisa ser uma imagem.", "error");
+          return;
+        }
+        setStatus(signupStatus, "Processando imagem do usuário...", "success");
+        avatar = await optimizeAvatar(avatarFile);
+      }
+
+      const account = {
+        name,
+        username,
+        password,
+        avatar,
+        createdAt: new Date().toISOString()
+      };
+
+      accounts.push(account);
+      saveAccounts(accounts);
+
+      localStorage.setItem(
+        STORAGE_KEY_SESSION,
+        JSON.stringify({
+          logged: true,
+          name,
+          username,
+          password,
+          avatar,
+          isAdmin: username === "arctos",
+          loggedAt: new Date().toISOString()
+        })
+      );
+
+      setStatus(signupStatus, "Conta criada com sucesso. Indo para o feed...", "success");
+      setTimeout(() => {
+        window.location.href = "index.html";
+      }, 700);
+    });
+
+    loginForm.addEventListener("submit", (event) => {
+      event.preventDefault();
+
+      const formData = new FormData(loginForm);
+      const username = normalizeUsername(formData.get("username"));
+      const password = normalizePassword(formData.get("password"));
+
+      if (!username || !password) {
+        setStatus(loginStatus, "Preencha nome de usuário e senha.", "error");
+        return;
+      }
+
+      if (username === ADMIN_USERNAME && password === ADMIN_PASSWORD) {
+        localStorage.setItem(
+          STORAGE_KEY_SESSION,
+          JSON.stringify({
+            logged: true,
+            name: ADMIN_NAME,
+            username: ADMIN_USERNAME,
+            password: ADMIN_PASSWORD,
+            avatar: DEFAULT_USER_AVATAR,
+            isAdmin: true,
+            loggedAt: new Date().toISOString()
+          })
+        );
+        setStatus(loginStatus, "Login admin feito com sucesso. Indo para o feed...", "success");
+        setTimeout(() => {
+          window.location.href = "index.html";
+        }, 700);
+        return;
+      }
+
+      const account = loadAccounts().find((item) => {
+        return (
+          normalizeUsername(item.username) === username &&
+          normalizePassword(item.password) === password
+        );
+      });
+
+      if (!account) {
+        setStatus(loginStatus, "Conta não encontrada. Confira usuário/senha ou crie uma nova conta.", "error");
+        return;
+      }
+
+      localStorage.setItem(
+        STORAGE_KEY_SESSION,
+        JSON.stringify({
+          logged: true,
+          name: account.name,
+          username: normalizeUsername(account.username),
+          password: normalizePassword(account.password),
+          avatar: normalizeAvatar(account.avatar || ""),
+          isAdmin: normalizeUsername(account.username) === "arctos",
+          loggedAt: new Date().toISOString()
+        })
+      );
+
+      setStatus(loginStatus, "Login feito com sucesso. Indo para o feed...", "success");
+      setTimeout(() => {
+        window.location.href = "index.html";
+      }, 700);
+    });
+  </script>
+</body>
+</html>
