@@ -458,7 +458,7 @@
     let lastLocalMutationAt = 0;
     let hasRemoteInitialized = false;
     let remoteSyncIssue = "";
-    const REMOTE_SYNC_ERROR_HINT = "Sincronização online indisponível no momento. Verifique se o servidor JS está ativo (npm start).";
+    let remoteSyncDisabled = false;
 
     const postWrap = document.getElementById("postWrap");
     const statusCode = document.getElementById("statusCode");
@@ -478,6 +478,22 @@
       }
       syncNotice.textContent = remoteSyncIssue;
       syncNotice.style.display = "block";
+    }
+
+    function disableRemoteSyncSilently() {
+      if (remoteSyncDisabled) return;
+      remoteSyncDisabled = true;
+      REMOTE_SYNC.enabled = false;
+      allowRemotePush = false;
+      if (remotePullTimer) {
+        clearInterval(remotePullTimer);
+        remotePullTimer = null;
+      }
+      if (remotePushTimer) {
+        clearTimeout(remotePushTimer);
+        remotePushTimer = null;
+      }
+      setRemoteSyncIssue("");
     }
 
     function parseStatusId(value) {
@@ -622,7 +638,7 @@
         setRemoteSyncIssue("");
         return true;
       } catch (_error) {
-        setRemoteSyncIssue(REMOTE_SYNC_ERROR_HINT);
+        disableRemoteSyncSilently();
         return false;
       }
     }
@@ -659,7 +675,7 @@
         loadCurrentPost();
         render();
       } catch (_error) {
-        setRemoteSyncIssue(REMOTE_SYNC_ERROR_HINT);
+        disableRemoteSyncSilently();
       }
     }
 
@@ -667,6 +683,7 @@
       if (!REMOTE_SYNC.enabled) return;
       if (hasRemoteInitialized) return;
       hasRemoteInitialized = true;
+      setRemoteSyncIssue("");
 
       await pullRemotePosts(true);
       allowRemotePush = true;
