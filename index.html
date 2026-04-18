@@ -1610,6 +1610,7 @@
     const REMOTE_SYNC = {
       enabled: /^https?:$/i.test(window.location.protocol),
       endpoint: "/api/posts",
+      fallbackEndpoint: "/api/posts.php",
       pollMs: 5000
     };
     let pendingPhotoData = "";
@@ -1621,6 +1622,7 @@
     let lastLocalMutationAt = 0;
     let hasRemoteInitialized = false;
     let remoteSyncIssue = "";
+    const REMOTE_SYNC_ERROR_HINT = "Sincronização online indisponível no momento. Verifique se o servidor JS está ativo (npm start).";
     let pendingProfileAvatarData = "";
 
     function setRemoteSyncIssue(message) {
@@ -1705,29 +1707,59 @@
       }, 450);
     }
 
+    async function fetchRemoteSync(method, payload, keepalive) {
+      const endpoints = [REMOTE_SYNC.endpoint, REMOTE_SYNC.fallbackEndpoint].filter(Boolean);
+      const requestBody = payload == null ? null : JSON.stringify(payload);
+      let lastError = null;
+
+      for (const endpoint of endpoints) {
+        try {
+          const response = await fetch(endpoint, {
+            method,
+            headers: method === "POST" ? { "Content-Type": "application/json" } : undefined,
+            cache: "no-store",
+            keepalive: !!keepalive,
+            body: method === "POST" ? requestBody : undefined
+          });
+
+          if (!response.ok) {
+            lastError = new Error("HTTP_" + response.status);
+            continue;
+          }
+
+          const contentType = String(response.headers.get("content-type") || "").toLowerCase();
+          if (!contentType.includes("application/json")) {
+            lastError = new Error("INVALID_CONTENT_TYPE");
+            continue;
+          }
+
+          if (endpoint !== REMOTE_SYNC.endpoint) {
+            REMOTE_SYNC.endpoint = endpoint;
+          }
+          return response;
+        } catch (error) {
+          lastError = error;
+        }
+      }
+
+      throw lastError || new Error("SYNC_UNAVAILABLE");
+    }
+
     async function pushRemotePosts(keepalive) {
       if (!REMOTE_SYNC.enabled) return false;
       try {
-        const response = await fetch(REMOTE_SYNC.endpoint, {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json"
-          },
-          cache: "no-store",
-          keepalive: !!keepalive,
-          body: JSON.stringify({
+        await fetchRemoteSync(
+          "POST",
+          {
             posts: state.posts,
             followers: Array.from(state.followersSet)
-          })
-        });
-        if (!response.ok) {
-          setRemoteSyncIssue("Sincronização online indisponível no momento.");
-          return false;
-        }
+          },
+          keepalive
+        );
         setRemoteSyncIssue("");
         return true;
       } catch (_error) {
-        setRemoteSyncIssue("Sincronização online indisponível no momento.");
+        setRemoteSyncIssue(REMOTE_SYNC_ERROR_HINT);
         return false;
       }
     }
@@ -1736,26 +1768,7 @@
       if (!REMOTE_SYNC.enabled) return;
 
       try {
-        const response = await fetch(REMOTE_SYNC.endpoint, {
-          method: "GET",
-          cache: "no-store"
-        });
-        if (!response.ok) {
-          setRemoteSyncIssue("Sincronização online indisponível no momento.");
-          return;
-        }
-
-        const contentType = String(response.headers.get("content-type") || "").toLowerCase();
-        if (!contentType.includes("application/json")) {
-          const snippet = (await response.text()).slice(0, 240).toLowerCase();
-          if (snippet.includes("<html") || snippet.includes("<!doctype")) {
-            setRemoteSyncIssue("API offline: endpoint retornou HTML em vez de JSON.");
-          } else {
-            setRemoteSyncIssue("API respondeu em formato inválido para sincronização.");
-          }
-          return;
-        }
-
+        const response = await fetchRemoteSync("GET");
         const payload = await response.json();
         setRemoteSyncIssue("");
         const incomingPosts = Array.isArray(payload)
@@ -1807,7 +1820,7 @@
         isApplyingRemotePosts = false;
         render();
       } catch (_error) {
-        setRemoteSyncIssue("Sincronização online indisponível no momento.");
+        setRemoteSyncIssue(REMOTE_SYNC_ERROR_HINT);
       }
     }
 
